@@ -186,9 +186,10 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 			return
 		}
 		
-		output?.startRecordingToOutputFileURL(outputUrl, recordingDelegate: self)
-		
-		recording = true
+		if !recording {
+			output?.startRecordingToOutputFileURL(outputUrl, recordingDelegate: self)
+			recording = true
+		}
 	}
 	
 	// pause video recording

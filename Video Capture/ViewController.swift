@@ -12,7 +12,6 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 	// MARK Instance Variables
 	var videoCapture :VideoCapture? = nil
 	var previewLayer :VideoCapturePreviewLayer? = nil
-	var recording = false
 	
 	// MARK IBOutlets
 	@IBOutlet weak var previewView: UIView!
@@ -21,14 +20,11 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 	@IBAction func startRecording(sender: AnyObject) {
 		if videoCapture != nil && videoCapture!.ready {
 			videoCapture?.record()
-			recording = true
 		}
 	}
 	
 	@IBAction func stopRecording(sender: AnyObject) {
-		if recording {
-			videoCapture?.pause()
-		}
+		videoCapture?.pause()
 	}
 	
 	// MARK - Video Capture Delegate	
