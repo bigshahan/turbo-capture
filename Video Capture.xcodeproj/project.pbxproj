@@ -411,6 +411,7 @@
 				6BC23BDA19B98A1E00491E28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6BC23BDB19B98A1E00491E28 /* Build configuration list for PBXNativeTarget "Video CaptureTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +420,7 @@
 				6BC23BDD19B98A1E00491E28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

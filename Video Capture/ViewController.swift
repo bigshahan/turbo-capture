@@ -26,7 +26,8 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		
 		// setup the preview layer
 		previewLayer = AVCaptureVideoPreviewLayer()
-		previewLayer?.bounds = previewView.layer.bounds
+		previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+		previewLayer?.frame = previewView.bounds
 		previewView.layer.addSublayer(previewLayer)
 		
 		// setup video capture
