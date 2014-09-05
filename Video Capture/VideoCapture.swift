@@ -19,7 +19,7 @@ enum VideoCaptureQuality {
 protocol VideoCaptureDelegate {
 	func videoCaptureReady()
 	func videoCaptureError(message :String)
-	func videoCaptureFinished()
+	func videoCaptureFinished(url :NSURL)
 }
 
 class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
@@ -204,7 +204,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
 		if CMTimeGetSeconds(captureOutput.recordedDuration) >= duration {
 			stop()
-			self.delegate?.videoCaptureFinished()
+			self.delegate?.videoCaptureFinished(outputUrl!)
 		}
 	}
 	

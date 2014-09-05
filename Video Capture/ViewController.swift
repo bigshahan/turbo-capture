@@ -36,8 +36,8 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 	func videoCaptureReady() {
 	}
 	
-	func videoCaptureFinished() {
-		NSLog("Recording finished")
+	func videoCaptureFinished(url :NSURL) {
+		NSLog("\(url)")
 	}
 	
 	// MARK - View Controller Lifecycle
