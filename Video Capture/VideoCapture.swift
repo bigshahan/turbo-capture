@@ -57,7 +57,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	// quality is only set when start is called
 	var quality :VideoCaptureQuality = VideoCaptureQuality.Normal
 	
-	// the camera to use
+	// the camera. defaults to front
 	var camera :VideoCaptureCamera {
 		set(camera) {
 			currentCamera = camera

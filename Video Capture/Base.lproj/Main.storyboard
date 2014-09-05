@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6206.9" systemVersion="14A343f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7026.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
@@ -18,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x2l-lE-fqY">
-                                <rect key="frame" x="108" y="423" width="105" height="30"/>
+                                <rect key="frame" x="161" y="423" width="159" height="30"/>
                                 <state key="normal" title="Hold to Record">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -43,22 +44,46 @@
                                 <rect key="frame" x="0.0" y="453" width="320" height="83"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="faD-1b-eQM">
+                                <rect key="frame" x="0.0" y="423" width="160" height="30"/>
+                                <state key="normal" title="Switch Camera">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="switchCamera:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="kJf-Dd-6S2"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rLn-4P-aYN">
+                                <rect key="frame" x="160" y="423" width="1" height="30"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="1" id="npa-oF-f16"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="faD-1b-eQM" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="1Yh-se-8UO"/>
                             <constraint firstItem="0mn-ac-eph" firstAttribute="top" secondItem="ggd-CO-2Ns" secondAttribute="bottom" id="1z7-eS-Dj6"/>
                             <constraint firstItem="0mn-ac-eph" firstAttribute="height" secondItem="U0D-I0-a6U" secondAttribute="height" id="6Tt-0K-WnK"/>
                             <constraint firstItem="ggd-CO-2Ns" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="943-MY-QGk"/>
+                            <constraint firstItem="rLn-4P-aYN" firstAttribute="leading" secondItem="faD-1b-eQM" secondAttribute="trailing" id="AYa-jE-PCf"/>
+                            <constraint firstItem="x2l-lE-fqY" firstAttribute="width" secondItem="faD-1b-eQM" secondAttribute="width" id="Bkc-95-gVN"/>
+                            <constraint firstItem="rLn-4P-aYN" firstAttribute="top" secondItem="0mn-ac-eph" secondAttribute="bottom" id="E8W-xq-xWA"/>
+                            <constraint firstItem="U0D-I0-a6U" firstAttribute="top" secondItem="rLn-4P-aYN" secondAttribute="bottom" id="EYR-Ug-F1v"/>
+                            <constraint firstItem="x2l-lE-fqY" firstAttribute="leading" secondItem="rLn-4P-aYN" secondAttribute="trailing" id="Hjb-Wn-aDV"/>
                             <constraint firstAttribute="trailing" secondItem="ggd-CO-2Ns" secondAttribute="trailing" id="LU5-Sw-FQH"/>
                             <constraint firstItem="0mn-ac-eph" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="RJX-g5-shf"/>
                             <constraint firstAttribute="trailing" secondItem="U0D-I0-a6U" secondAttribute="trailing" id="bVK-U4-dJT"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="U0D-I0-a6U" secondAttribute="bottom" id="dXA-wk-5gT"/>
                             <constraint firstItem="ggd-CO-2Ns" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="lIC-Hl-TaG"/>
+                            <constraint firstItem="U0D-I0-a6U" firstAttribute="top" secondItem="faD-1b-eQM" secondAttribute="bottom" id="m2L-KG-KDu"/>
+                            <constraint firstAttribute="trailing" secondItem="x2l-lE-fqY" secondAttribute="trailing" id="mNH-eG-Een"/>
                             <constraint firstItem="U0D-I0-a6U" firstAttribute="top" secondItem="x2l-lE-fqY" secondAttribute="bottom" id="oBK-2D-6rz"/>
                             <constraint firstItem="x2l-lE-fqY" firstAttribute="top" secondItem="0mn-ac-eph" secondAttribute="bottom" id="pKG-4p-9WP"/>
                             <constraint firstItem="U0D-I0-a6U" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="qb0-lP-cya"/>
                             <constraint firstAttribute="trailing" secondItem="0mn-ac-eph" secondAttribute="trailing" id="wLP-dK-yc1"/>
-                            <constraint firstAttribute="centerX" secondItem="x2l-lE-fqY" secondAttribute="centerX" id="yFH-Vb-Hdi"/>
+                            <constraint firstItem="faD-1b-eQM" firstAttribute="top" secondItem="0mn-ac-eph" secondAttribute="bottom" id="wuz-hf-Qw7"/>
                         </constraints>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
