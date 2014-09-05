@@ -12,6 +12,10 @@
 		6BC23BC719B98A1E00491E28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BC23BC519B98A1E00491E28 /* Main.storyboard */; };
 		6BC23BC919B98A1E00491E28 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BC23BC819B98A1E00491E28 /* Images.xcassets */; };
 		6BC23BD519B98A1E00491E28 /* Video_CaptureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC23BD419B98A1E00491E28 /* Video_CaptureTests.swift */; };
+		6BC23BDF19B98A4300491E28 /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC23BDE19B98A4300491E28 /* VideoCapture.swift */; };
+		6BC23BE119B9917F00491E28 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BC23BE019B9917F00491E28 /* CoreMedia.framework */; };
+		6BC23BE319B9918400491E28 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BC23BE219B9918400491E28 /* AVFoundation.framework */; };
+		6BC23BE519B9919400491E28 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BC23BE419B9919400491E28 /* AssetsLibrary.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +38,10 @@
 		6BC23BCE19B98A1E00491E28 /* Video CaptureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Video CaptureTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BC23BD319B98A1E00491E28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6BC23BD419B98A1E00491E28 /* Video_CaptureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video_CaptureTests.swift; sourceTree = "<group>"; };
+		6BC23BDE19B98A4300491E28 /* VideoCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCapture.swift; sourceTree = "<group>"; };
+		6BC23BE019B9917F00491E28 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		6BC23BE219B9918400491E28 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		6BC23BE419B9919400491E28 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +49,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BC23BE519B9919400491E28 /* AssetsLibrary.framework in Frameworks */,
+				6BC23BE319B9918400491E28 /* AVFoundation.framework in Frameworks */,
+				6BC23BE119B9917F00491E28 /* CoreMedia.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,6 +68,9 @@
 		6BC23BB319B98A1E00491E28 = {
 			isa = PBXGroup;
 			children = (
+				6BC23BE419B9919400491E28 /* AssetsLibrary.framework */,
+				6BC23BE219B9918400491E28 /* AVFoundation.framework */,
+				6BC23BE019B9917F00491E28 /* CoreMedia.framework */,
 				6BC23BBE19B98A1E00491E28 /* Video Capture */,
 				6BC23BD119B98A1E00491E28 /* Video CaptureTests */,
 				6BC23BBD19B98A1E00491E28 /* Products */,
@@ -80,6 +94,7 @@
 				6BC23BC519B98A1E00491E28 /* Main.storyboard */,
 				6BC23BC819B98A1E00491E28 /* Images.xcassets */,
 				6BC23BBF19B98A1E00491E28 /* Supporting Files */,
+				6BC23BDE19B98A4300491E28 /* VideoCapture.swift */,
 			);
 			path = "Video Capture";
 			sourceTree = "<group>";
@@ -209,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BC23BC419B98A1E00491E28 /* ViewController.swift in Sources */,
+				6BC23BDF19B98A4300491E28 /* VideoCapture.swift in Sources */,
 				6BC23BC219B98A1E00491E28 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

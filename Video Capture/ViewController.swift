@@ -7,19 +7,40 @@
 //
 
 import UIKit
+import AVFoundation
 
-class ViewController: UIViewController {
-                            
+class ViewController: UIViewController, VideoCaptureDelegate {
+	var videoCapture :VideoCapture? = nil
+	var previewLayer :AVCaptureVideoPreviewLayer? = nil
+	
+	@IBOutlet weak var previewView: UIView!
+	
+	@IBAction func startRecording(sender: AnyObject) {
+	}
+	
+	@IBAction func stopRecording(sender: AnyObject) {
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view, typically from a nib.
+		
+		// setup the preview layer
+		previewLayer = AVCaptureVideoPreviewLayer()
+		previewLayer?.bounds = previewView.layer.bounds
+		previewView.layer.addSublayer(previewLayer)
+		
+		// setup video capture
+		videoCapture = VideoCapture(fromPreviewLayer: previewLayer, delegate: self)
 	}
-
-	override func didReceiveMemoryWarning() {
-		super.didReceiveMemoryWarning()
-		// Dispose of any resources that can be recreated.
+	
+	// MARK - Video Capture Delegate
+	func videoCaptureReady() {
+		
 	}
-
-
+	
+	func videoCaptureError(message :String) {
+		UIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "Ok").show()
+		NSLog(message)
+	}
 }
 
