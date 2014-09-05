@@ -197,11 +197,17 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		if !recording {
 			return
 		}
+		recording = false
 		output?.stopRecording()
 	}
 	
 	// MARK - Capture Output Delegate
+	func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!) {
+		NSLog("started recording \(CMTimeGetSeconds(captureOutput.recordedDuration))")
+	}
+	
 	func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
+		NSLog("stopped recording \(CMTimeGetSeconds(captureOutput.recordedDuration))")
 		if CMTimeGetSeconds(captureOutput.recordedDuration) >= duration {
 			stop()
 			self.delegate?.videoCaptureFinished(outputFileURL)
