@@ -42,5 +42,10 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		UIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "Ok").show()
 		NSLog(message)
 	}
+	
+	// because hiding the status bar is cool
+	override func prefersStatusBarHidden() -> Bool {
+		return true
+	}
 }
 
