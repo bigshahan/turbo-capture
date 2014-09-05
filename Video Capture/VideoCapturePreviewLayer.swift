@@ -8,7 +8,7 @@
 
 import AVFoundation
 
-class VideoCaptureLayer: AVCaptureVideoPreviewLayer {
+class VideoCapturePreviewLayer: AVCaptureVideoPreviewLayer {
 	override init() {
 			super.init()
 	}

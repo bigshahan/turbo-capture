@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, VideoCaptureDelegate {
 	var videoCapture :VideoCapture? = nil
-	var previewLayer :VideoCaptureLayer? = nil
+	var previewLayer :VideoCapturePreviewLayer? = nil
 	
 	@IBOutlet weak var previewView: UIView!
 	
@@ -24,7 +24,7 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		super.viewDidLoad()
 		
 		// setup the preview layer
-		previewLayer = VideoCaptureLayer()
+		previewLayer = VideoCapturePreviewLayer()
 		previewLayer?.cropFit()
 		previewLayer?.frame = previewView.bounds
 		previewView.layer.addSublayer(previewLayer)
