@@ -9,19 +9,16 @@
 import AVFoundation
 
 class VideoCapturePreviewLayer: AVCaptureVideoPreviewLayer {
-	override init() {
-			super.init()
-	}
-	
 	init(frame: CGRect) {
 		super.init()
 		self.frame = frame
 	}
 	
+	// required init stuff
 	override init(session: AVCaptureSession!) {
 		super.init(session: session)
 	}
-
+	
 	required init(coder aDecoder: NSCoder) {
 	    fatalError("init(coder:) has not been implemented")
 	}
