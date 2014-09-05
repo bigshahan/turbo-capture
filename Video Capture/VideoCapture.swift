@@ -16,6 +16,11 @@ enum VideoCaptureQuality {
 	case Normal
 }
 
+enum VideoCaptureCamera {
+	case Front
+	case Back
+}
+
 protocol VideoCaptureDelegate {
 	func videoCaptureReady()
 	func videoCaptureError(message :String)
@@ -31,6 +36,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	private var output :AVCaptureMovieFileOutput?
 	private var outputUrl :NSURL?
 	
+	private var currentCamera :VideoCaptureCamera = VideoCaptureCamera.Front
 	private var videoDevice :AVCaptureDevice?
 	private var videoInput :AVCaptureDeviceInput?
 	
@@ -51,6 +57,21 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	// quality is only set when start is called
 	var quality :VideoCaptureQuality = VideoCaptureQuality.Normal
 	
+	// the camera to use
+	var camera :VideoCaptureCamera {
+		set(camera) {
+			currentCamera = camera
+			
+			// update camera
+			if ready {
+				
+			}
+		}
+		get {
+			return currentCamera
+		}
+	}
+	
 	// MARK - Init Function
 	// duration is number of seconds
 	init(previewLayer :VideoCapturePreviewLayer?, delegate :VideoCaptureDelegate?, duration: Double) {
@@ -59,6 +80,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		self.duration = duration
 	}
 
+	// MARK - Recording Lifecycle
 	// starts the preview
 	func start() {
 		// check if already setup
@@ -199,6 +221,19 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		}
 		recording = false
 		output?.stopRecording()
+	}
+	
+	// MARK - Multiple Cameras
+	func availableCameras() -> [VideoCaptureCamera] {
+		var cameras :[VideoCaptureCamera] = []
+		
+		// check if a front camera is available
+		
+		
+		// check if a back camera is available
+		
+		
+		return cameras
 	}
 	
 	// MARK - Capture Output Delegate
