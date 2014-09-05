@@ -16,6 +16,7 @@
 		6BC23BE119B9917F00491E28 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BC23BE019B9917F00491E28 /* CoreMedia.framework */; };
 		6BC23BE319B9918400491E28 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BC23BE219B9918400491E28 /* AVFoundation.framework */; };
 		6BC23BE519B9919400491E28 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BC23BE419B9919400491E28 /* AssetsLibrary.framework */; };
+		6BD2991719BA220C0009AD3F /* VideoCaptureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD2991619BA220C0009AD3F /* VideoCaptureLayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		6BC23BE019B9917F00491E28 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		6BC23BE219B9918400491E28 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		6BC23BE419B9919400491E28 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		6BD2991619BA220C0009AD3F /* VideoCaptureLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCaptureLayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				6BC23BC819B98A1E00491E28 /* Images.xcassets */,
 				6BC23BBF19B98A1E00491E28 /* Supporting Files */,
 				6BC23BDE19B98A4300491E28 /* VideoCapture.swift */,
+				6BD2991619BA220C0009AD3F /* VideoCaptureLayer.swift */,
 			);
 			path = "Video Capture";
 			sourceTree = "<group>";
@@ -225,6 +228,7 @@
 			files = (
 				6BC23BC419B98A1E00491E28 /* ViewController.swift in Sources */,
 				6BC23BDF19B98A4300491E28 /* VideoCapture.swift in Sources */,
+				6BD2991719BA220C0009AD3F /* VideoCaptureLayer.swift in Sources */,
 				6BC23BC219B98A1E00491E28 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -19,7 +19,7 @@ protocol VideoCaptureDelegate {
 
 class VideoCapture {
 	private var delegate :VideoCaptureDelegate?
-	private var previewLayer :AVCaptureVideoPreviewLayer?
+	private var previewLayer :VideoCaptureLayer?
 
 	private var ready = false
 	private var session :AVCaptureSession?
@@ -28,7 +28,7 @@ class VideoCapture {
 	private var videoInput :AVCaptureDeviceInput?
 	private var audioInput :AVCaptureDeviceInput?
 	
-	init(previewLayer :AVCaptureVideoPreviewLayer?, delegate :VideoCaptureDelegate?) {
+	init(previewLayer :VideoCaptureLayer?, delegate :VideoCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
 
