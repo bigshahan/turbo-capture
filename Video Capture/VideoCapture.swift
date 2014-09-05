@@ -18,20 +18,31 @@ protocol VideoCaptureDelegate {
 }
 
 class VideoCapture {
+	// MARK Private Properties
 	private var delegate :VideoCaptureDelegate?
 	private var previewLayer :VideoCapturePreviewLayer?
-
-	private var ready = false
 	private var session :AVCaptureSession?
 	private var videoDevice :AVCaptureDevice?
 	private var audioDevice :AVCaptureDevice?
 	private var videoInput :AVCaptureDeviceInput?
 	private var audioInput :AVCaptureDeviceInput?
+	private var errorOccurred :Bool = false
+	private var recording :Bool = false
 	
+	// MARK - Computed / Public Properties
+	var ready: Bool {
+		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil
+	}
+	
+	// MARK - Init Function
 	init(previewLayer :VideoCapturePreviewLayer?, delegate :VideoCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
+		start()
+	}
 
+	// starts the preview
+	func start() {
 		// check if already setup
 		if ready {
 			return
@@ -96,13 +107,17 @@ class VideoCapture {
 		session?.startRunning()
 		
 		// everything is setup so its ready to go
-		ready = true
 		delegate?.videoCaptureReady()
 	}
 	
+	// stops recording and video capture
 	func stop() {
+		if recording {
+			pause()
+		}
+		
 		session?.stopRunning()
-		ready = false
+		errorOccurred = false
 		session = nil
 		videoDevice = nil
 		videoInput = nil
@@ -110,7 +125,29 @@ class VideoCapture {
 		audioInput = nil
 	}
 	
+	// start video recording
+	func record() {
+		if !ready {
+			throw("Need to check if ready before trying to record")
+			return
+		}
+	}
+	
+	// pause video recording
+	func pause() {
+		if !recording {
+			throw("Need to be recording before you can pause")
+			return
+		}
+	}
+	
+	private func throw(message :String) {
+		errorOccurred = true
+		NSException(name: "VideoCaptureException", reason: message, userInfo: nil).raise()
+	}
+	
 	private func error(message :String) {
+		errorOccurred = true
 		delegate?.videoCaptureError(message)
 	}
 }

@@ -7,11 +7,13 @@
 //
 
 import AVFoundation
+import UIKit
 
 class VideoCapturePreviewLayer: AVCaptureVideoPreviewLayer {
-	init(frame: CGRect) {
+	init(view: UIView) {
 		super.init()
-		self.frame = frame
+		self.frame = view.bounds
+		view.layer.addSublayer(self)
 	}
 	
 	// required init stuff
