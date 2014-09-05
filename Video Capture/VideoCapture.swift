@@ -19,32 +19,44 @@ enum VideoCaptureQuality {
 protocol VideoCaptureDelegate {
 	func videoCaptureReady()
 	func videoCaptureError(message :String)
+	func videoCaptureFinished()
 }
 
-class VideoCapture {
+class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	// MARK Private Properties
 	private var delegate :VideoCaptureDelegate?
 	private var previewLayer :VideoCapturePreviewLayer?
+	
 	private var session :AVCaptureSession?
+	private var output :AVCaptureMovieFileOutput?
+	private var outputUrl :NSURL?
+	
 	private var videoDevice :AVCaptureDevice?
-	private var audioDevice :AVCaptureDevice?
 	private var videoInput :AVCaptureDeviceInput?
+	
 	private var audioInput :AVCaptureDeviceInput?
+	private var audioDevice :AVCaptureDevice?
+
 	private var errorOccurred = false
 	private var recording = false
 	
+	// number of seconds
+	private var duration = 10.0
+	
 	// MARK - Computed / Public Properties
 	var ready: Bool {
-		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil
+		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil && output != nil && outputUrl != nil
 	}
 	
 	// quality is only set when start is called
 	var quality :VideoCaptureQuality = VideoCaptureQuality.Normal
 	
 	// MARK - Init Function
-	init(previewLayer :VideoCapturePreviewLayer?, delegate :VideoCaptureDelegate?) {
+	// duration is number of seconds
+	init(previewLayer :VideoCapturePreviewLayer?, delegate :VideoCaptureDelegate?, duration: Double) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
+		self.duration = duration
 	}
 
 	// starts the preview
@@ -116,6 +128,33 @@ class VideoCapture {
 		// setup preview layer
 		previewLayer?.session = session
 		
+		// setup output
+		output = AVCaptureMovieFileOutput()
+		output?.maxRecordedDuration = CMTimeMakeWithSeconds(duration, 30)
+		output?.minFreeDiskSpaceLimit = 1024 * 1024 * 50
+		
+		if session? != nil && session!.canAddOutput(output) {
+			session?.addOutput(output)
+		} else {
+			error("Could not add file output")
+			return
+		}
+		
+		// get a temporary file for output
+		var path = "\(NSTemporaryDirectory())output.mov"
+		
+		var fileManager = NSFileManager.defaultManager()
+		if fileManager.fileExistsAtPath(path) {
+			var error = NSErrorPointer()
+			
+			if !fileManager.removeItemAtPath(path, error: error) {
+				self.error("A duplicate output file could not be removed from the output directory")
+				return
+			}
+		}
+		
+		outputUrl = NSURL(fileURLWithPath: path)
+		
 		// start running
 		session?.startRunning()
 		
@@ -136,6 +175,8 @@ class VideoCapture {
 		videoInput = nil
 		audioDevice = nil
 		audioInput = nil
+		output = nil
+		outputUrl = nil
 	}
 	
 	// start video recording
@@ -145,17 +186,28 @@ class VideoCapture {
 			return
 		}
 		
+		output?.startRecordingToOutputFileURL(outputUrl, recordingDelegate: self)
+		
 		recording = true
 	}
 	
 	// pause video recording
 	func pause() {
 		if !recording {
-			throw("Need to be recording before you can pause")
 			return
+		}
+		output?.stopRecording()
+	}
+	
+	// MARK - Capture Output Delegate
+	func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
+		if CMTimeGetSeconds(captureOutput.recordedDuration) >= duration {
+			stop()
+			self.delegate?.videoCaptureFinished()
 		}
 	}
 	
+	// MARK - Error Handling
 	private func throw(message :String) {
 		errorOccurred = true
 		NSException(name: "VideoCaptureException", reason: message, userInfo: nil).raise()

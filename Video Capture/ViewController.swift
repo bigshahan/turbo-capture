@@ -40,6 +40,10 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 	func videoCaptureReady() {
 	}
 	
+	func videoCaptureFinished() {
+		NSLog("Recording finished")
+	}
+	
 	// MARK - View Controller Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -49,7 +53,7 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		previewLayer?.cropFit()
 	
 		// setup video capture + preview
-		videoCapture = VideoCapture(previewLayer: previewLayer, delegate: self)
+		videoCapture = VideoCapture(previewLayer: previewLayer, delegate: self, duration: 10)
 		videoCapture?.start()
 	}
 	
