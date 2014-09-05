@@ -26,8 +26,8 @@ class VideoCapture {
 	private var audioDevice :AVCaptureDevice?
 	private var videoInput :AVCaptureDeviceInput?
 	private var audioInput :AVCaptureDeviceInput?
-	private var errorOccurred :Bool = false
-	private var recording :Bool = false
+	private var errorOccurred = false
+	private var recording = false
 	
 	// MARK - Computed / Public Properties
 	var ready: Bool {
@@ -131,6 +131,8 @@ class VideoCapture {
 			throw("Need to check if ready before trying to record")
 			return
 		}
+		
+		recording = true
 	}
 	
 	// pause video recording
