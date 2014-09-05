@@ -50,6 +50,7 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 	
 		// setup video capture + preview
 		videoCapture = VideoCapture(previewLayer: previewLayer, delegate: self)
+		videoCapture?.start()
 	}
 	
 	override func prefersStatusBarHidden() -> Bool {

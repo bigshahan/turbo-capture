@@ -38,13 +38,13 @@ class VideoCapture {
 		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil
 	}
 	
+	// quality is only set when start is called
 	var quality :VideoCaptureQuality = VideoCaptureQuality.Normal
 	
 	// MARK - Init Function
 	init(previewLayer :VideoCapturePreviewLayer?, delegate :VideoCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
-		start()
 	}
 
 	// starts the preview
