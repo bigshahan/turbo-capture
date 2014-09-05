@@ -13,6 +13,11 @@ class VideoCapturePreviewLayer: AVCaptureVideoPreviewLayer {
 			super.init()
 	}
 	
+	init(frame: CGRect) {
+		super.init()
+		self.frame = frame
+	}
+	
 	override init(session: AVCaptureSession!) {
 		super.init(session: session)
 	}
