@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class ViewController: UIViewController, VideoCaptureDelegate {
 	// MARK Instance Variables
@@ -38,6 +39,8 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 	
 	func videoCaptureFinished(url :NSURL) {
 		NSLog("\(url)")
+		var controller = MPMoviePlayerViewController(contentURL: url)
+		presentMoviePlayerViewControllerAnimated(controller)
 	}
 	
 	// MARK - View Controller Lifecycle
