@@ -12,6 +12,10 @@ import AVFoundation
 import AssetsLibrary
 import UIKit
 
+enum VideoCaptureQuality {
+	case Normal
+}
+
 protocol VideoCaptureDelegate {
 	func videoCaptureReady()
 	func videoCaptureError(message :String)
@@ -33,6 +37,8 @@ class VideoCapture {
 	var ready: Bool {
 		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil
 	}
+	
+	var quality :VideoCaptureQuality = VideoCaptureQuality.Normal
 	
 	// MARK - Init Function
 	init(previewLayer :VideoCapturePreviewLayer?, delegate :VideoCaptureDelegate?) {
@@ -99,6 +105,13 @@ class VideoCapture {
 			return
 		}
 		
+		// setup video qualtity
+		switch quality {
+		default:
+			if session? != nil && session!.canSetSessionPreset(AVCaptureSessionPreset640x480) {
+				session?.sessionPreset = AVCaptureSessionPreset640x480
+			}
+		}
 		
 		// setup preview layer
 		previewLayer?.session = session
