@@ -69,7 +69,23 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 			
 			// update preview
 			if ready {
+				session?.beginConfiguration()
 				
+				var newVideoDevice = cameraDevice(currentCamera)
+				var error = NSErrorPointer()
+				var newVideoInput = AVCaptureDeviceInput(device: newVideoDevice, error: error)
+				
+				if error == nil {
+					session?.removeInput(videoInput)
+					videoInput = newVideoInput
+					videoDevice = newVideoDevice
+					
+					if session!.canAddInput(videoInput) {
+						session?.addInput(videoInput)
+					}
+				}
+				
+				session?.commitConfiguration()
 			}
 		}
 		get {
@@ -79,10 +95,9 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	
 	// MARK: - Init Function
 	// duration is number of seconds
-	init(previewLayer :VideoCapturePreviewLayer?, duration: Double, delegate :VideoCaptureDelegate?) {
+	init(previewLayer :VideoCapturePreviewLayer?, delegate :VideoCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
-		self.duration = duration
 	}
 
 	// MARK - Recording Lifecycle
@@ -97,7 +112,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		session = AVCaptureSession()
 		
 		// setup video device
-		videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+		videoDevice = cameraDevice(currentCamera)
 		
 		if videoDevice == nil {
 			error("Could not setup a video capture device")
@@ -229,6 +244,22 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	}
 	
 	// MARK: - Multiple Cameras
+	func cameraDevice(type: VideoCaptureCamera) -> AVCaptureDevice {
+		var devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+		
+		for device in devices as [AVCaptureDevice] {
+			if type == VideoCaptureCamera.Back && device.position == AVCaptureDevicePosition.Back {
+				return device
+			}
+			
+			if type == VideoCaptureCamera.Front && device.position == AVCaptureDevicePosition.Front {
+				return device
+			}
+		}
+		
+		return devices[0] as AVCaptureDevice
+	}
+	
 	func availableCameras() -> [VideoCaptureCamera] {
 		var cameras :[VideoCaptureCamera] = []
 		

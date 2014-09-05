@@ -67,7 +67,7 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		previewLayer?.cropFit()
 	
 		// setup video capture + preview
-		videoCapture = VideoCapture(previewLayer: previewLayer, duration: 10, delegate: self)
+		videoCapture = VideoCapture(previewLayer: previewLayer, delegate: self)
 		videoCapture?.start()
 	}
 	
