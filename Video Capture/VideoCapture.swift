@@ -60,10 +60,14 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	// the camera. defaults to front
 	var camera :VideoCaptureCamera {
 		set(camera) {
-			NSLog("Camera set to \(camera)")
+			// cannot change camera while recording
+			if recording {
+				return
+			}
+			
 			currentCamera = camera
 			
-			// update camera
+			// update preview
 			if ready {
 				
 			}
