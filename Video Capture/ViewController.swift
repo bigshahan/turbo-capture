@@ -10,14 +10,14 @@ import UIKit
 import MediaPlayer
 
 class ViewController: UIViewController, VideoCaptureDelegate {
-	// MARK Instance Variables
+	// MARK: Instance Variables
 	var videoCapture :VideoCapture? = nil
 	var previewLayer :VideoCapturePreviewLayer? = nil
 	
-	// MARK IBOutlets
+	// MARK: IBOutlets
 	@IBOutlet weak var previewView: UIView!
 	
-	// MARK - Switch Camera
+	// MARK: - Switch Camera
 	@IBAction func switchCamera(sender: AnyObject) {
 		if videoCapture != nil {
 			var cameras = videoCapture!.availableCameras()
@@ -32,7 +32,7 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		}
 	}
 	
-	// MARK - Handle Record Button
+	// MARK: - Handle Record Button
 	@IBAction func startRecording(sender: AnyObject) {
 		if videoCapture != nil && videoCapture!.ready {
 			videoCapture?.record()
@@ -43,7 +43,7 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		videoCapture?.pause()
 	}
 	
-	// MARK - Video Capture Delegate	
+	// MARK: - Video Capture Delegate
 	func videoCaptureError(message :String) {
 		UIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "Ok").show()
 		NSLog(message)
@@ -58,7 +58,7 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		presentMoviePlayerViewControllerAnimated(controller)
 	}
 	
-	// MARK - View Controller Lifecycle
+	// MARK: - View Controller Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
@@ -67,7 +67,7 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		previewLayer?.cropFit()
 	
 		// setup video capture + preview
-		videoCapture = VideoCapture(previewLayer: previewLayer, delegate: self, duration: 10)
+		videoCapture = VideoCapture(previewLayer: previewLayer, duration: 10, delegate: self)
 		videoCapture?.start()
 	}
 	

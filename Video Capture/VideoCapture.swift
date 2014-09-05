@@ -28,7 +28,7 @@ protocol VideoCaptureDelegate {
 }
 
 class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
-	// MARK Private Properties
+	// MARK: Private Properties
 	private var delegate :VideoCaptureDelegate?
 	private var previewLayer :VideoCapturePreviewLayer?
 	
@@ -49,7 +49,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	// number of seconds
 	private var duration = 10.0
 	
-	// MARK - Computed / Public Properties
+	// MARK: - Computed / Public Properties
 	var ready: Bool {
 		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil && output != nil && outputUrl != nil
 	}
@@ -60,6 +60,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	// the camera. defaults to front
 	var camera :VideoCaptureCamera {
 		set(camera) {
+			NSLog("Camera set to \(camera)")
 			currentCamera = camera
 			
 			// update camera
@@ -72,9 +73,9 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		}
 	}
 	
-	// MARK - Init Function
+	// MARK: - Init Function
 	// duration is number of seconds
-	init(previewLayer :VideoCapturePreviewLayer?, delegate :VideoCaptureDelegate?, duration: Double) {
+	init(previewLayer :VideoCapturePreviewLayer?, duration: Double, delegate :VideoCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
 		self.duration = duration
@@ -223,20 +224,25 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		output?.stopRecording()
 	}
 	
-	// MARK - Multiple Cameras
+	// MARK: - Multiple Cameras
 	func availableCameras() -> [VideoCaptureCamera] {
 		var cameras :[VideoCaptureCamera] = []
 		
-		// check if a front camera is available
+		// get camers
+		var devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
 		
-		
-		// check if a back camera is available
-		
+		for device in devices as [AVCaptureDevice] {
+			if device.position == AVCaptureDevicePosition.Back {
+				cameras.append(VideoCaptureCamera.Back)
+			} else {
+				cameras.append(VideoCaptureCamera.Front)
+			}
+		}
 		
 		return cameras
 	}
 	
-	// MARK - Capture Output Delegate
+	// MARK: - Capture Output Delegate
 	func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!) {
 		NSLog("started recording \(CMTimeGetSeconds(captureOutput.recordedDuration))")
 	}
@@ -249,7 +255,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		}
 	}
 	
-	// MARK - Error Handling
+	// MARK: - Error Handling
 	private func throw(message :String) {
 		errorOccurred = true
 		NSException(name: "VideoCaptureException", reason: message, userInfo: nil).raise()
