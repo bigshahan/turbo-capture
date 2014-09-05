@@ -30,12 +30,11 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		previewView.layer.addSublayer(previewLayer)
 		
 		// setup video capture
-		videoCapture = VideoCapture(fromPreviewLayer: previewLayer, delegate: self)
+		videoCapture = VideoCapture(previewLayer: previewLayer, delegate: self)
 	}
 	
 	// MARK - Video Capture Delegate
 	func videoCaptureReady() {
-		
 	}
 	
 	func videoCaptureError(message :String) {

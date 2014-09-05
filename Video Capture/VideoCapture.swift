@@ -28,7 +28,7 @@ class VideoCapture {
 	private var videoInput :AVCaptureDeviceInput?
 	private var audioInput :AVCaptureDeviceInput?
 	
-	init(fromPreviewLayer previewLayer :AVCaptureVideoPreviewLayer?, delegate :VideoCaptureDelegate?) {
+	init(previewLayer :AVCaptureVideoPreviewLayer?, delegate :VideoCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
 
