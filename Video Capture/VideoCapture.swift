@@ -204,7 +204,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
 		if CMTimeGetSeconds(captureOutput.recordedDuration) >= duration {
 			stop()
-			self.delegate?.videoCaptureFinished(outputUrl!)
+			self.delegate?.videoCaptureFinished(outputFileURL)
 		}
 	}
 	
