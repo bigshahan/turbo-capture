@@ -10,7 +10,7 @@ import UIKit
 import MediaPlayer
 
 class ViewController: UIViewController, VideoCaptureDelegate {
-	// MARK: Instance Variables
+	// MARK: Properties
 	var videoCapture :VideoCapture? = nil
 	var previewLayer :VideoCapturePreviewLayer? = nil
 	
@@ -45,11 +45,16 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 	
 	// MARK: - Video Capture Delegate
 	func videoCaptureError(message :String) {
-		UIAlertView(title: "Error", message: message, delegate: nil, cancelButtonTitle: "Ok").show()
+		UIAlertView(title: "Error", message: "Could not activate the camera or microphone.", delegate: nil, cancelButtonTitle: "Ok").show()
 		NSLog(message)
 	}
 	
-	func videoCaptureReady() {
+	func videoCaptureCameraDenied() {
+		UIAlertView(title: "Camera Unavailable", message: "Please update your privacy settings to enable Camera access to this app.", delegate: nil, cancelButtonTitle: "Ok").show()
+	}
+	
+	func videoCaptureMicrophoneDenied() {
+		UIAlertView(title: "Microphone Unavailable", message: "Please update your privacy settings to enable Microphone access to this app.", delegate: nil, cancelButtonTitle: "Ok").show()
 	}
 	
 	func videoCaptureFinished(url :NSURL) {

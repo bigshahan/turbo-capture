@@ -22,8 +22,9 @@ enum VideoCaptureCamera {
 }
 
 protocol VideoCaptureDelegate {
-	func videoCaptureReady()
 	func videoCaptureError(message :String)
+	func videoCaptureMicrophoneDenied()
+	func videoCaptureCameraDenied()
 	func videoCaptureFinished(url :NSURL)
 }
 
@@ -45,6 +46,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 
 	private var errorOccurred = false
 	private var recording = false
+	private var startedRecording = false
 	
 	// number of seconds
 	private var duration = 10.0
@@ -197,17 +199,14 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		
 		outputUrl = NSURL(fileURLWithPath: path)
 		
-		// start running
+		// start running the session
 		session?.startRunning()
-		
-		// everything is setup so its ready to go
-		delegate?.videoCaptureReady()
 	}
 	
 	// stops recording and video capture
 	func stop() {
 		if recording {
-			pause()
+			recording = false
 		}
 		
 		session?.stopRunning()
@@ -229,8 +228,13 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		}
 		
 		if !recording {
-			output?.startRecordingToOutputFileURL(outputUrl, recordingDelegate: self)
-			recording = true
+			if startedRecording {
+				output?.connectionWithMediaType(AVMediaTypeVideo).enabled = true
+			} else {
+				output?.startRecordingToOutputFileURL(outputUrl, recordingDelegate: self)
+				recording = true
+				startedRecording = true
+			}
 		}
 	}
 	
@@ -240,7 +244,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 			return
 		}
 		recording = false
-		output?.stopRecording()
+		output?.connectionWithMediaType(AVMediaTypeVideo).enabled = false
 	}
 	
 	// MARK: - Multiple Cameras
