@@ -46,7 +46,6 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 
 	private var errorOccurred = false
 	private var recording = false
-	private var startedRecording = false
 	
 	// number of seconds
 	private var duration = 10.0
@@ -206,7 +205,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	// stops recording and video capture
 	func stop() {
 		if recording {
-			recording = false
+			pause()
 		}
 		
 		session?.stopRunning()
@@ -228,13 +227,8 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		}
 		
 		if !recording {
-			if startedRecording {
-				output?.connectionWithMediaType(AVMediaTypeVideo).enabled = true
-			} else {
-				output?.startRecordingToOutputFileURL(outputUrl, recordingDelegate: self)
-				recording = true
-				startedRecording = true
-			}
+			output?.startRecordingToOutputFileURL(outputUrl, recordingDelegate: self)
+			recording = true
 		}
 	}
 	
@@ -244,7 +238,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 			return
 		}
 		recording = false
-		output?.connectionWithMediaType(AVMediaTypeVideo).enabled = false
+		output?.stopRecording()
 	}
 	
 	// MARK: - Multiple Cameras
