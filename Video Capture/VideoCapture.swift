@@ -111,14 +111,24 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 			return
 		}
 		
+		// Check for Camera Permissions
+		var videoStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+		
+		if videoStatus == AVAuthorizationStatus.Denied {
+			delegate?.videoCaptureCameraDenied()
+			return
+		}
+		
+		// Check for Microphone Permissions
+		var audioStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeAudio)
+		
+		if audioStatus == AVAuthorizationStatus.Denied {
+			delegate?.videoCaptureMicrophoneDenied()
+			return
+		}
+		
 		// setup video capturing session
 		session = AVCaptureSession()
-		
-		// TODO: - check for Camera Permissions
-
-		
-		// TODO: - check for Microphone Permissions
-		
 		
 		// setup video device
 		videoDevice = cameraDevice(currentCamera)
