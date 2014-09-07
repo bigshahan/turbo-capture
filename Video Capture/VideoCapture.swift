@@ -21,6 +21,7 @@ enum VideoCaptureCamera {
 	case Back
 }
 
+// MARK: - Video Capture Delegate Protocol
 protocol VideoCaptureDelegate {
 	func videoCaptureError(message :String)
 	func videoCaptureMicrophoneDenied()
@@ -28,6 +29,7 @@ protocol VideoCaptureDelegate {
 	func videoCaptureFinished(url :NSURL)
 }
 
+// MARK: - Video Capture Class
 class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	// MARK: Private Properties
 	private var delegate :VideoCaptureDelegate?
@@ -112,6 +114,12 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		// setup video capturing session
 		session = AVCaptureSession()
 		
+		// TODO: - check for Camera Permissions
+
+		
+		// TODO: - check for Microphone Permissions
+		
+		
 		// setup video device
 		videoDevice = cameraDevice(currentCamera)
 		
@@ -128,7 +136,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 			if (session?.canAddInput(videoInput) != nil) {
 				session?.addInput(videoInput)
 			} else {
-				error("Can not add video device input to session")
+				error("Could not add video device input to session")
 				return
 			}
 		} else {
@@ -152,7 +160,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 			if (session?.canAddInput(audioInput) != nil) {
 				session?.addInput(audioInput)
 			} else {
-				error("Can not add audio device input to session")
+				error("Could not add audio device input to session")
 				return
 			}
 		} else {
@@ -261,7 +269,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	func availableCameras() -> [VideoCaptureCamera] {
 		var cameras :[VideoCaptureCamera] = []
 		
-		// get camers
+		// get cameras
 		var devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
 		
 		for device in devices as [AVCaptureDevice] {

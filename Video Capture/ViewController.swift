@@ -50,11 +50,11 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 	}
 	
 	func videoCaptureCameraDenied() {
-		UIAlertView(title: "Camera Unavailable", message: "Please update your privacy settings to enable Camera access to this app.", delegate: nil, cancelButtonTitle: "Ok").show()
+		UIAlertView(title: "This app does not have access to your camera.", message: "You can enable access in Privacy Settings.", delegate: nil, cancelButtonTitle: "Ok").show()
 	}
 	
 	func videoCaptureMicrophoneDenied() {
-		UIAlertView(title: "Microphone Unavailable", message: "Please update your privacy settings to enable Microphone access to this app.", delegate: nil, cancelButtonTitle: "Ok").show()
+		UIAlertView(title: "This app does not have access to your microphone.", message: "You can enable access in Privacy Settings.", delegate: nil, cancelButtonTitle: "Ok").show()
 	}
 	
 	func videoCaptureFinished(url :NSURL) {
