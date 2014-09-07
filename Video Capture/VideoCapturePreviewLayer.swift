@@ -26,7 +26,7 @@ class VideoCapturePreviewLayer: AVCaptureVideoPreviewLayer {
 	}
 	
 	// updates videoGravity to enable crop fit
-	func cropFit() {
+	func aspectFill() {
 		videoGravity = AVLayerVideoGravityResizeAspectFill
 	}
 }
