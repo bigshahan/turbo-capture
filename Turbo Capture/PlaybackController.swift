@@ -32,6 +32,7 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 	
 	// MARK: IBOutlets
 	@IBOutlet weak var playbackView: UIView!
+	@IBOutlet weak var progressView: UIProgressView!
 
 	// MARK: - Handle Button Taps
 	@IBAction func playPauseTapped(sender: AnyObject) {
@@ -56,23 +57,21 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 		
 		// setup of playback
 		playback = TurboPlayback(url: url!, view: playbackView, delegate: self)
+		playback?.aspectFill()
 	}
 	
 	// MARK: - Playback Delegate
 	func turboPlaybackStopped() {
-		
 	}
 	
 	func turboPlaybackPaused() {
-		
 	}
 	
 	func turboPlaybackStarted() {
-		
 	}
 	
-	func turboPlaybackPosition(seconds :Float) {
-		// update progress bar
+	func turboPlaybackPosition(seconds :Double) {
+		progressView.setProgress(Float(seconds/playback!.duration), animated: true)
 	}
 	
 	func turboPlaybackError(message :String) {

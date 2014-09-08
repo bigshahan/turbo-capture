@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import AVFoundation
 
 protocol TurboPlaybackDelegate {
 	func turboPlaybackStopped()
 	func turboPlaybackPaused()
 	func turboPlaybackStarted()
-	func turboPlaybackPosition(seconds :Float)
+	func turboPlaybackPosition(seconds :Double)
 	func turboPlaybackError(message :String)
 }
 
@@ -30,18 +31,20 @@ class TurboPlayback: NSObject {
 		}
 	}
 	// in seconds
-	var duration :Float {
+	var duration :Double {
 		get {
 			return videoDuration
 		}
 	}
 	
 	// MARK: Private Properties
-	private var url :NSURL?
+	private var url :NSURL
 	private var errorOccurred = false
-	private var view :UIView?
+	private var view :UIView
 	private var isPlaying = false
-	private var videoDuration :Float = 0.0
+	private var videoDuration :Double = 0.0
+	private var player :AVPlayer
+	private var layer :AVPlayerLayer
 	
 	// MARK: Init
 	init(url :NSURL, view :UIView, delegate :TurboPlaybackDelegate?) {
@@ -50,13 +53,20 @@ class TurboPlayback: NSObject {
 		self.delegate = delegate
 		
 		// setup avplayer
-		
+		player = AVPlayer(URL: url)
 		
 		// determine video duration
-		
+		videoDuration = CMTimeGetSeconds(player.currentItem.asset.duration)
 		
 		// setup view
-		
+		layer = AVPlayerLayer(player: player)
+		layer.frame = view.bounds
+		view.layer.addSublayer(layer)
+	}
+	
+	// MARK: Sizing
+	func aspectFill() {
+		layer.videoGravity = AVLayerVideoGravityResizeAspectFill
 	}
 	
 	// MARK: Playback Lifecycle
@@ -65,8 +75,12 @@ class TurboPlayback: NSObject {
 			return
 		}
 		
-		delegate?.turboPlaybackStarted()
-		isPlaying = true
+		// nested due to swift compiler errors with type
+		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
+			player.play()
+			delegate?.turboPlaybackStarted()
+			isPlaying = true
+		}
 	}
 	
 	func pause() {
@@ -74,14 +88,29 @@ class TurboPlayback: NSObject {
 			return
 		}
 		
+		player.pause()
+		
 		delegate?.turboPlaybackPaused()
 		isPlaying = false
+	}
+	
+	func seek(seconds :Double) {
+		var seconds2 = seconds
+		
+		if seconds > videoDuration {
+			seconds2 = videoDuration
+		}
+		
+		player.seekToTime(CMTimeMakeWithSeconds(seconds, player.currentTime().timescale))
 	}
 	
 	func stop() {
 		if !isPlaying || !ready {
 			return
 		}
+		
+		pause()
+		seek(0)
 		
 		delegate?.turboPlaybackStopped()
 	}
