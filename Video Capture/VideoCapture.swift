@@ -68,11 +68,7 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	// the camera. defaults to front
 	var camera :VideoCaptureCamera {
 		set(camera) {
-			// cannot change camera while recording
-			if recording {
-				return
-			}
-			
+			// set current camera
 			currentCamera = camera
 			
 			// update preview
