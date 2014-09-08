@@ -246,10 +246,18 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	
 	// stops recording and video capture
 	func stop() {
+		// pause recording if needed
 		if recording {
 			pause()
 		}
 		
+		// TODO: create final output file
+		
+		
+		// TODO: call finished delegate
+		
+		
+		// end session
 		session?.stopRunning()
 		errorOccurred = false
 		session = nil
