@@ -64,16 +64,16 @@ class ViewController: UIViewController, TurboCaptureDelegate {
 	
 	// MARK: - Video Capture Delegate
 	func turboCaptureError(message :String) {
-		UIAlertView(title: "Error", message: "Could not activate the camera or microphone.", delegate: nil, cancelButtonTitle: "Ok").show()
-		NSLog(message)
+		UIAlertView(title: "Error", message: "Could not activate the camera or microphone.", delegate: nil, cancelButtonTitle: "Dismiss").show()
+		NSLog("TurboCaptureError: \(message)")
 	}
 	
 	func turboCaptureCameraDenied() {
-		UIAlertView(title: "This app does not have access to your camera.", message: "You can enable access in Privacy Settings.", delegate: nil, cancelButtonTitle: "Ok").show()
+		UIAlertView(title: "This app does not have access to your camera.", message: "You can enable access in Privacy Settings.", delegate: nil, cancelButtonTitle: "Dismiss").show()
 	}
 	
 	func turboCaptureMicrophoneDenied() {
-		UIAlertView(title: "This app does not have access to your microphone.", message: "You can enable access in Privacy Settings.", delegate: nil, cancelButtonTitle: "Ok").show()
+		UIAlertView(title: "This app does not have access to your microphone.", message: "You can enable access in Privacy Settings.", delegate: nil, cancelButtonTitle: "Dismiss").show()
 	}
 	
 	func turboCaptureFinished(url :NSURL) {
@@ -82,6 +82,13 @@ class ViewController: UIViewController, TurboCaptureDelegate {
 		// write to photos library
 		var library = ALAssetsLibrary()
 		library.writeVideoAtPathToSavedPhotosAlbum(url, completionBlock: nil)
+		
+		// figure out filesize
+		var err = NSErrorPointer()
+		var attributes = NSFileManager.defaultManager().attributesOfItemAtPath(url.path!, error: err)
+		var bytes = attributes![NSFileSize] as NSNumber
+		
+		NSLog("\(bytes) bytes :)")
 	}
 	
 	func turboCaptureElapsed(seconds: Double) {
@@ -106,6 +113,7 @@ class ViewController: UIViewController, TurboCaptureDelegate {
 	
 		// setup video capture + preview
 		videoCapture = TurboCapture(previewLayer: previewLayer, delegate: self)
+		videoCapture?.duration = 20
 		videoCapture?.start()
 	}
 	
