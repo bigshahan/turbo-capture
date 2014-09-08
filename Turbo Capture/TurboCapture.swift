@@ -221,7 +221,7 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		previewLayer?.session = session
 		
 		// setup capture queue
-		captureQueue = dispatch_queue_create("com.turbocapture.capturequeue", DISPATCH_QUEUE_SERIAL)
+		captureQueue = dispatch_queue_create("com.shahan.turbocapture.capturequeue", DISPATCH_QUEUE_SERIAL)
 		
 		// setup video output
 		videoOutput = AVCaptureVideoDataOutput()
@@ -234,7 +234,7 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		session?.addOutput(audioOutput)
 
 		// setup assetwrite
-		serialQueue = dispatch_queue_create("com.videocapture.serialqueue", nil)
+		serialQueue = dispatch_queue_create("com.shahan.turbocapture.serialqueue", nil)
 		
 		// get a temporary file for output
 		var path = "\(NSTemporaryDirectory())output.mov"
