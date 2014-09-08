@@ -30,21 +30,24 @@ protocol VideoCaptureDelegate {
 }
 
 // MARK: - Video Capture Class
-class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
+class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
 	// MARK: Private Properties
 	private var delegate :VideoCaptureDelegate?
 	private var previewLayer :VideoCapturePreviewLayer?
 	
 	private var session :AVCaptureSession?
-	private var output :AVCaptureMovieFileOutput?
 	private var outputUrl :NSURL?
+	private var captureQueue :dispatch_queue_t?
+	private var serialQueue :dispatch_queue_t?
 	
 	private var currentCamera :VideoCaptureCamera = VideoCaptureCamera.Front
 	private var videoDevice :AVCaptureDevice?
 	private var videoInput :AVCaptureDeviceInput?
-	
+	private var videoOutput :AVCaptureVideoDataOutput?
+
 	private var audioInput :AVCaptureDeviceInput?
 	private var audioDevice :AVCaptureDevice?
+	private var audioOutput :AVCaptureAudioDataOutput?
 
 	private var errorOccurred = false
 	private var recording = false
@@ -54,7 +57,7 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 	
 	// MARK: - Computed / Public Properties
 	var ready: Bool {
-		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil && output != nil && outputUrl != nil
+		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil && videoOutput != nil && audioOutput != nil && outputUrl != nil
 	}
 	
 	// quality is only set when start is called
@@ -102,8 +105,21 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
 	}
+	
+	// MARK: - Video / Audio Capture Data Output Delegate
+	func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
+		if ready && recording {
+			dispatch_sync(serialQueue, {
+				if captureOutput.connectionWithMediaType(AVMediaTypeAudio) == connection {
+					NSLog("audio output!")
+				} else {
+					NSLog("video output!")
+				}
+			})
+		}
+	}
 
-	// MARK - Recording Lifecycle
+	// MARK: - Recording Lifecycle
 	// starts the preview
 	func start() {
 		// check if already setup
@@ -189,17 +205,21 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		// setup preview layer
 		previewLayer?.session = session
 		
-		// setup output
-		output = AVCaptureMovieFileOutput()
-		output?.maxRecordedDuration = CMTimeMakeWithSeconds(duration, 30)
-		output?.minFreeDiskSpaceLimit = 1024 * 1024 * 50
+		// setup capture queue
+		captureQueue = dispatch_queue_create("com.videocapture.capturequeue", DISPATCH_QUEUE_SERIAL)
 		
-		if session? != nil && session!.canAddOutput(output) {
-			session?.addOutput(output)
-		} else {
-			error("Could not add file output")
-			return
-		}
+		// setup video output
+		videoOutput = AVCaptureVideoDataOutput()
+		videoOutput?.setSampleBufferDelegate(self, queue: captureQueue)
+		session?.addOutput(videoOutput)
+		
+		// setup audio output
+		audioOutput = AVCaptureAudioDataOutput()
+		audioOutput?.setSampleBufferDelegate(self, queue: captureQueue)
+		session?.addOutput(audioOutput)
+
+		// setup assetwrite
+		serialQueue = dispatch_queue_create("com.videocapture.serialqueue", nil)
 		
 		// get a temporary file for output
 		var path = "\(NSTemporaryDirectory())output.mov"
@@ -231,9 +251,12 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		session = nil
 		videoDevice = nil
 		videoInput = nil
+		videoOutput = nil
 		audioDevice = nil
 		audioInput = nil
-		output = nil
+		audioOutput = nil
+		captureQueue = nil
+		serialQueue = nil
 		outputUrl = nil
 	}
 	
@@ -244,19 +267,12 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 			return
 		}
 		
-		if !recording {
-			output?.startRecordingToOutputFileURL(outputUrl, recordingDelegate: self)
-			recording = true
-		}
+		recording = true
 	}
 	
 	// pause video recording
 	func pause() {
-		if !recording {
-			return
-		}
 		recording = false
-		output?.stopRecording()
 	}
 	
 	// MARK: - Multiple Cameras
@@ -291,19 +307,6 @@ class VideoCapture: NSObject, AVCaptureFileOutputRecordingDelegate {
 		}
 		
 		return cameras
-	}
-	
-	// MARK: - Capture Output Delegate
-	func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!) {
-		NSLog("started recording \(CMTimeGetSeconds(captureOutput.recordedDuration))")
-	}
-	
-	func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
-		NSLog("stopped recording \(CMTimeGetSeconds(captureOutput.recordedDuration))")
-		if CMTimeGetSeconds(captureOutput.recordedDuration) >= duration {
-			stop()
-			self.delegate?.videoCaptureFinished(outputFileURL)
-		}
 	}
 	
 	// MARK: - Error Handling
