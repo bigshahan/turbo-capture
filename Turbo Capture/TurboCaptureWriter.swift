@@ -68,7 +68,7 @@ class TurboCaptureWriter: NSObject {
 		
 		// setup inputs
 		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
-		videoInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
+		videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: nil)
 		
 		// add inputs to AVAssetWriter
 		if writer!.canAddInput(audioInput) {
@@ -109,7 +109,7 @@ class TurboCaptureWriter: NSObject {
 			NSLog("Video sample buffer!")
 		
 		// handle audio
-		} else if audioInput!.readyForMoreMediaData {
+		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData {
 			audioInput?.appendSampleBuffer(sampleBuffer)
 			NSLog("Audio sample buffer!")
 		}

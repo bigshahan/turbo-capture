@@ -129,7 +129,7 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 			dispatch_sync(serialQueue, {
 				if captureOutput.connectionWithMediaType(AVMediaTypeAudio) == connection {
 					self.writer?.write(TurboCaptureWriterMediaType.Audio, sampleBuffer: sampleBuffer)
-				} else {
+				} else if captureOutput.connectionWithMediaType(AVMediaTypeVideo) == connection {
 					self.writer?.write(TurboCaptureWriterMediaType.Video, sampleBuffer: sampleBuffer)
 				}
 			})
@@ -242,6 +242,17 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		
 		// get a temporary file for output
 		var path = "\(NSTemporaryDirectory())output.mov"
+		
+		var fileManager = NSFileManager.defaultManager()
+		if fileManager.fileExistsAtPath(path) {
+			var error = NSErrorPointer()
+			
+			if !fileManager.removeItemAtPath(path, error: error) {
+				self.error("A duplicate output file could not be removed from the output directory")
+				return
+			}
+		}
+
 		outputUrl = NSURL(fileURLWithPath: path)
 		
 		// setup assetwrite
