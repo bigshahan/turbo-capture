@@ -48,7 +48,7 @@ protocol TurboCaptureDelegate {
 }
 
 // MARK: - Video Capture Class
-class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
+class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate, TurboCaptureWriterDelegate {
 	// MARK: Private Properties
 	private var delegate :TurboCaptureDelegate?
 	private var previewLayer :TurboCapturePreviewLayer?
@@ -128,12 +128,17 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		if ready && recording {
 			dispatch_sync(serialQueue, {
 				if captureOutput.connectionWithMediaType(AVMediaTypeAudio) == connection {
-					NSLog("audio output!")
+					self.writer?.write(TurboCaptureWriterMediaType.Audio, sampleBuffer: sampleBuffer)
 				} else {
-					NSLog("video output!")
+					self.writer?.write(TurboCaptureWriterMediaType.Video, sampleBuffer: sampleBuffer)
 				}
 			})
 		}
+	}
+	
+	// MARK: - Turbo Capture Writer Delegate
+	func turboCaptureWriterError(message: String) {
+		error(message)
 	}
 
 	// MARK: - Recording Lifecycle
@@ -241,7 +246,7 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		
 		// setup assetwrite
 		serialQueue = dispatch_queue_create("com.shahan.turbocapture.serialqueue", nil)
-		writer = TurboCaptureWriter(url: outputUrl!)
+		writer = TurboCaptureWriter(url: outputUrl!, delegate: self)
 		
 		// start running the session
 		session?.startRunning()

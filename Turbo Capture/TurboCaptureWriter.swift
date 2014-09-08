@@ -26,32 +26,80 @@
 import UIKit
 import AVFoundation
 
-enum 
+enum TurboCaptureWriterMediaType {
+	case Video
+	case Audio
+}
+
+// delegate
+protocol TurboCaptureWriterDelegate {
+	func turboCaptureWriterError(message :String)
+}
 
 // basically wraps AVAssetWriter with inputs
 class TurboCaptureWriter: NSObject {
-	var writer :AVAssetWriter
-	var audioInput :AVAssetWriterInput
-	var videoInput :AVAssetWriterInput
+	var delegate :TurboCaptureWriterDelegate?
 	
-	init(url: NSURL) {
+	private var writer :AVAssetWriter?
+	private var audioInput :AVAssetWriterInput?
+	private var videoInput :AVAssetWriterInput?
+	private var errorOccurred = false
+	
+	var ready :Bool {
+		get {
+			return !errorOccurred && writer != nil && audioInput != nil && videoInput != nil
+		}
+	}
+	
+	init(url: NSURL, delegate: TurboCaptureWriterDelegate?) {
+		super.init()
+
+		// setup delegate
+		self.delegate = delegate
+		
+		// setup writer
 		var err = NSErrorPointer()
-		// setyp writer
 		writer = AVAssetWriter(URL: url, fileType: AVMediaTypeMuxed, error: err)
+		
+		if err != nil {
+			error("Could not initialize asset writer")
+			return
+		}
 		
 		// setup inputs
 		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
 		videoInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
 		
 		// add inputs to AVAssetWriter
-		if writer.canAddInput(audioInput) {
-			writer.addInput(audioInput)
+		if writer!.canAddInput(audioInput) {
+			writer?.addInput(audioInput)
+		} else {
+			error("Could not add audio input to asset writer")
+			return
 		}
 		
-		if writer.canAddInput(videoInput) {
-			writer.addInput(videoInput)
+		if writer!.canAddInput(videoInput) {
+			writer?.addInput(videoInput)
+		} else {
+			error("Could not add video input to asset writer")
+			return
 		}
 	}
 	
+	func write(type: TurboCaptureWriterMediaType, sampleBuffer: CMSampleBuffer) {
+		if !ready {
+			return
+		}
+		
+		if type == TurboCaptureWriterMediaType.Video {
+			NSLog("Video sample buffer!")
+		} else {
+			NSLog("Audio sample buffer!")
+		}
+	}
 	
+	private func error(message :String) {
+		errorOccurred = true
+		delegate?.turboCaptureWriterError(message)
+	}
 }
