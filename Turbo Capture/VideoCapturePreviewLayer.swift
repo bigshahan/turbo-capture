@@ -26,7 +26,7 @@
 import AVFoundation
 import UIKit
 
-class VideoCapturePreviewLayer: AVCaptureVideoPreviewLayer {
+class TurboCapturePreviewLayer: AVCaptureVideoPreviewLayer {
 	init(view: UIView) {
 		super.init()
 		self.frame = view.bounds

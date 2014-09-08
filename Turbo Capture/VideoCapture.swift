@@ -1,6 +1,6 @@
 //
-//  VideoCapture.swift
-//  Video Capture
+//  TurboCapture.swift
+//  Turbo Capture
 //
 //  Created by Shahan Khan on 9/4/14.
 //  Copyright (c) 2014 Shahan Khan
@@ -29,36 +29,36 @@ import AVFoundation
 import AssetsLibrary
 import UIKit
 
-enum VideoCaptureQuality {
+enum TurboCaptureQuality {
 	case Normal
 }
 
-enum VideoCaptureCamera {
+enum TurboCaptureCamera {
 	case Front
 	case Back
 }
 
 // MARK: - Video Capture Delegate Protocol
-protocol VideoCaptureDelegate {
-	func videoCaptureError(message :String)
-	func videoCaptureMicrophoneDenied()
-	func videoCaptureCameraDenied()
-	func videoCaptureFinished(url :NSURL)
-	func videoCaptureElapsed(seconds: Double)
+protocol TurboCaptureDelegate {
+	func turboCaptureError(message :String)
+	func turboCaptureMicrophoneDenied()
+	func turboCaptureCameraDenied()
+	func turboCaptureFinished(url :NSURL)
+	func turboCaptureElapsed(seconds: Double)
 }
 
 // MARK: - Video Capture Class
-class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
+class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
 	// MARK: Private Properties
-	private var delegate :VideoCaptureDelegate?
-	private var previewLayer :VideoCapturePreviewLayer?
+	private var delegate :TurboCaptureDelegate?
+	private var previewLayer :TurboCapturePreviewLayer?
 	
 	private var session :AVCaptureSession?
 	private var outputUrl :NSURL?
 	private var captureQueue :dispatch_queue_t?
 	private var serialQueue :dispatch_queue_t?
 	
-	private var currentCamera :VideoCaptureCamera = VideoCaptureCamera.Front
+	private var currentCamera :TurboCaptureCamera = TurboCaptureCamera.Front
 	private var videoDevice :AVCaptureDevice?
 	private var videoInput :AVCaptureDeviceInput?
 	private var videoOutput :AVCaptureVideoDataOutput?
@@ -80,10 +80,10 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	}
 	
 	// quality is only set when start is called
-	var quality :VideoCaptureQuality = VideoCaptureQuality.Normal
+	var quality :TurboCaptureQuality = TurboCaptureQuality.Normal
 	
 	// the camera. defaults to front
-	var camera :VideoCaptureCamera {
+	var camera :TurboCaptureCamera {
 		set(camera) {
 			// set current camera
 			currentCamera = camera
@@ -116,7 +116,7 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	
 	// MARK: - Init Function
 	// duration is number of seconds
-	init(previewLayer :VideoCapturePreviewLayer?, delegate :VideoCaptureDelegate?) {
+	init(previewLayer :TurboCapturePreviewLayer?, delegate :TurboCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
 	}
@@ -146,7 +146,7 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		var videoStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
 		
 		if videoStatus == AVAuthorizationStatus.Denied {
-			delegate?.videoCaptureCameraDenied()
+			delegate?.turboCaptureCameraDenied()
 			return
 		}
 		
@@ -154,7 +154,7 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		var audioStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeAudio)
 		
 		if audioStatus == AVAuthorizationStatus.Denied {
-			delegate?.videoCaptureMicrophoneDenied()
+			delegate?.turboCaptureMicrophoneDenied()
 			return
 		}
 		
@@ -221,7 +221,7 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		previewLayer?.session = session
 		
 		// setup capture queue
-		captureQueue = dispatch_queue_create("com.videocapture.capturequeue", DISPATCH_QUEUE_SERIAL)
+		captureQueue = dispatch_queue_create("com.turbocapture.capturequeue", DISPATCH_QUEUE_SERIAL)
 		
 		// setup video output
 		videoOutput = AVCaptureVideoDataOutput()
@@ -281,15 +281,15 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	}
 	
 	// MARK: - Multiple Cameras
-	func cameraDevice(type: VideoCaptureCamera) -> AVCaptureDevice {
+	func cameraDevice(type: TurboCaptureCamera) -> AVCaptureDevice {
 		var devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
 		
 		for device in devices as [AVCaptureDevice] {
-			if type == VideoCaptureCamera.Back && device.position == AVCaptureDevicePosition.Back {
+			if type == TurboCaptureCamera.Back && device.position == AVCaptureDevicePosition.Back {
 				return device
 			}
 			
-			if type == VideoCaptureCamera.Front && device.position == AVCaptureDevicePosition.Front {
+			if type == TurboCaptureCamera.Front && device.position == AVCaptureDevicePosition.Front {
 				return device
 			}
 		}
@@ -297,17 +297,17 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		return devices[0] as AVCaptureDevice
 	}
 	
-	func availableCameras() -> [VideoCaptureCamera] {
-		var cameras :[VideoCaptureCamera] = []
+	func availableCameras() -> [TurboCaptureCamera] {
+		var cameras :[TurboCaptureCamera] = []
 		
 		// get cameras
 		var devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
 		
 		for device in devices as [AVCaptureDevice] {
 			if device.position == AVCaptureDevicePosition.Back {
-				cameras.append(VideoCaptureCamera.Back)
+				cameras.append(TurboCaptureCamera.Back)
 			} else {
-				cameras.append(VideoCaptureCamera.Front)
+				cameras.append(TurboCaptureCamera.Front)
 			}
 		}
 		
@@ -322,6 +322,6 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	
 	private func error(message :String) {
 		errorOccurred = true
-		delegate?.videoCaptureError(message)
+		delegate?.turboCaptureError(message)
 	}
 }

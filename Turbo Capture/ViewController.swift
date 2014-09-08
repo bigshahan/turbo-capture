@@ -26,10 +26,10 @@
 import UIKit
 import MediaPlayer
 
-class ViewController: UIViewController, VideoCaptureDelegate {
+class ViewController: UIViewController, TurboCaptureDelegate {
 	// MARK: Properties
-	var videoCapture :VideoCapture? = nil
-	var previewLayer :VideoCapturePreviewLayer? = nil
+	var videoCapture :TurboCapture? = nil
+	var previewLayer :TurboCapturePreviewLayer? = nil
 	
 	// MARK: IBOutlets
 	@IBOutlet weak var previewView: UIView!
@@ -62,27 +62,27 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 	}
 	
 	// MARK: - Video Capture Delegate
-	func videoCaptureError(message :String) {
+	func turboCaptureError(message :String) {
 		UIAlertView(title: "Error", message: "Could not activate the camera or microphone.", delegate: nil, cancelButtonTitle: "Ok").show()
 		NSLog(message)
 	}
 	
-	func videoCaptureCameraDenied() {
+	func turboCaptureCameraDenied() {
 		UIAlertView(title: "This app does not have access to your camera.", message: "You can enable access in Privacy Settings.", delegate: nil, cancelButtonTitle: "Ok").show()
 	}
 	
-	func videoCaptureMicrophoneDenied() {
+	func turboCaptureMicrophoneDenied() {
 		UIAlertView(title: "This app does not have access to your microphone.", message: "You can enable access in Privacy Settings.", delegate: nil, cancelButtonTitle: "Ok").show()
 	}
 	
-	func videoCaptureFinished(url :NSURL) {
+	func turboCaptureFinished(url :NSURL) {
 		NSLog("\(url)")
 		var controller = MPMoviePlayerViewController(contentURL: url)
 		presentMoviePlayerViewControllerAnimated(controller)
 		reset()
 	}
 	
-	func videoCaptureElapsed(seconds: Double) {
+	func turboCaptureElapsed(seconds: Double) {
 		progressView.setProgress(Float(seconds/10.0), animated: true)
 	}
 
@@ -95,11 +95,11 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		super.viewDidLoad()
 		
 		// setup the preview layer
-		previewLayer = VideoCapturePreviewLayer(view: previewView)
+		previewLayer = TurboCapturePreviewLayer(view: previewView)
 		previewLayer?.aspectFill()
 	
 		// setup video capture + preview
-		videoCapture = VideoCapture(previewLayer: previewLayer, delegate: self)
+		videoCapture = TurboCapture(previewLayer: previewLayer, delegate: self)
 		videoCapture?.start()
 	}
 	

@@ -1,15 +1,15 @@
 //
-//  Video_CaptureTests.swift
-//  Video CaptureTests
+//  Turbo_CaptureTests.swift
+//  Turbo CaptureTests
 //
-//  Created by Shahan Khan on 9/4/14.
+//  Created by Shahan Khan on 9/7/14.
 //  Copyright (c) 2014 Shahan Khan. All rights reserved.
 //
 
 import UIKit
 import XCTest
 
-class Video_CaptureTests: XCTestCase {
+class Turbo_CaptureTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

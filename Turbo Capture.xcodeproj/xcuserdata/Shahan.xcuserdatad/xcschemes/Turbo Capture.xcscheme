@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6BC23BBB19B98A1E00491E28"
-               BuildableName = "Video Capture.app"
-               BlueprintName = "Video Capture"
-               ReferencedContainer = "container:Video Capture.xcodeproj">
+               BlueprintIdentifier = "6B77378E19BD7E980051EC53"
+               BuildableName = "Turbo Capture.app"
+               BlueprintName = "Turbo Capture"
+               ReferencedContainer = "container:Turbo Capture.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -28,10 +28,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6BC23BCD19B98A1E00491E28"
-               BuildableName = "Video CaptureTests.xctest"
-               BlueprintName = "Video CaptureTests"
-               ReferencedContainer = "container:Video Capture.xcodeproj">
+               BlueprintIdentifier = "6B7737A019BD7E980051EC53"
+               BuildableName = "Turbo CaptureTests.xctest"
+               BlueprintName = "Turbo CaptureTests"
+               ReferencedContainer = "container:Turbo Capture.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,20 +46,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6BC23BCD19B98A1E00491E28"
-               BuildableName = "Video CaptureTests.xctest"
-               BlueprintName = "Video CaptureTests"
-               ReferencedContainer = "container:Video Capture.xcodeproj">
+               BlueprintIdentifier = "6B7737A019BD7E980051EC53"
+               BuildableName = "Turbo CaptureTests.xctest"
+               BlueprintName = "Turbo CaptureTests"
+               ReferencedContainer = "container:Turbo Capture.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6BC23BBB19B98A1E00491E28"
-            BuildableName = "Video Capture.app"
-            BlueprintName = "Video Capture"
-            ReferencedContainer = "container:Video Capture.xcodeproj">
+            BlueprintIdentifier = "6B77378E19BD7E980051EC53"
+            BuildableName = "Turbo Capture.app"
+            BlueprintName = "Turbo Capture"
+            ReferencedContainer = "container:Turbo Capture.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -75,10 +75,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6BC23BBB19B98A1E00491E28"
-            BuildableName = "Video Capture.app"
-            BlueprintName = "Video Capture"
-            ReferencedContainer = "container:Video Capture.xcodeproj">
+            BlueprintIdentifier = "6B77378E19BD7E980051EC53"
+            BuildableName = "Turbo Capture.app"
+            BlueprintName = "Turbo Capture"
+            ReferencedContainer = "container:Turbo Capture.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -93,10 +93,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6BC23BBB19B98A1E00491E28"
-            BuildableName = "Video Capture.app"
-            BlueprintName = "Video Capture"
-            ReferencedContainer = "container:Video Capture.xcodeproj">
+            BlueprintIdentifier = "6B77378E19BD7E980051EC53"
+            BuildableName = "Turbo Capture.app"
+            BlueprintName = "Turbo Capture"
+            ReferencedContainer = "container:Turbo Capture.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
