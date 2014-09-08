@@ -34,6 +34,7 @@ enum TurboCaptureWriterMediaType {
 // delegate
 protocol TurboCaptureWriterDelegate {
 	func turboCaptureWriterError(message :String)
+	func turboCaptureWriterElapsed(seconds	:Double)
 }
 
 // basically wraps AVAssetWriter with inputs
@@ -44,6 +45,9 @@ class TurboCaptureWriter: NSObject {
 	private var audioInput :AVAssetWriterInput?
 	private var videoInput :AVAssetWriterInput?
 	private var errorOccurred = false
+	
+	// time first sample came at
+	private var startTime :CMTime?
 	
 	var ready :Bool {
 		get {
@@ -118,6 +122,12 @@ class TurboCaptureWriter: NSObject {
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
 			videoInput?.appendSampleBuffer(sampleBuffer)
 			
+			if startTime == nil {
+				startTime = CMSampleBufferGetDecodeTimeStamp(sampleBuffer)
+			}
+			
+			
+			
 		// handle audio
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData {
 			audioInput?.appendSampleBuffer(sampleBuffer)
@@ -141,6 +151,7 @@ class TurboCaptureWriter: NSObject {
 		audioInput = nil
 		videoInput = nil
 		errorOccurred = false
+		startTime = nil
 	}
 	
 	private func error(message :String) {

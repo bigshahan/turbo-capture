@@ -83,7 +83,15 @@ class ViewController: UIViewController, TurboCaptureDelegate {
 	}
 	
 	func turboCaptureElapsed(seconds: Double) {
-		progressView.setProgress(Float(seconds/10.0), animated: true)
+		var value = Float(seconds/10.0)
+		
+		if seconds >= 1 {
+			videoCapture?.stop()
+			value = 1
+			return
+		}
+		
+		progressView.setProgress(value, animated: true)
 	}
 
 	// MARK: - View Controller Lifecycle

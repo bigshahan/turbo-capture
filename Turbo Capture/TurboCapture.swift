@@ -140,6 +140,10 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	func turboCaptureWriterError(message: String) {
 		error(message)
 	}
+	
+	func turboCaptureWriterElapsed(seconds: Double) {
+		delegate?.turboCaptureElapsed(seconds)
+	}
 
 	// MARK: - Recording Lifecycle
 	// starts the preview
