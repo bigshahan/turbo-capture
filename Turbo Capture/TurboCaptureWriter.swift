@@ -26,6 +26,8 @@
 import UIKit
 import AVFoundation
 
+enum 
+
 // basically wraps AVAssetWriter with inputs
 class TurboCaptureWriter: NSObject {
 	var writer :AVAssetWriter

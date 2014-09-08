@@ -234,14 +234,14 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		audioOutput = AVCaptureAudioDataOutput()
 		audioOutput?.setSampleBufferDelegate(self, queue: captureQueue)
 		session?.addOutput(audioOutput)
-
-		// setup assetwrite
-		serialQueue = dispatch_queue_create("com.shahan.turbocapture.serialqueue", nil)
-		writer = TurboCaptureWriter(url: outputUrl!)
 		
 		// get a temporary file for output
 		var path = "\(NSTemporaryDirectory())output.mov"
 		outputUrl = NSURL(fileURLWithPath: path)
+		
+		// setup assetwrite
+		serialQueue = dispatch_queue_create("com.shahan.turbocapture.serialqueue", nil)
+		writer = TurboCaptureWriter(url: outputUrl!)
 		
 		// start running the session
 		session?.startRunning()
