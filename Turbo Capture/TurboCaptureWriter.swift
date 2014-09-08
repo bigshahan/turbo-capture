@@ -1,8 +1,8 @@
 //
-//  VideoCaptureLayer.swift
-//  Video Capture
+//  TurboCaptureWriter.swift
+//  Turbo Capture
 //
-//  Created by Shahan Khan on 9/5/14.
+//  Created by Shahan Khan on 9/8/14.
 //  Copyright (c) 2014 Shahan Khan.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,27 +23,33 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //	THE SOFTWARE.
 
-import AVFoundation
 import UIKit
+import AVFoundation
 
-class TurboCapturePreviewLayer: AVCaptureVideoPreviewLayer {
-	init(view: UIView) {
-		super.init()
-		self.frame = view.bounds
-		view.layer.addSublayer(self)
+// basically wraps AVAssetWriter with inputs
+class TurboCaptureWriter: NSObject {
+	var writer :AVAssetWriter
+	var audioInput :AVAssetWriterInput
+	var videoInput :AVAssetWriterInput
+	
+	init(url: NSURL) {
+		var err = NSErrorPointer()
+		// setyp writer
+		writer = AVAssetWriter(URL: url, fileType: AVMediaTypeMuxed, error: err)
+		
+		// setup inputs
+		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
+		videoInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
+		
+		// add inputs to AVAssetWriter
+		if writer.canAddInput(audioInput) {
+			writer.addInput(audioInput)
+		}
+		
+		if writer.canAddInput(videoInput) {
+			writer.addInput(videoInput)
+		}
 	}
 	
-	// required init stuff
-	override init(session: AVCaptureSession!) {
-		super.init(session: session)
-	}
 	
-	required init(coder aDecoder: NSCoder) {
-	    fatalError("init(coder:) has not been implemented")
-	}
-	
-	// updates videoGravity to enable crop fit
-	func aspectFill() {
-		videoGravity = AVLayerVideoGravityResizeAspectFill
-	}
 }

@@ -3,7 +3,7 @@
 //  Turbo Capture
 //
 //  Created by Shahan Khan on 9/4/14.
-//  Copyright (c) 2014 Shahan Khan
+//  Copyright (c) 2014 Shahan Khan.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //	of this software and associated documentation files (the "Software"), to deal
@@ -71,12 +71,14 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	private var recording = false
 	private var elapsed = 0.0
 	
+	private var writer :TurboCaptureWriter?
+	
 	// MARK: - Computed / Public Properties
 	// number of seconds
 	var duration = 10.0
 	
 	var ready: Bool {
-		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil && videoOutput != nil && audioOutput != nil && outputUrl != nil
+		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil && videoOutput != nil && audioOutput != nil && outputUrl != nil && writer != nil
 	}
 	
 	// quality is only set when start is called
@@ -235,6 +237,7 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 
 		// setup assetwrite
 		serialQueue = dispatch_queue_create("com.shahan.turbocapture.serialqueue", nil)
+		writer = TurboCaptureWriter(url: outputUrl!)
 		
 		// get a temporary file for output
 		var path = "\(NSTemporaryDirectory())output.mov"
@@ -270,6 +273,7 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		captureQueue = nil
 		serialQueue = nil
 		outputUrl = nil
+		writer = nil
 		elapsed = 0
 	}
 	

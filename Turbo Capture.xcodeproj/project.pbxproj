@@ -18,6 +18,7 @@
 		6B7737B819BD7F3F0051EC53 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B7737B719BD7F3F0051EC53 /* MediaPlayer.framework */; };
 		6B7737BB19BD7F550051EC53 /* TurboCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7737B919BD7F550051EC53 /* TurboCapture.swift */; };
 		6B7737BC19BD7F550051EC53 /* TurboCapturePreviewLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7737BA19BD7F550051EC53 /* TurboCapturePreviewLayer.swift */; };
+		6B7737BE19BE23580051EC53 /* TurboCaptureWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7737BD19BE23580051EC53 /* TurboCaptureWriter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		6B7737B719BD7F3F0051EC53 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		6B7737B919BD7F550051EC53 /* TurboCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboCapture.swift; sourceTree = "<group>"; };
 		6B7737BA19BD7F550051EC53 /* TurboCapturePreviewLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboCapturePreviewLayer.swift; sourceTree = "<group>"; };
+		6B7737BD19BE23580051EC53 /* TurboCaptureWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboCaptureWriter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				6B77379419BD7E980051EC53 /* AppDelegate.swift */,
 				6B77379619BD7E980051EC53 /* ViewController.swift */,
 				6B7737B919BD7F550051EC53 /* TurboCapture.swift */,
+				6B7737BD19BE23580051EC53 /* TurboCaptureWriter.swift */,
 				6B7737BA19BD7F550051EC53 /* TurboCapturePreviewLayer.swift */,
 				6B77379819BD7E980051EC53 /* Main.storyboard */,
 				6B77379B19BD7E980051EC53 /* Images.xcassets */,
@@ -230,6 +233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B7737BE19BE23580051EC53 /* TurboCaptureWriter.swift in Sources */,
 				6B77379719BD7E980051EC53 /* ViewController.swift in Sources */,
 				6B7737BB19BD7F550051EC53 /* TurboCapture.swift in Sources */,
 				6B77379519BD7E980051EC53 /* AppDelegate.swift in Sources */,
