@@ -72,12 +72,12 @@ class TurboCaptureWriter: NSObject {
 		}
 		
 		// setup audio input
-//		var audioSettings = [
-//			AVFormatIDKey:kAudioFormatMPEG4AAC,
-//			AVSampleRateKey: 44100.0,
-//			AVNumberOfChannelsKey: 1,
-//			AVEncoderBitRateKey: 64000
-//		]
+		var audioSettings = [
+			AVFormatIDKey:kAudioFormatMPEG4AAC,
+			AVSampleRateKey: 44100.0,
+			AVNumberOfChannelsKey: 1,
+			AVEncoderBitRateKey: 64000
+		]
 		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
 		audioInput?.expectsMediaDataInRealTime = true
 

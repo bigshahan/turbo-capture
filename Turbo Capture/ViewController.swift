@@ -86,9 +86,8 @@ class ViewController: UIViewController, TurboCaptureDelegate {
 		// figure out filesize
 		var err = NSErrorPointer()
 		var attributes = NSFileManager.defaultManager().attributesOfItemAtPath(url.path!, error: err)
-		var bytes = attributes![NSFileSize] as NSNumber
-		
-		NSLog("\(bytes) bytes :)")
+		var megabytes = (attributes![NSFileSize] as NSNumber)/(1024*1024)
+		NSLog("\(megabytes) megabytes :)")
 	}
 	
 	func turboCaptureElapsed(seconds: Double) {
