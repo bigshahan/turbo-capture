@@ -101,7 +101,7 @@
                     <size key="freeformSize" width="320" height="536"/>
                     <connections>
                         <outlet property="previewView" destination="ggd-CO-2Ns" id="J6q-hA-rkJ"/>
-                        <outlet property="progressView" destination="7jb-TH-qTL" id="MsP-9Y-lKU"/>
+                        <outlet property="progressView" destination="7jb-TH-qTL" id="zY7-L2-QPM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

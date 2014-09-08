@@ -52,6 +52,8 @@ class ViewController: UIViewController, TurboCaptureDelegate {
 	
 	// MARK: - Handle Record Button
 	@IBAction func startRecording(sender: AnyObject) {
+		progressView.setProgress(0.5, animated: true)	
+		
 		if videoCapture != nil && videoCapture!.ready {
 			videoCapture?.record()
 		}
@@ -79,26 +81,21 @@ class ViewController: UIViewController, TurboCaptureDelegate {
 		NSLog("\(url)")
 		var controller = MPMoviePlayerViewController(contentURL: url)
 		presentMoviePlayerViewControllerAnimated(controller)
-		reset()
 	}
 	
 	func turboCaptureElapsed(seconds: Double) {
 		var value = Float(seconds/10.0)
-		
-		if seconds >= 1 {
+		progressView.setProgress(value, animated: false)
+
+		if value >= 1 {
 			videoCapture?.stop()
-			value = 1
 			return
 		}
 		
-		progressView.setProgress(value, animated: true)
+		NSLog("Setting progress \(value)")
 	}
 
 	// MARK: - View Controller Lifecycle
-	func reset() {
-		videoCapture?.start()
-	}
-	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		

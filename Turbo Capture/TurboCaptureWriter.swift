@@ -122,15 +122,22 @@ class TurboCaptureWriter: NSObject {
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
 			videoInput?.appendSampleBuffer(sampleBuffer)
 			
-			if startTime == nil {
-				startTime = CMSampleBufferGetDecodeTimeStamp(sampleBuffer)
-			}
-			
-			
-			
 		// handle audio
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData {
 			audioInput?.appendSampleBuffer(sampleBuffer)
+			
+			// figure out start point of sample buffer
+			var start = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+			
+			// set startTime if not yet set
+			if startTime == nil {
+				startTime = start
+			}
+			
+			// determine duration and trigger delegate
+			var duration = CMSampleBufferGetDuration(sampleBuffer)
+			var elapsed = CMTimeSubtract(CMTimeAdd(start, duration), startTime!)
+			delegate?.turboCaptureWriterElapsed(CMTimeGetSeconds(elapsed))
 		}
 	}
 	
