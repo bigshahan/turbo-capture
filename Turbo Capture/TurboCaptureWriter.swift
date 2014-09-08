@@ -75,8 +75,8 @@ class TurboCaptureWriter: NSObject {
 		// setup video input
 		var videoSettings = [
 			AVVideoCodecKey: AVVideoCodecH264,
-			AVVideoWidthKey: 480,
-			AVVideoHeightKey: 640
+			AVVideoWidthKey: 640,
+			AVVideoHeightKey: 480
 		]
 		videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
 		videoInput?.expectsMediaDataInRealTime = true
@@ -117,12 +117,10 @@ class TurboCaptureWriter: NSObject {
 		// handle video
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
 			videoInput?.appendSampleBuffer(sampleBuffer)
-			NSLog("Video sample buffer!")
-		
+			
 		// handle audio
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData {
 			audioInput?.appendSampleBuffer(sampleBuffer)
-			NSLog("Audio sample buffer!")
 		}
 	}
 	
