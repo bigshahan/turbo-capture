@@ -27,6 +27,7 @@ protocol VideoCaptureDelegate {
 	func videoCaptureMicrophoneDenied()
 	func videoCaptureCameraDenied()
 	func videoCaptureFinished(url :NSURL)
+	func videoCaptureElapsed(seconds: Double)
 }
 
 // MARK: - Video Capture Class
@@ -51,6 +52,7 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 
 	private var errorOccurred = false
 	private var recording = false
+	private var elapsed = 0.0
 	
 	// MARK: - Computed / Public Properties
 	// number of seconds
@@ -258,6 +260,7 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 		captureQueue = nil
 		serialQueue = nil
 		outputUrl = nil
+		elapsed = 0
 	}
 	
 	// start video recording

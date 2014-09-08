@@ -63,6 +63,10 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		presentMoviePlayerViewControllerAnimated(controller)
 	}
 	
+	func videoCaptureElapsed(seconds: Double) {
+		NSLog("\(seconds)")
+	}
+	
 	// MARK: - View Controller Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
