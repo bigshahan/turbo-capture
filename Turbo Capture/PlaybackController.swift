@@ -26,7 +26,7 @@
 import UIKit
 
 class PlaybackController: UIViewController {
-	var videoUrl :NSURL?
+	var url :NSURL?
 	var playback :TurboPlayback?
 	
 	@IBOutlet weak var playbackView: UIView!
@@ -37,7 +37,7 @@ class PlaybackController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		if videoUrl == nil {
+		if url == nil {
 			return
 		}
 		
