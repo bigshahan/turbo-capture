@@ -25,15 +25,28 @@
 
 import UIKit
 
-class PlaybackController: UIViewController {
+class PlaybackController: UIViewController, TurboPlaybackDelegate {
+	// MARK: Properties
 	var url :NSURL?
 	var playback :TurboPlayback?
 	
+	// MARK: IBOutlets
 	@IBOutlet weak var playbackView: UIView!
 
+	// MARK: - Handle Button Taps
 	@IBAction func playPauseTapped(sender: AnyObject) {
+		if playback == nil {
+			return
+		}
+		
+		if playback!.playing {
+			playback?.pause()
+		} else {
+			playback?.play()
+		}
 	}
 	
+	// MARK: - View Controller Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
@@ -42,6 +55,28 @@ class PlaybackController: UIViewController {
 		}
 		
 		// setup of playback
-		playback = TurboPlayback()
+		playback = TurboPlayback(url: url!, view: playbackView, delegate: self)
+	}
+	
+	// MARK: - Playback Delegate
+	func turboPlaybackStopped() {
+		
+	}
+	
+	func turboPlaybackPaused() {
+		
+	}
+	
+	func turboPlaybackStarted() {
+		
+	}
+	
+	func turboPlaybackPosition(seconds :Float) {
+		// update progress bar
+	}
+	
+	func turboPlaybackError(message :String) {
+		NSLog("Playback error \(message)")
+		UIAlertView(title: "Error", message: "Could not playback video", delegate: nil, cancelButtonTitle: "Dismiss")
 	}
 }
