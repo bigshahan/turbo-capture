@@ -51,9 +51,7 @@ class ViewController: UIViewController, TurboCaptureDelegate {
 	}
 	
 	// MARK: - Handle Record Button
-	@IBAction func startRecording(sender: AnyObject) {
-		progressView.setProgress(0.5, animated: true)	
-		
+	@IBAction func startRecording(sender: AnyObject) {		
 		if videoCapture != nil && videoCapture!.ready {
 			videoCapture?.record()
 		}

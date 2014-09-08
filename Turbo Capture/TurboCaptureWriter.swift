@@ -35,6 +35,7 @@ enum TurboCaptureWriterMediaType {
 protocol TurboCaptureWriterDelegate {
 	func turboCaptureWriterError(message :String)
 	func turboCaptureWriterElapsed(seconds	:Double)
+	func turboCaptureWriterFinished()
 }
 
 // basically wraps AVAssetWriter with inputs
@@ -71,9 +72,12 @@ class TurboCaptureWriter: NSObject {
 		}
 		
 		// setup audio input
-		var audioSettings = [
-			AVFormatIDKey:kAudioFormatMPEG4AAC
-		]
+//		var audioSettings = [
+//			AVFormatIDKey:kAudioFormatMPEG4AAC,
+//			AVSampleRateKey: 44100.0,
+//			AVNumberOfChannelsKey: 1,
+//			AVEncoderBitRateKey: 64000
+//		]
 		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
 		
 		// setup video input
@@ -149,6 +153,7 @@ class TurboCaptureWriter: NSObject {
 		// close file for writing
 		writer?.finishWritingWithCompletionHandler({
 			// clear out everything
+			self.delegate?.turboCaptureWriterFinished()
 			self.clear()
 		})
 	}
