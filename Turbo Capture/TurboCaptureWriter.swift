@@ -115,6 +115,25 @@ class TurboCaptureWriter: NSObject {
 		}
 	}
 	
+	func stop() {
+		if !ready {
+			return
+		}
+		
+		// close file for writing
+		writer?.finishWritingWithCompletionHandler({
+			// clear out everything
+			self.clear()
+		})
+	}
+	
+	private func clear() {
+		writer = nil
+		audioInput = nil
+		videoInput = nil
+		errorOccurred = false
+	}
+	
 	private func error(message :String) {
 		errorOccurred = true
 		delegate?.turboCaptureWriterError(message)
