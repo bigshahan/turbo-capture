@@ -69,7 +69,6 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 
 	private var errorOccurred = false
 	private var recording = false
-	private var elapsed = 0.0
 	
 	private var writer :TurboCaptureWriter?
 	
@@ -149,22 +148,6 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	func turboCaptureWriterFinished() {
 		// Call finished delegate
 		delegate?.turboCaptureFinished(outputUrl!)
-		
-		// end session
-		session?.stopRunning()
-		errorOccurred = false
-		session = nil
-		videoDevice = nil
-		videoInput = nil
-		videoOutput = nil
-		audioDevice = nil
-		audioInput = nil
-		audioOutput = nil
-		captureQueue = nil
-		serialQueue = nil
-		outputUrl = nil
-		writer = nil
-		elapsed = 0
 	}
 
 	// MARK: - Recording Lifecycle

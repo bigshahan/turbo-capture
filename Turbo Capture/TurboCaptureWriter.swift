@@ -154,16 +154,9 @@ class TurboCaptureWriter: NSObject {
 		writer?.finishWritingWithCompletionHandler({
 			// clear out everything
 			self.delegate?.turboCaptureWriterFinished()
-			self.clear()
+			self.errorOccurred = false
+			self.startTime = nil
 		})
-	}
-	
-	private func clear() {
-		writer = nil
-		audioInput = nil
-		videoInput = nil
-		errorOccurred = false
-		startTime = nil
 	}
 	
 	private func error(message :String) {
