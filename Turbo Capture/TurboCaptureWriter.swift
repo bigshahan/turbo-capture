@@ -59,7 +59,7 @@ class TurboCaptureWriter: NSObject {
 		
 		// setup writer
 		var err = NSErrorPointer()
-		writer = AVAssetWriter(URL: url, fileType: AVMediaTypeMuxed, error: err)
+		writer = AVAssetWriter(URL: url, fileType: AVFileTypeQuickTimeMovie, error: err)
 		
 		if err != nil {
 			error("Could not initialize asset writer")
@@ -87,13 +87,30 @@ class TurboCaptureWriter: NSObject {
 	}
 	
 	func write(type: TurboCaptureWriterMediaType, sampleBuffer: CMSampleBuffer) {
+		// can't write if not ready
 		if !ready {
 			return
 		}
 		
-		if type == TurboCaptureWriterMediaType.Video {
+		// make sure writer is setup
+		if writer?.status == AVAssetWriterStatus.Unknown {
+			writer?.startWriting()
+			writer?.startSessionAtSourceTime(CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
+		}
+		
+		if writer?.status == AVAssetWriterStatus.Failed {
+			error("AVAssetWriter error \(writer?.error.localizedDescription)")
+			return
+		}
+		
+		// handle video
+		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
+			videoInput?.appendSampleBuffer(sampleBuffer)
 			NSLog("Video sample buffer!")
-		} else {
+		
+		// handle audio
+		} else if audioInput!.readyForMoreMediaData {
+			audioInput?.appendSampleBuffer(sampleBuffer)
 			NSLog("Audio sample buffer!")
 		}
 	}
