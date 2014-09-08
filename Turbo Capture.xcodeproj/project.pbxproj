@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B48F2CA19BE69E5005C1C1E /* PlaybackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B48F2C919BE69E5005C1C1E /* PlaybackController.swift */; };
+		6B48F2CC19BE6BF0005C1C1E /* TurboPlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B48F2CB19BE6BF0005C1C1E /* TurboPlayback.swift */; };
 		6B77379519BD7E980051EC53 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B77379419BD7E980051EC53 /* AppDelegate.swift */; };
-		6B77379719BD7E980051EC53 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B77379619BD7E980051EC53 /* ViewController.swift */; };
+		6B77379719BD7E980051EC53 /* RecordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B77379619BD7E980051EC53 /* RecordController.swift */; };
 		6B77379A19BD7E980051EC53 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B77379819BD7E980051EC53 /* Main.storyboard */; };
 		6B77379C19BD7E980051EC53 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B77379B19BD7E980051EC53 /* Images.xcassets */; };
 		6B7737A819BD7E980051EC53 /* Turbo_CaptureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7737A719BD7E980051EC53 /* Turbo_CaptureTests.swift */; };
@@ -32,10 +34,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6B48F2C919BE69E5005C1C1E /* PlaybackController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackController.swift; sourceTree = "<group>"; };
+		6B48F2CB19BE6BF0005C1C1E /* TurboPlayback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboPlayback.swift; sourceTree = "<group>"; };
 		6B77378F19BD7E980051EC53 /* Turbo Capture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Turbo Capture.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B77379319BD7E980051EC53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B77379419BD7E980051EC53 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6B77379619BD7E980051EC53 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6B77379619BD7E980051EC53 /* RecordController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordController.swift; sourceTree = "<group>"; };
 		6B77379919BD7E980051EC53 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6B77379B19BD7E980051EC53 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6B7737A119BD7E980051EC53 /* Turbo CaptureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Turbo CaptureTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,10 +102,12 @@
 			isa = PBXGroup;
 			children = (
 				6B77379419BD7E980051EC53 /* AppDelegate.swift */,
-				6B77379619BD7E980051EC53 /* ViewController.swift */,
+				6B77379619BD7E980051EC53 /* RecordController.swift */,
+				6B48F2C919BE69E5005C1C1E /* PlaybackController.swift */,
 				6B7737B919BD7F550051EC53 /* TurboCapture.swift */,
 				6B7737BD19BE23580051EC53 /* TurboCaptureWriter.swift */,
 				6B7737BA19BD7F550051EC53 /* TurboCapturePreviewLayer.swift */,
+				6B48F2CB19BE6BF0005C1C1E /* TurboPlayback.swift */,
 				6B77379819BD7E980051EC53 /* Main.storyboard */,
 				6B77379B19BD7E980051EC53 /* Images.xcassets */,
 				6B77379219BD7E980051EC53 /* Supporting Files */,
@@ -233,9 +239,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B48F2CA19BE69E5005C1C1E /* PlaybackController.swift in Sources */,
 				6B7737BE19BE23580051EC53 /* TurboCaptureWriter.swift in Sources */,
-				6B77379719BD7E980051EC53 /* ViewController.swift in Sources */,
+				6B77379719BD7E980051EC53 /* RecordController.swift in Sources */,
 				6B7737BB19BD7F550051EC53 /* TurboCapture.swift in Sources */,
+				6B48F2CC19BE6BF0005C1C1E /* TurboPlayback.swift in Sources */,
 				6B77379519BD7E980051EC53 /* AppDelegate.swift in Sources */,
 				6B7737BC19BD7F550051EC53 /* TurboCapturePreviewLayer.swift in Sources */,
 			);

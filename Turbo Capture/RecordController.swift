@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  RecordController.swift
 //  Video Capture
 //
 //  Created by Shahan Khan on 9/4/14.
@@ -27,7 +27,7 @@ import UIKit
 import MediaPlayer
 import AssetsLibrary
 
-class ViewController: UIViewController, TurboCaptureDelegate {
+class RecordController: UIViewController, TurboCaptureDelegate {
 	// MARK: Properties
 	var videoCapture :TurboCapture? = nil
 	var previewLayer :TurboCapturePreviewLayer? = nil
@@ -88,6 +88,11 @@ class ViewController: UIViewController, TurboCaptureDelegate {
 		var attributes = NSFileManager.defaultManager().attributesOfItemAtPath(url.path!, error: err)
 		var megabytes = (attributes![NSFileSize] as NSNumber)/(1024*1024)
 		NSLog("\(megabytes) megabytes :)")
+		
+		// load PlaybackController
+		var controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("playback") as PlaybackController
+		controller.url = url
+		presentViewController(controller, animated: true, completion: nil)
 	}
 	
 	func turboCaptureElapsed(seconds: Double) {
