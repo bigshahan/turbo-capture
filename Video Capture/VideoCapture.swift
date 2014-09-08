@@ -52,10 +52,10 @@ class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	private var errorOccurred = false
 	private var recording = false
 	
-	// number of seconds
-	private var duration = 10.0
-	
 	// MARK: - Computed / Public Properties
+	// number of seconds
+	var duration = 10.0
+	
 	var ready: Bool {
 		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil && videoOutput != nil && audioOutput != nil && outputUrl != nil
 	}
