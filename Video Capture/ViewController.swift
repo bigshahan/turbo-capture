@@ -16,6 +16,7 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 	
 	// MARK: IBOutlets
 	@IBOutlet weak var previewView: UIView!
+	@IBOutlet weak var progressView: UIProgressView!
 	
 	// MARK: - Switch Camera
 	@IBAction func switchCamera(sender: AnyObject) {
@@ -61,13 +62,18 @@ class ViewController: UIViewController, VideoCaptureDelegate {
 		NSLog("\(url)")
 		var controller = MPMoviePlayerViewController(contentURL: url)
 		presentMoviePlayerViewControllerAnimated(controller)
+		reset()
 	}
 	
 	func videoCaptureElapsed(seconds: Double) {
-		NSLog("\(seconds)")
+		progressView.setProgress(Float(seconds/10.0), animated: true)
+	}
+
+	// MARK: - View Controller Lifecycle
+	func reset() {
+		videoCapture?.start()
 	}
 	
-	// MARK: - View Controller Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
