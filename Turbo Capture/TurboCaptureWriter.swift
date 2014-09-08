@@ -66,9 +66,20 @@ class TurboCaptureWriter: NSObject {
 			return
 		}
 		
-		// setup inputs
+		// setup audio input
+		var audioSettings = [
+			AVFormatIDKey:kAudioFormatMPEG4AAC
+		]
 		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
-		videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: nil)
+		
+		// setup video input
+		var videoSettings = [
+			AVVideoCodecKey: AVVideoCodecH264,
+			AVVideoWidthKey: 480,
+			AVVideoHeightKey: 640
+		]
+		videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
+		videoInput?.expectsMediaDataInRealTime = true
 		
 		// add inputs to AVAssetWriter
 		if writer!.canAddInput(audioInput) {
