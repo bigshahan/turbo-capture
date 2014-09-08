@@ -25,6 +25,7 @@
 
 import UIKit
 import MediaPlayer
+import AssetsLibrary
 
 class ViewController: UIViewController, TurboCaptureDelegate {
 	// MARK: Properties
@@ -77,8 +78,10 @@ class ViewController: UIViewController, TurboCaptureDelegate {
 	
 	func turboCaptureFinished(url :NSURL) {
 		NSLog("\(url)")
-		var controller = MPMoviePlayerViewController(contentURL: url)
-		presentMoviePlayerViewControllerAnimated(controller)
+		
+		// write to photos library
+		var library = ALAssetsLibrary()
+		library.writeVideoAtPathToSavedPhotosAlbum(url, completionBlock: nil)
 	}
 	
 	func turboCaptureElapsed(seconds: Double) {

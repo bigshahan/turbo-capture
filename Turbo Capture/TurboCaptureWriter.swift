@@ -79,7 +79,8 @@ class TurboCaptureWriter: NSObject {
 //			AVEncoderBitRateKey: 64000
 //		]
 		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
-		
+		audioInput?.expectsMediaDataInRealTime = true
+
 		// setup video input
 		var videoSettings = [
 			AVVideoCodecKey: AVVideoCodecH264,
@@ -152,6 +153,8 @@ class TurboCaptureWriter: NSObject {
 		
 		// close file for writing
 		writer?.finishWritingWithCompletionHandler({
+			NSLog("writer is finished writing")
+			
 			// clear out everything
 			self.delegate?.turboCaptureWriterFinished()
 			self.errorOccurred = false
