@@ -30,6 +30,9 @@ class TurboPlayback: TurboBase {
 			return !errorOccurred
 		}
 	}
+	
+	var loop = false
+	
 	// in seconds
 	var duration :Double {
 		get {
@@ -124,6 +127,10 @@ class TurboPlayback: TurboBase {
 		
 		pause()
 		seek(0)
+		
+		if loop {
+			play()
+		}
 		
 		delegate?.turboPlaybackStopped()
 	}
