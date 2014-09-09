@@ -117,7 +117,6 @@ class TurboPlayback: TurboBase {
 			seconds2 = videoDuration
 		}
 		
-		NSLog("attempting to seek to \(seconds)")
 		player.seekToTime(CMTimeMakeWithSeconds(seconds, player.currentTime().timescale))
 	}
 	
