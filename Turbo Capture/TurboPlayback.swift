@@ -83,13 +83,10 @@ class TurboPlayback: TurboBase {
 		// nested due to swift compiler errors with type
 		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
 			
-			async({
-				self.player.play()
-			})
-			
-			delegate?.turboPlaybackStarted()
-			isPlaying = true
-			
+			self.isPlaying = true
+			self.delegate?.turboPlaybackStarted()
+			self.player.play()
+
 			// start timer
 			timer = NSTimer.scheduledTimerWithTimeInterval(0.25, target: self, selector: "playedSplitSecond", userInfo: nil, repeats: true)
 		}
@@ -117,7 +114,7 @@ class TurboPlayback: TurboBase {
 			seconds2 = videoDuration
 		}
 		
-		player.seekToTime(CMTimeMakeWithSeconds(seconds, player.currentTime().timescale))
+		player.seekToTime(CMTimeMakeWithSeconds(seconds, player.currentTime().timescale), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimePositiveInfinity)
 	}
 	
 	func stop() {
