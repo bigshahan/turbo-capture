@@ -103,8 +103,6 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 			videoCapture?.stop()
 			return
 		}
-		
-		NSLog("Setting progress \(value)")
 	}
 
 	// MARK: - View Controller Lifecycle
@@ -117,7 +115,7 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 	
 		// setup video capture + preview
 		videoCapture = TurboCapture(previewLayer: previewLayer, delegate: self)
-		videoCapture?.duration = 20
+		videoCapture?.duration = 5
 		videoCapture?.start()
 	}
 	

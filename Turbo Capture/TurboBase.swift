@@ -12,4 +12,8 @@ class TurboBase: NSObject {
 	internal func main(handler:()->()) {
 		dispatch_async(dispatch_get_main_queue(), handler)
 	}
+	
+	internal func async(handler:()->()) {
+		dispatch_async(dispatch_get_main_queue(), handler)
+	}
 }

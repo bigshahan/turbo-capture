@@ -63,6 +63,10 @@ class TurboPlayback: TurboBase {
 		layer = AVPlayerLayer(player: player)
 		layer.frame = view.bounds
 		view.layer.addSublayer(layer)
+		
+		// setup notification listener
+		super.init()
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "stop", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
 	}
 	
 	// MARK: Sizing
@@ -78,12 +82,16 @@ class TurboPlayback: TurboBase {
 		
 		// nested due to swift compiler errors with type
 		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
-			player.play()
+			
+			async({
+				self.player.play()
+			})
+			
 			delegate?.turboPlaybackStarted()
 			isPlaying = true
 			
 			// start timer
-			timer = NSTimer.scheduledTimerWithTimeInterval(0.02, target: self, selector: "playedSplitSecond", userInfo: nil, repeats: true)
+			timer = NSTimer.scheduledTimerWithTimeInterval(0.25, target: self, selector: "playedSplitSecond", userInfo: nil, repeats: true)
 		}
 	}
 	
@@ -126,10 +134,17 @@ class TurboPlayback: TurboBase {
 	
 	private func error(message :String) {
 		errorOccurred = true
-		delegate?.turboPlaybackError(message)
+		
+		async({
+			self.delegate?.turboPlaybackError(message)
+			return
+		})
 	}
 	
 	func playedSplitSecond() {
-		delegate?.turboPlaybackPosition(CMTimeGetSeconds(player.currentTime()))
+		async({
+			self.delegate?.turboPlaybackPosition(CMTimeGetSeconds(self.player.currentTime()))
+			return
+		})
 	}
 }
