@@ -91,7 +91,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 			if ready {
 				session?.beginConfiguration()
 				
-				var newVideoDevice = cameraDevice(currentCamera)
+				var newVideoDevice = cameraDevice(currentCamera)!
 				var error = NSErrorPointer()
 				var newVideoInput = AVCaptureDeviceInput(device: newVideoDevice, error: error)
 				
@@ -117,6 +117,8 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	init(previewLayer :TurboCapturePreviewLayer?, delegate :TurboCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
+		super.init()
+		start()
 	}
 	
 	// MARK: - Video / Audio Capture Data Output Delegate
@@ -153,7 +155,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 
 	// MARK: - Recording Lifecycle
 	// starts the preview
-	func start() {
+	private func start() {
 		// check if already setup
 		if ready {
 			return
@@ -311,7 +313,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	}
 	
 	// MARK: - Multiple Cameras
-	func cameraDevice(type: TurboCaptureCamera) -> AVCaptureDevice {
+	func cameraDevice(type: TurboCaptureCamera) -> AVCaptureDevice? {
 		var devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
 		
 		for device in devices as [AVCaptureDevice] {
@@ -324,7 +326,11 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 			}
 		}
 		
-		return devices[0] as AVCaptureDevice
+		if devices.count == 0 {
+			return nil
+		}
+		
+		return devices[0] as? AVCaptureDevice
 	}
 	
 	func availableCameras() -> [TurboCaptureCamera] {
@@ -342,6 +348,18 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		}
 		
 		return cameras
+	}
+	
+	func switchCamera() {
+		var cameras = availableCameras()
+		
+		if cameras.count > 1 {
+			if camera == cameras[0] {
+				camera = cameras[1]
+			} else {
+				camera = cameras[0]
+			}
+		}
 	}
 	
 	// MARK: - Error Handling

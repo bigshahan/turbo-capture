@@ -39,17 +39,7 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 	
 	// MARK: - Switch Camera
 	@IBAction func switchCamera(sender: AnyObject) {
-		if videoCapture != nil {
-			var cameras = videoCapture!.availableCameras()
-			
-			if cameras.count > 1 {
-				if videoCapture!.camera == cameras[0] {
-					videoCapture?.camera = cameras[1]
-				} else {
-					videoCapture?.camera = cameras[0]
-				}
-			}
-		}
+		videoCapture?.switchCamera()
 	}
 	
 	// MARK: - Handle Record Button
@@ -116,7 +106,6 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 	
 		// setup video capture + preview
 		videoCapture = TurboCapture(previewLayer: previewLayer, delegate: self)
-		videoCapture?.start()
 	}
 	
 	override func prefersStatusBarHidden() -> Bool {

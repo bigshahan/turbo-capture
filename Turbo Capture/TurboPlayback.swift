@@ -136,7 +136,7 @@ class TurboPlayback: TurboBase {
 			seconds2 = videoDuration
 		}
 		
-		player.seekToTime(CMTimeMakeWithSeconds(seconds, player.currentTime().timescale), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimePositiveInfinity)
+		player.seekToTime(CMTimeMakeWithSeconds(seconds, player.currentTime().timescale))
 	}
 	
 	func stop() {
