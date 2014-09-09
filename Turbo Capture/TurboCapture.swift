@@ -350,7 +350,8 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	private func error(message :String) {
 		errorOccurred = true
 		main({
-			delegate?.turboCaptureError(message)
+			self.delegate?.turboCaptureError(message)
+			return
 		})
 	}
 }
