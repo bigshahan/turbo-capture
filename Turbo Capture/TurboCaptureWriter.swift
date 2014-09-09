@@ -39,7 +39,7 @@ protocol TurboCaptureWriterDelegate {
 }
 
 // basically wraps AVAssetWriter with inputs
-class TurboCaptureWriter: NSObject {
+class TurboCaptureWriter: TurboBase {
 	var delegate :TurboCaptureWriterDelegate?
 	
 	private var writer :AVAssetWriter?
@@ -84,8 +84,8 @@ class TurboCaptureWriter: NSObject {
 		// setup video input
 		var videoSettings = [
 			AVVideoCodecKey: AVVideoCodecH264,
-			AVVideoWidthKey: 640,
-			AVVideoHeightKey: 480
+			AVVideoWidthKey: 480,
+			AVVideoHeightKey: 640
 		]
 		videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
 		videoInput?.expectsMediaDataInRealTime = true

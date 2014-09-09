@@ -21,6 +21,7 @@
 		6B7737BB19BD7F550051EC53 /* TurboCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7737B919BD7F550051EC53 /* TurboCapture.swift */; };
 		6B7737BC19BD7F550051EC53 /* TurboCapturePreviewLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7737BA19BD7F550051EC53 /* TurboCapturePreviewLayer.swift */; };
 		6B7737BE19BE23580051EC53 /* TurboCaptureWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7737BD19BE23580051EC53 /* TurboCaptureWriter.swift */; };
+		6BF1D73B19BE833D0087BEB6 /* TurboBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF1D73A19BE833D0087BEB6 /* TurboBase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		6B7737B919BD7F550051EC53 /* TurboCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboCapture.swift; sourceTree = "<group>"; };
 		6B7737BA19BD7F550051EC53 /* TurboCapturePreviewLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboCapturePreviewLayer.swift; sourceTree = "<group>"; };
 		6B7737BD19BE23580051EC53 /* TurboCaptureWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboCaptureWriter.swift; sourceTree = "<group>"; };
+		6BF1D73A19BE833D0087BEB6 /* TurboBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboBase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				6B7737BD19BE23580051EC53 /* TurboCaptureWriter.swift */,
 				6B7737BA19BD7F550051EC53 /* TurboCapturePreviewLayer.swift */,
 				6B48F2CB19BE6BF0005C1C1E /* TurboPlayback.swift */,
+				6BF1D73A19BE833D0087BEB6 /* TurboBase.swift */,
 				6B77379819BD7E980051EC53 /* Main.storyboard */,
 				6B77379B19BD7E980051EC53 /* Images.xcassets */,
 				6B77379219BD7E980051EC53 /* Supporting Files */,
@@ -240,6 +243,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B48F2CA19BE69E5005C1C1E /* PlaybackController.swift in Sources */,
+				6BF1D73B19BE833D0087BEB6 /* TurboBase.swift in Sources */,
 				6B7737BE19BE23580051EC53 /* TurboCaptureWriter.swift in Sources */,
 				6B77379719BD7E980051EC53 /* RecordController.swift in Sources */,
 				6B7737BB19BD7F550051EC53 /* TurboCapture.swift in Sources */,

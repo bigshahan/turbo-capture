@@ -17,7 +17,7 @@ protocol TurboPlaybackDelegate {
 	func turboPlaybackError(message :String)
 }
 
-class TurboPlayback: NSObject {
+class TurboPlayback: TurboBase {
 	// MARK: Public Properties
 	var delegate :TurboPlaybackDelegate?
 	var playing :Bool {

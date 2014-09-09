@@ -48,7 +48,7 @@ protocol TurboCaptureDelegate {
 }
 
 // MARK: - Video Capture Class
-class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate, TurboCaptureWriterDelegate {
+class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate, TurboCaptureWriterDelegate {
 	// MARK: Private Properties
 	private var delegate :TurboCaptureDelegate?
 	private var previewLayer :TurboCapturePreviewLayer?
@@ -137,11 +137,15 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	
 	// MARK: - Turbo Capture Writer Delegate
 	func turboCaptureWriterError(message: String) {
-		error(message)
+		self.error(message)
 	}
 	
 	func turboCaptureWriterElapsed(seconds: Double) {
-		delegate?.turboCaptureElapsed(seconds)
+		// have to make sure calling from main queue
+		main({
+			self.delegate?.turboCaptureElapsed(seconds)
+			return
+		})
 	}
 	
 	// writing output file finished!
@@ -345,6 +349,8 @@ class TurboCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCa
 	
 	private func error(message :String) {
 		errorOccurred = true
-		delegate?.turboCaptureError(message)
+		main({
+			delegate?.turboCaptureError(message)
+		})
 	}
 }
