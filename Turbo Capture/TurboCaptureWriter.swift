@@ -152,9 +152,7 @@ class TurboCaptureWriter: TurboBase {
 		}
 		
 		// close file for writing
-		writer?.finishWritingWithCompletionHandler({
-			NSLog("writer is finished writing")
-			
+		writer?.finishWritingWithCompletionHandler({			
 			// clear out everything
 			self.delegate?.turboCaptureWriterFinished()
 			self.errorOccurred = false
