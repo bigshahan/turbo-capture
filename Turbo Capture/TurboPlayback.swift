@@ -51,7 +51,7 @@ class TurboPlayback: TurboBase {
 	private var timer :NSTimer?
 	
 	// MARK: Init
-	init(url :NSURL, view :UIView, delegate :TurboPlaybackDelegate?) {
+	init(url :NSURL, view :UIView, autoplay :Bool, delegate :TurboPlaybackDelegate?) {
 		self.url = url
 		self.view = view
 		self.delegate = delegate
@@ -70,6 +70,25 @@ class TurboPlayback: TurboBase {
 		// setup notification listener
 		super.init()
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "stop", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+		
+		if autoplay {
+			while(true) {
+				if playing {
+					break
+				}
+				
+				if player.status == AVPlayerStatus.Failed {
+					break
+				}
+				
+				if player.currentItem.status == AVPlayerItemStatus.Failed {
+					break
+				}
+				
+				play()
+			}
+			
+		}
 	}
 	
 	// MARK: Sizing

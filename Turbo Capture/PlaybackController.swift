@@ -56,7 +56,7 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 		}
 		
 		// setup of playback
-		playback = TurboPlayback(url: url!, view: playbackView, delegate: self)
+		playback = TurboPlayback(url: url!, view: playbackView, autoplay: true, delegate: self)
 		playback?.loop = true
 		playback?.aspectFill()
 	}
