@@ -116,7 +116,6 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	}
 	
 	// MARK: - Init Function
-	// duration is number of seconds
 	init(previewLayer :TurboCapturePreviewLayer?, delegate :TurboCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
@@ -247,6 +246,12 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		videoOutput = AVCaptureVideoDataOutput()
 		videoOutput?.setSampleBufferDelegate(self, queue: captureQueue)
 		session?.addOutput(videoOutput)
+		
+		// portrait orientation
+		var connection = videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
+		if connection != nil && connection!.supportsVideoOrientation {
+			connection!.videoOrientation = AVCaptureVideoOrientation.Portrait
+		}
 		
 		// setup audio output
 		audioOutput = AVCaptureAudioDataOutput()
