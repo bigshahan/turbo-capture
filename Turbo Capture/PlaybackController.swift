@@ -62,7 +62,7 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 	
 	// MARK: - Playback Delegate
 	func turboPlaybackStopped() {
-		playback?.seek(0)
+		progressView.setProgress(0, animated: false)
 	}
 	
 	func turboPlaybackPaused() {
