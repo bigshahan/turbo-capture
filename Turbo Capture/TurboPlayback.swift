@@ -45,6 +45,7 @@ class TurboPlayback: NSObject {
 	private var videoDuration :Double = 0.0
 	private var player :AVPlayer
 	private var layer :AVPlayerLayer
+	private var timer :NSTimer?
 	
 	// MARK: Init
 	init(url :NSURL, view :UIView, delegate :TurboPlaybackDelegate?) {
@@ -80,6 +81,9 @@ class TurboPlayback: NSObject {
 			player.play()
 			delegate?.turboPlaybackStarted()
 			isPlaying = true
+			
+			// start timer
+			timer = NSTimer.scheduledTimerWithTimeInterval(0.02, target: self, selector: "playedSplitSecond", userInfo: nil, repeats: true)
 		}
 	}
 	
@@ -92,6 +96,10 @@ class TurboPlayback: NSObject {
 		
 		delegate?.turboPlaybackPaused()
 		isPlaying = false
+		
+		// stop timer
+		timer?.invalidate()
+		timer = nil
 	}
 	
 	func seek(seconds :Double) {
@@ -101,6 +109,7 @@ class TurboPlayback: NSObject {
 			seconds2 = videoDuration
 		}
 		
+		NSLog("attempting to seek to \(seconds)")
 		player.seekToTime(CMTimeMakeWithSeconds(seconds, player.currentTime().timescale))
 	}
 	
@@ -115,7 +124,12 @@ class TurboPlayback: NSObject {
 		delegate?.turboPlaybackStopped()
 	}
 	
-	private func error() {
+	private func error(message :String) {
 		errorOccurred = true
+		delegate?.turboPlaybackError(message)
+	}
+	
+	func playedSplitSecond() {
+		delegate?.turboPlaybackPosition(CMTimeGetSeconds(player.currentTime()))
 	}
 }
