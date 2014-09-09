@@ -44,7 +44,7 @@ protocol TurboCaptureDelegate {
 	func turboCaptureMicrophoneDenied()
 	func turboCaptureCameraDenied()
 	func turboCaptureFinished(url :NSURL)
-	func turboCaptureElapsed(seconds: Double)
+	func turboCaptureElapsed(seconds: Float)
 }
 
 // MARK: - Video Capture Class
@@ -73,9 +73,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	private var writer :TurboCaptureWriter?
 	
 	// MARK: - Computed / Public Properties
-	// number of seconds
-	var duration = 10.0
-	
+	// number of seconds	
 	var ready: Bool {
 		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil && videoOutput != nil && audioOutput != nil && outputUrl != nil && writer != nil
 	}
@@ -139,8 +137,8 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		self.error(message)
 	}
 	
-	func turboCaptureWriterElapsed(seconds: Double) {
-		// have to make sure calling from main queue
+	func turboCaptureWriterElapsed(seconds: Float) {
+		// have to make sure calling delegate from main queue
 		main({
 			self.delegate?.turboCaptureElapsed(seconds)
 			return

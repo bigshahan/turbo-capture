@@ -34,7 +34,7 @@ enum TurboCaptureWriterMediaType {
 // delegate
 protocol TurboCaptureWriterDelegate {
 	func turboCaptureWriterError(message :String)
-	func turboCaptureWriterElapsed(seconds	:Double)
+	func turboCaptureWriterElapsed(seconds	:Float)
 	func turboCaptureWriterFinished()
 }
 
@@ -142,7 +142,7 @@ class TurboCaptureWriter: TurboBase {
 			// determine duration and trigger delegate
 			var duration = CMSampleBufferGetDuration(sampleBuffer)
 			var elapsed = CMTimeSubtract(CMTimeAdd(start, duration), startTime!)
-			delegate?.turboCaptureWriterElapsed(CMTimeGetSeconds(elapsed))
+			delegate?.turboCaptureWriterElapsed(Float(CMTimeGetSeconds(elapsed)))
 		}
 	}
 	
@@ -152,7 +152,7 @@ class TurboCaptureWriter: TurboBase {
 		}
 		
 		// close file for writing
-		writer?.finishWritingWithCompletionHandler({			
+		writer?.finishWritingWithCompletionHandler({
 			// clear out everything
 			self.delegate?.turboCaptureWriterFinished()
 			self.errorOccurred = false

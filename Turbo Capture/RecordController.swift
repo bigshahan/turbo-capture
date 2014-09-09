@@ -31,6 +31,7 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 	// MARK: Properties
 	var videoCapture :TurboCapture? = nil
 	var previewLayer :TurboCapturePreviewLayer? = nil
+	var duration :Float = 5
 	
 	// MARK: IBOutlets
 	@IBOutlet weak var previewView: UIView!
@@ -95,8 +96,8 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 		presentViewController(controller, animated: true, completion: nil)
 	}
 	
-	func turboCaptureElapsed(seconds: Double) {
-		var value = Float(seconds/10.0)
+	func turboCaptureElapsed(seconds: Float) {
+		var value = seconds/duration
 		progressView.setProgress(value, animated: false)
 
 		if value >= 1 {
@@ -115,7 +116,6 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 	
 		// setup video capture + preview
 		videoCapture = TurboCapture(previewLayer: previewLayer, delegate: self)
-		videoCapture?.duration = 5
 		videoCapture?.start()
 	}
 	
