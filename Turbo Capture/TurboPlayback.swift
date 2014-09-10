@@ -147,24 +147,27 @@ class TurboPlayback: TurboBase {
 		pause()
 		seek(0)
 		
+		main({
+			self.delegate?.turboPlaybackStopped()
+			return
+		})
+		
 		if loop {
 			play()
 		}
-		
-		delegate?.turboPlaybackStopped()
 	}
 	
 	private func error(message :String) {
 		errorOccurred = true
 		
-		async({
+		main({
 			self.delegate?.turboPlaybackError(message)
 			return
 		})
 	}
 	
 	func playedSplitSecond() {
-		async({
+		main({
 			self.delegate?.turboPlaybackPosition(CMTimeGetSeconds(self.player.currentTime()))
 			return
 		})

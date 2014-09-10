@@ -68,8 +68,6 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 	}
 	
 	func turboCaptureFinished(url :NSURL) {
-		NSLog("\(url)")
-		
 		// write to photos library
 		var library = ALAssetsLibrary()
 		library.writeVideoAtPathToSavedPhotosAlbum(url, completionBlock: nil)
@@ -78,12 +76,12 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 		var err = NSErrorPointer()
 		var attributes = NSFileManager.defaultManager().attributesOfItemAtPath(url.path!, error: err)
 		var megabytes = (attributes![NSFileSize] as NSNumber)/(1024*1024)
-		NSLog("\(megabytes) megabytes :)")
+		NSLog("\(megabytes) megabytes :). on main thread? \(NSThread.currentThread().isMainThread)")
 		
 		// load PlaybackController
 		var controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("playback") as PlaybackController
 		controller.url = url
-		presentViewController(controller, animated: true, completion: nil)
+		self.presentViewController(controller, animated: true, completion: nil)
 	}
 	
 	func turboCaptureElapsed(seconds: Float) {

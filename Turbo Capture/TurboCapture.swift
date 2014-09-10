@@ -142,6 +142,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	
 	// MARK: - Turbo Capture Writer Delegate
 	func turboCaptureWriterError(message: String) {
+		// pass error message up
 		self.error(message)
 	}
 	
@@ -156,7 +157,10 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	// writing output file finished!
 	func turboCaptureWriterFinished() {
 		// Call finished delegate
-		delegate?.turboCaptureFinished(outputUrl!)
+		main({
+			self.delegate?.turboCaptureFinished(self.outputUrl!)
+			return
+		})
 	}
 
 	// MARK: - Recording Lifecycle
@@ -171,7 +175,10 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		var videoStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
 		
 		if videoStatus == AVAuthorizationStatus.Denied {
-			delegate?.turboCaptureCameraDenied()
+			main({
+				self.delegate?.turboCaptureCameraDenied()
+				return
+			})
 			return
 		}
 		
@@ -179,7 +186,10 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		var audioStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeAudio)
 		
 		if audioStatus == AVAuthorizationStatus.Denied {
-			delegate?.turboCaptureMicrophoneDenied()
+			main({
+				self.delegate?.turboCaptureMicrophoneDenied()
+				return
+			})
 			return
 		}
 		
@@ -298,6 +308,9 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		if recording {
 			pause()
 		}
+		
+		// stop session
+		session?.stopRunning()
 		
 		// Create final output file
 		writer?.stop()
