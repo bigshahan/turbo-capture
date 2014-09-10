@@ -71,32 +71,29 @@ class TurboPlayback: TurboBase {
 		super.init()
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "stop", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
 		
+		// handle autoplay
 		if autoplay {
-			while(true) {
-				if playing {
-					break
-				}
-				
-				if player.status == AVPlayerStatus.Failed {
-					break
-				}
-				
-				if player.currentItem.status == AVPlayerItemStatus.Failed {
-					break
-				}
-				
-				play()
-			}
-			
+			player.addObserver(self, forKeyPath: "status", options: .New, context: nil)
+			player.currentItem.addObserver(self, forKeyPath: "status", options: .New, context: nil)
 		}
 	}
 	
-	// MARK: Sizing
+	// MARK: - KVO Observer
+	// used for autoplay
+	override func observeValueForKeyPath(keyPath: String!, ofObject object: AnyObject!, change: [NSObject : AnyObject]!, context: UnsafeMutablePointer<Void>) {
+		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
+			play()
+			player.removeObserver(self, forKeyPath: "status")
+			player.currentItem.removeObserver(self, forKeyPath: "status")
+		}
+	}
+	
+	// MARK: - Sizing
 	func aspectFill() {
 		layer.videoGravity = AVLayerVideoGravityResizeAspectFill
 	}
 	
-	// MARK: Playback Lifecycle
+	// MARK: - Playback Lifecycle
 	func play() {
 		if playing || !ready {
 			return
@@ -104,7 +101,6 @@ class TurboPlayback: TurboBase {
 		
 		// nested due to swift compiler errors with type
 		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
-			
 			self.isPlaying = true
 			self.delegate?.turboPlaybackStarted()
 			self.player.play()

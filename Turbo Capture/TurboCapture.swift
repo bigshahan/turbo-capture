@@ -309,9 +309,6 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 			pause()
 		}
 		
-		// stop session
-		session?.stopRunning()
-		
 		// Create final output file
 		writer?.stop()
 	}
