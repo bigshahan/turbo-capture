@@ -106,6 +106,12 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 				}
 				
 				session?.commitConfiguration()
+				
+				// portrait orientation - this is done in two places
+				var connection = videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
+				if connection != nil && connection!.supportsVideoOrientation {
+					connection!.videoOrientation = AVCaptureVideoOrientation.Portrait
+				}
 			}
 		}
 		get {
@@ -247,7 +253,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		videoOutput?.setSampleBufferDelegate(self, queue: captureQueue)
 		session?.addOutput(videoOutput)
 		
-		// portrait orientation
+		// portrait orientation - this is done in two places
 		var connection = videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
 		if connection != nil && connection!.supportsVideoOrientation {
 			connection!.videoOrientation = AVCaptureVideoOrientation.Portrait
@@ -351,6 +357,11 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	}
 	
 	func switchCamera() {
+		// cant switch camera if not ready or already recording
+		if !ready || recording {
+			return
+		}
+		
 		var cameras = availableCameras()
 		
 		if cameras.count > 1 {
