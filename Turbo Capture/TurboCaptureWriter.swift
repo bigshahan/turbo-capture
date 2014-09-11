@@ -147,7 +147,7 @@ class TurboCaptureWriter: TurboBase {
 	}
 	
 	func stop() {
-		if !ready {
+		if !ready && writer!.status != AVAssetWriterStatus.Writing {
 			return
 		}
 		
