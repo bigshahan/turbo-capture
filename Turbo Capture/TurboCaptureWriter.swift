@@ -58,7 +58,7 @@ class TurboCaptureWriter: TurboBase {
 	
 	init(url: NSURL, delegate: TurboCaptureWriterDelegate?) {
 		super.init()
-
+		
 		// setup delegate
 		self.delegate = delegate
 		
@@ -80,7 +80,7 @@ class TurboCaptureWriter: TurboBase {
 		]
 		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
 		audioInput?.expectsMediaDataInRealTime = true
-
+		
 		// setup video input
 		var videoSettings = [
 			AVVideoCodecKey: AVVideoCodecH264,
@@ -127,7 +127,7 @@ class TurboCaptureWriter: TurboBase {
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
 			videoInput?.appendSampleBuffer(sampleBuffer)
 			
-		// handle audio
+			// handle audio
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData {
 			audioInput?.appendSampleBuffer(sampleBuffer)
 			
@@ -147,7 +147,7 @@ class TurboCaptureWriter: TurboBase {
 	}
 	
 	func stop() {
-		if !ready && writer!.status != AVAssetWriterStatus.Writing {
+		if !ready || writer!.status != AVAssetWriterStatus.Writing {
 			return
 		}
 		
