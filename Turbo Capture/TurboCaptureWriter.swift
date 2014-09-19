@@ -42,13 +42,18 @@ protocol TurboCaptureWriterDelegate {
 class TurboCaptureWriter: TurboBase {
 	var delegate :TurboCaptureWriterDelegate?
 	
-	private var writer :AVAssetWriter?
-	private var audioInput :AVAssetWriterInput?
-	private var videoInput :AVAssetWriterInput?
+	private var writer: AVAssetWriter?
+	private var audioInput: AVAssetWriterInput?
+	private var videoInput: AVAssetWriterInput?
 	private var errorOccurred = false
 	
+	// used for time correction on pauses
+	private var delta: CMTime?
+	private var lastVideoTime :CMTime?
+	private var lastAudioTime :CMTime?
+	
 	// time first sample came at
-	private var startTime :CMTime?
+	private var startTime: CMTime?
 	
 	var ready :Bool {
 		get {
@@ -123,16 +128,32 @@ class TurboCaptureWriter: TurboBase {
 			return
 		}
 		
-		// handle video
+		// get timing information from buffer
+		var start = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+		var duration = CMSampleBufferGetDuration(sampleBuffer)
+		
+		// update start and duration with offset adjustments
+		start = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+		duration = CMSampleBufferGetDuration(sampleBuffer)
+		
+		// offset
+		var delta = CMTimeMake(0, 0)
+		
+		// adjust sample buffer times
+		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData && lastVideoTime != nil {
+			
+		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData && lastAudioTime != nil {
+			
+		}
+
+		// handle video write
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
 			videoInput?.appendSampleBuffer(sampleBuffer)
+			lastVideoTime = CMTimeAdd(start, duration)
 			
-			// handle audio
+		// handle audio writes
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData {
 			audioInput?.appendSampleBuffer(sampleBuffer)
-			
-			// figure out start point of sample buffer
-			var start = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
 			
 			// set startTime if not yet set
 			if startTime == nil {
@@ -140,9 +161,11 @@ class TurboCaptureWriter: TurboBase {
 			}
 			
 			// determine duration and trigger delegate
-			var duration = CMSampleBufferGetDuration(sampleBuffer)
 			var elapsed = CMTimeSubtract(CMTimeAdd(start, duration), startTime!)
 			delegate?.turboCaptureWriterElapsed(Float(CMTimeGetSeconds(elapsed)))
+			
+			// set last audio time
+			lastVideoTime = CMTimeAdd(start, duration)
 		}
 	}
 	
@@ -158,6 +181,11 @@ class TurboCaptureWriter: TurboBase {
 			self.errorOccurred = false
 			self.startTime = nil
 		})
+	}
+	
+	// handles pauses
+	private func fixTiming(sampleBuffer: CMSampleBuffer, timeToSubtract time: CMTime) -> CMSampleBuffer {
+		return sampleBuffer
 	}
 	
 	private func error(message :String) {

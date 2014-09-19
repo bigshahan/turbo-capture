@@ -17,7 +17,6 @@
 		6B7737B219BD7F160051EC53 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B7737B119BD7F160051EC53 /* CoreMedia.framework */; };
 		6B7737B419BD7F1C0051EC53 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B7737B319BD7F1C0051EC53 /* AVFoundation.framework */; };
 		6B7737B619BD7F210051EC53 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B7737B519BD7F210051EC53 /* AssetsLibrary.framework */; };
-		6B7737B819BD7F3F0051EC53 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B7737B719BD7F3F0051EC53 /* MediaPlayer.framework */; };
 		6B7737BB19BD7F550051EC53 /* TurboCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7737B919BD7F550051EC53 /* TurboCapture.swift */; };
 		6B7737BC19BD7F550051EC53 /* TurboCapturePreviewLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7737BA19BD7F550051EC53 /* TurboCapturePreviewLayer.swift */; };
 		6B7737BE19BE23580051EC53 /* TurboCaptureWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7737BD19BE23580051EC53 /* TurboCaptureWriter.swift */; };
@@ -49,7 +48,6 @@
 		6B7737B119BD7F160051EC53 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		6B7737B319BD7F1C0051EC53 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		6B7737B519BD7F210051EC53 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
-		6B7737B719BD7F3F0051EC53 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		6B7737B919BD7F550051EC53 /* TurboCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboCapture.swift; sourceTree = "<group>"; };
 		6B7737BA19BD7F550051EC53 /* TurboCapturePreviewLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboCapturePreviewLayer.swift; sourceTree = "<group>"; };
 		6B7737BD19BE23580051EC53 /* TurboCaptureWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboCaptureWriter.swift; sourceTree = "<group>"; };
@@ -61,7 +59,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B7737B819BD7F3F0051EC53 /* MediaPlayer.framework in Frameworks */,
 				6B7737B619BD7F210051EC53 /* AssetsLibrary.framework in Frameworks */,
 				6B7737B419BD7F1C0051EC53 /* AVFoundation.framework in Frameworks */,
 				6B7737B219BD7F160051EC53 /* CoreMedia.framework in Frameworks */,
@@ -87,7 +84,6 @@
 				6B77379119BD7E980051EC53 /* Turbo Capture */,
 				6B7737A419BD7E980051EC53 /* Turbo CaptureTests */,
 				6B77379019BD7E980051EC53 /* Products */,
-				6B7737B719BD7F3F0051EC53 /* MediaPlayer.framework */,
 			);
 			sourceTree = "<group>";
 		};
