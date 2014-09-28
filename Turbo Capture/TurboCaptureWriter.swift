@@ -48,8 +48,14 @@ class TurboCaptureWriter: TurboBase {
 	private var errorOccurred = false
 	
 	// used for time correction on pauses
+	private var videoDelta = CMTimeMakeWithSeconds(0, 10000)
+	private var audioDelta = CMTimeMakeWithSeconds(0, 10000)
+	
 	private var lastVideoTime :CMTime?
 	private var lastAudioTime :CMTime?
+	
+	private var updateVideoTime = true
+	private var updateAudioTime = true
 	
 	// time first sample came at
 	private var startTime: CMTime?
@@ -128,9 +134,9 @@ class TurboCaptureWriter: TurboBase {
 		}
 		
 		// get timing information from buffer
-		var delta = CMTimeMakeWithSeconds(0, 10000)
 		var start = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
 		var duration = CMSampleBufferGetDuration(sampleBuffer)
+		var delta = CMTimeMakeWithSeconds(0, 10000)
 		
 		// update start and duration with offset adjustments
 		start = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
@@ -138,14 +144,24 @@ class TurboCaptureWriter: TurboBase {
 		
 		// calculate time adjustments on sample buffer times to account for pauses
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData && lastVideoTime != nil {
-			NSLog("Video")
-			delta = CMTimeSubtract(start, lastVideoTime!)
+			if updateVideoTime {
+				videoDelta = CMTimeAdd(delta, CMTimeSubtract(start, lastVideoTime!))
+				updateVideoTime = false
+			}
+			
+			delta = videoDelta
+			
+			NSLog("Video Delta: \(CMTimeGetSeconds(videoDelta))")
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData && lastAudioTime != nil {
-			NSLog("Audio")
-			delta = CMTimeSubtract(start, lastAudioTime!)
+			if updateAudioTime {
+				videoDelta = CMTimeAdd(delta, CMTimeSubtract(start, lastAudioTime!))
+				updateAudioTime = false
+			}
+			
+			delta = audioDelta
+			
+			NSLog("Audio Delta: \(CMTimeGetSeconds(audioDelta))")
 		}
-		
-		NSLog("Delta in seconds: \(CMTimeGetSeconds(delta))")
 		
 		// adjust sample buffer times to account for pauses
 		if CMTimeGetSeconds(delta) > 0 {
@@ -191,6 +207,11 @@ class TurboCaptureWriter: TurboBase {
 			self.errorOccurred = false
 			self.startTime = nil
 		})
+	}
+	
+	func pause() {
+		updateVideoTime = true
+		updateAudioTime = true
 	}
 	
 	private func error(message :String) {

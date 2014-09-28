@@ -326,6 +326,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	// pause video recording
 	func pause() {
 		recording = false
+		writer?.pause()
 	}
 	
 	// MARK: - Multiple Cameras
