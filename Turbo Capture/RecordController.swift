@@ -31,7 +31,7 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 	// MARK: Properties
 	var videoCapture :TurboCapture? = nil
 	var previewLayer :TurboCapturePreviewLayer? = nil
-	var duration :Float = 5
+	var duration :Float = 20
 	
 	// MARK: IBOutlets
 	@IBOutlet weak var previewView: UIView!
