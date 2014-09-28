@@ -54,8 +54,8 @@ class TurboCaptureWriter: TurboBase {
 	private var lastVideoTime :CMTime?
 	private var lastAudioTime :CMTime?
 	
-	private var updateVideoTime = true
-	private var updateAudioTime = true
+	private var updateVideoTime = false
+	private var updateAudioTime = false
 	
 	// time first sample came at
 	private var startTime: CMTime?
@@ -145,7 +145,7 @@ class TurboCaptureWriter: TurboBase {
 		// calculate time adjustments on sample buffer times to account for pauses
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData && lastVideoTime != nil {
 			if updateVideoTime {
-				videoDelta = CMTimeAdd(delta, CMTimeSubtract(start, lastVideoTime!))
+				videoDelta = CMTimeAdd(videoDelta, CMTimeSubtract(start, lastVideoTime!))
 				updateVideoTime = false
 			}
 			
@@ -154,7 +154,7 @@ class TurboCaptureWriter: TurboBase {
 			NSLog("Video Delta: \(CMTimeGetSeconds(videoDelta))")
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData && lastAudioTime != nil {
 			if updateAudioTime {
-				videoDelta = CMTimeAdd(delta, CMTimeSubtract(start, lastAudioTime!))
+				audioDelta = CMTimeAdd(audioDelta, CMTimeSubtract(start, lastAudioTime!))
 				updateAudioTime = false
 			}
 			
