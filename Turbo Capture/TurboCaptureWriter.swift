@@ -142,12 +142,13 @@ class TurboCaptureWriter: TurboBase {
 		// adjust sample buffer times
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData && lastVideoTime != nil {
 			
+			start = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData && lastAudioTime != nil {
-			
+			start = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
 		}
 
 		// handle video write
-		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
+		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyFoqrMoreMediaData {
 			videoInput?.appendSampleBuffer(sampleBuffer)
 			lastVideoTime = CMTimeAdd(start, duration)
 			
@@ -165,7 +166,7 @@ class TurboCaptureWriter: TurboBase {
 			delegate?.turboCaptureWriterElapsed(Float(CMTimeGetSeconds(elapsed)))
 			
 			// set last audio time
-			lastVideoTime = CMTimeAdd(start, duration)
+			lastAudioTime = CMTimeAdd(start, duration)
 		}
 	}
 	
