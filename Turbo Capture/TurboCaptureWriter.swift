@@ -48,8 +48,8 @@ class TurboCaptureWriter: TurboBase {
 	private var errorOccurred = false
 	
 	// used for time correction on pauses
-	private var videoDelta = CMTimeMakeWithSeconds(0, 10000)
-	private var audioDelta = CMTimeMakeWithSeconds(0, 10000)
+	private var videoDelta = CMTimeMakeWithSeconds(0, 1000000000)
+	private var audioDelta = CMTimeMakeWithSeconds(0, 1000000000)
 	
 	private var lastVideoTime :CMTime?
 	private var lastAudioTime :CMTime?
@@ -135,10 +135,14 @@ class TurboCaptureWriter: TurboBase {
 			return
 		}
 		
+		if writer?.status != AVAssetWriterStatus.Writing {
+			return
+		}
+		
 		// get timing information from buffer
 		var start = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
 		var duration = CMSampleBufferGetDuration(sampleBuffer)
-		var delta = CMTimeMakeWithSeconds(0, 10000)
+		var delta = CMTimeMakeWithSeconds(0, 1000000000)
 		
 		// update start and duration with offset adjustments
 		start = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
@@ -195,8 +199,8 @@ class TurboCaptureWriter: TurboBase {
 		// handle video write
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
 			videoInput?.appendSampleBuffer(buffer)
-			lastVideoTime = start
-			NSLog("Video - \(CMTimeGetSeconds(videoDelta)) \(CMTimeGetSeconds(start))")
+			lastVideoTime = CMTimeAdd(start, CMTimeMakeWithSeconds(0.04, 1000000000))
+
 		// handle audio writes
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData {
 			audioInput?.appendSampleBuffer(buffer)
@@ -212,7 +216,6 @@ class TurboCaptureWriter: TurboBase {
 			
 			// set last audio time
 			lastAudioTime = CMTimeAdd(start, duration)
-			NSLog("Audio - \(CMTimeGetSeconds(audioDelta)) \(CMTimeGetSeconds(start))")
 		}
 	}
 	
