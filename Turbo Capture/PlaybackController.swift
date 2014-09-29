@@ -27,8 +27,8 @@ import UIKit
 
 class PlaybackController: UIViewController, TurboPlaybackDelegate {
 	// MARK: Properties
-	var url :NSURL?
-	var playback :TurboPlayback?
+	var url: NSURL?
+	var playback: TurboPlayback?
 	
 	// MARK: IBOutlets
 	@IBOutlet weak var playbackView: UIView!
@@ -73,8 +73,8 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 	}
 	
 	func turboPlaybackPosition(seconds :Double) {
-		var progress = Float(seconds/playback!.duration)
-		progressView.setProgress(progress, animated: true)
+		var progress = seconds/playback!.duration
+		progressView.setProgress(Float(progress), animated: true)
 	}
 	
 	func turboPlaybackError(message :String) {

@@ -33,8 +33,8 @@ enum TurboCaptureWriterMediaType {
 
 // delegate
 protocol TurboCaptureWriterDelegate {
-	func turboCaptureWriterError(message :String)
-	func turboCaptureWriterElapsed(seconds	:Float)
+	func turboCaptureWriterError(message: String)
+	func turboCaptureWriterElapsed(seconds: Double)
 	func turboCaptureWriterFinished()
 }
 
@@ -51,8 +51,8 @@ class TurboCaptureWriter: TurboBase {
 	private var videoDelta = CMTimeMakeWithSeconds(0, 1000000000)
 	private var audioDelta = CMTimeMakeWithSeconds(0, 1000000000)
 	
-	private var lastVideoTime :CMTime?
-	private var lastAudioTime :CMTime?
+	private var lastVideoTime: CMTime?
+	private var lastAudioTime: CMTime?
 	
 	private var updateVideoTime = false
 	private var updateAudioTime = false
@@ -212,7 +212,7 @@ class TurboCaptureWriter: TurboBase {
 			
 			// determine duration and trigger delegate
 			var elapsed = CMTimeSubtract(CMTimeAdd(start, duration), startTime!)
-			delegate?.turboCaptureWriterElapsed(Float(CMTimeGetSeconds(elapsed)))
+			delegate?.turboCaptureWriterElapsed(CMTimeGetSeconds(elapsed))
 			
 			// set last audio time
 			lastAudioTime = CMTimeAdd(start, duration)

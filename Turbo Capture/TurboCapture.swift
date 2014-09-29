@@ -40,32 +40,32 @@ enum TurboCaptureCamera {
 
 // MARK: - Video Capture Delegate Protocol
 protocol TurboCaptureDelegate {
-	func turboCaptureError(message :String)
+	func turboCaptureError(message: String)
 	func turboCaptureMicrophoneDenied()
 	func turboCaptureCameraDenied()
-	func turboCaptureFinished(url :NSURL)
-	func turboCaptureElapsed(seconds: Float)
+	func turboCaptureFinished(url: NSURL, thumbnail: UIImage, duration: Double)
+	func turboCaptureElapsed(seconds: Double)
 }
 
 // MARK: - Video Capture Class
 class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate, TurboCaptureWriterDelegate {
 	// MARK: Private Properties
-	private var delegate :TurboCaptureDelegate?
-	private var previewLayer :TurboCapturePreviewLayer?
+	private var delegate: TurboCaptureDelegate?
+	private var previewLayer: TurboCapturePreviewLayer?
 	
-	private var session :AVCaptureSession?
-	private var outputUrl :NSURL?
-	private var captureQueue :dispatch_queue_t?
-	private var serialQueue :dispatch_queue_t?
+	private var session: AVCaptureSession?
+	private var outputUrl: NSURL?
+	private var captureQueue: dispatch_queue_t?
+	private var serialQueue: dispatch_queue_t?
 	
-	private var currentCamera :TurboCaptureCamera = TurboCaptureCamera.Front
-	private var videoDevice :AVCaptureDevice?
-	private var videoInput :AVCaptureDeviceInput?
-	private var videoOutput :AVCaptureVideoDataOutput?
+	private var currentCamera: TurboCaptureCamera = TurboCaptureCamera.Front
+	private var videoDevice: AVCaptureDevice?
+	private var videoInput: AVCaptureDeviceInput?
+	private var videoOutput: AVCaptureVideoDataOutput?
 
-	private var audioInput :AVCaptureDeviceInput?
-	private var audioDevice :AVCaptureDevice?
-	private var audioOutput :AVCaptureAudioDataOutput?
+	private var audioInput: AVCaptureDeviceInput?
+	private var audioDevice: AVCaptureDevice?
+	private var audioOutput: AVCaptureAudioDataOutput?
 
 	private var errorOccurred = false
 	private var recording = false
@@ -79,10 +79,10 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	}
 	
 	// quality is only set when start is called
-	var quality :TurboCaptureQuality = TurboCaptureQuality.Normal
+	var quality: TurboCaptureQuality = TurboCaptureQuality.Normal
 	
 	// the camera. defaults to front
-	var camera :TurboCaptureCamera {
+	var camera: TurboCaptureCamera {
 		set(camera) {
 			// set current camera
 			currentCamera = camera
@@ -120,7 +120,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	}
 	
 	// MARK: - Init Function
-	init(previewLayer :TurboCapturePreviewLayer?, delegate :TurboCaptureDelegate?) {
+	init(previewLayer: TurboCapturePreviewLayer?, delegate: TurboCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
 		super.init()
@@ -146,7 +146,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		self.error(message)
 	}
 	
-	func turboCaptureWriterElapsed(seconds: Float) {
+	func turboCaptureWriterElapsed(seconds: Double) {
 		// have to make sure calling delegate from main queue
 		main({
 			self.delegate?.turboCaptureElapsed(seconds)
@@ -156,15 +156,16 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	
 	// writing output file finished!
 	func turboCaptureWriterFinished() {
-		// get length of recording
-		
-		
-		// get a thumbnail
-		
+		// setup AVAsset to get a thumbnail and recording length
+		var asset = AVURLAsset(URL: self.outputUrl!, options: nil)
+		var generator = AVAssetImageGenerator(asset: asset)
+		var error = NSErrorPointer()
+		var time = CMTimeMake(1,60)
+		var image = generator.copyCGImageAtTime(time, actualTime: nil, error: error)
 		
 		// Call finished delegate
 		main({
-			self.delegate?.turboCaptureFinished(self.outputUrl!)
+			self.delegate?.turboCaptureFinished(self.outputUrl!, thumbnail: UIImage(CGImage: image), duration: CMTimeGetSeconds(asset.duration))
 			return
 		})
 	}
@@ -357,7 +358,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	}
 	
 	func availableCameras() -> [TurboCaptureCamera] {
-		var cameras :[TurboCaptureCamera] = []
+		var cameras: [TurboCaptureCamera] = []
 		
 		// get cameras
 		var devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)

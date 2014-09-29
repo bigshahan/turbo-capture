@@ -13,19 +13,19 @@ protocol TurboPlaybackDelegate {
 	func turboPlaybackStopped()
 	func turboPlaybackPaused()
 	func turboPlaybackStarted()
-	func turboPlaybackPosition(seconds :Double)
-	func turboPlaybackError(message :String)
+	func turboPlaybackPosition(seconds: Double)
+	func turboPlaybackError(message: String)
 }
 
 class TurboPlayback: TurboBase {
 	// MARK: Public Properties
-	var delegate :TurboPlaybackDelegate?
-	var playing :Bool {
+	var delegate: TurboPlaybackDelegate?
+	var playing: Bool {
 		get {
 			return isPlaying
 		}
 	}
-	var ready :Bool {
+	var ready: Bool {
 		get {
 			return !errorOccurred
 		}
@@ -34,24 +34,24 @@ class TurboPlayback: TurboBase {
 	var loop = false
 	
 	// in seconds
-	var duration :Double {
+	var duration: Double {
 		get {
 			return videoDuration
 		}
 	}
 	
 	// MARK: Private Properties
-	private var url :NSURL
+	private var url: NSURL
 	private var errorOccurred = false
-	private var view :UIView
+	private var view: UIView
 	private var isPlaying = false
-	private var videoDuration :Double = 0.0
-	private var player :AVPlayer
-	private var layer :AVPlayerLayer
-	private var timer :NSTimer?
+	private var videoDuration: Double = 0.0
+	private var player: AVPlayer
+	private var layer: AVPlayerLayer
+	private var timer: NSTimer?
 	
 	// MARK: Init
-	init(url :NSURL, view :UIView, autoplay :Bool, delegate :TurboPlaybackDelegate?) {
+	init(url: NSURL, view: UIView, autoplay: Bool, delegate: TurboPlaybackDelegate?) {
 		self.url = url
 		self.view = view
 		self.delegate = delegate
@@ -125,7 +125,7 @@ class TurboPlayback: TurboBase {
 		timer = nil
 	}
 	
-	func seek(seconds :Double) {
+	func seek(seconds: Double) {
 		var seconds2 = seconds
 		
 		if seconds > videoDuration {

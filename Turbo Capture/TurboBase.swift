@@ -10,7 +10,7 @@ import UIKit
 
 class TurboBase: NSObject {
 	// ensures handler function runs on the main thread
-	internal func main(handler:()->()) {
+	internal func main(handler: ()->()) {
 		var thread = NSThread.currentThread()
 		dispatch_async(dispatch_get_main_queue(), handler)
 	}

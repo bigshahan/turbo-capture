@@ -31,7 +31,7 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 	// MARK: Properties
 	var videoCapture :TurboCapture? = nil
 	var previewLayer :TurboCapturePreviewLayer? = nil
-	var duration :Float = 20
+	var duration :Double = 20
 	
 	// MARK: IBOutlets
 	@IBOutlet weak var previewView: UIView!
@@ -67,7 +67,7 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 		UIAlertView(title: "This app does not have access to your microphone.", message: "You can enable access in Privacy Settings.", delegate: nil, cancelButtonTitle: "Dismiss").show()
 	}
 	
-	func turboCaptureFinished(url :NSURL) {
+	func turboCaptureFinished(url :NSURL, thumbnail: UIImage, duration: Double) {
 		// write to photos library
 		var library = ALAssetsLibrary()
 		library.writeVideoAtPathToSavedPhotosAlbum(url, completionBlock: nil)
@@ -78,9 +78,9 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 		self.presentViewController(controller, animated: true, completion: nil)
 	}
 	
-	func turboCaptureElapsed(seconds: Float) {
+	func turboCaptureElapsed(seconds: Double) {
 		var value = seconds/duration
-		progressView.setProgress(value, animated: false)
+		progressView.setProgress(Float(value), animated: false)
 
 		if value >= 1 {
 			videoCapture?.stop()
