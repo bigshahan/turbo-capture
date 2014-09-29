@@ -131,7 +131,7 @@ class TurboCaptureWriter: TurboBase {
 		}
 		
 		if writer?.status == AVAssetWriterStatus.Failed {
-			error("AVAssetWriter error \(writer?.error.localizedDescription)")
+			error("AVAssetWriter error \(writer!.error) \(writer?.error.code) \(writer?.error.localizedDescription)")
 			return
 		}
 		
@@ -147,22 +147,19 @@ class TurboCaptureWriter: TurboBase {
 		// calculate time adjustments on sample buffer times to account for pauses
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData && lastVideoTime != nil {
 			if updateVideoTime {
-				videoDelta = CMTimeAdd(videoDelta, CMTimeSubtract(start, lastVideoTime!))
+				videoDelta = CMTimeSubtract(start, lastVideoTime!)
 				updateVideoTime = false
 			}
 			
 			delta = videoDelta
 			
-			NSLog("Video Delta: \(CMTimeGetSeconds(videoDelta))")
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData && lastAudioTime != nil {
 			if updateAudioTime {
-				audioDelta = CMTimeAdd(audioDelta, CMTimeSubtract(start, lastAudioTime!))
+				audioDelta = CMTimeSubtract(start, lastAudioTime!)
 				updateAudioTime = false
 			}
 			
 			delta = audioDelta
-			
-			NSLog("Audio Delta: \(CMTimeGetSeconds(audioDelta))")
 		}
 		
 		// adjust sample buffer times to account for pauses
@@ -178,8 +175,6 @@ class TurboCaptureWriter: TurboBase {
 			}
 			
 			CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, count, &timingInfo, &count)
-			
-			NSLog("Total Count: \(count)")
 			
 			for var i: CMItemCount = 0; i < count; i++ {
 				timingInfo[i].decodeTimeStamp = CMTimeSubtract(timingInfo[i].decodeTimeStamp, delta)
@@ -201,7 +196,7 @@ class TurboCaptureWriter: TurboBase {
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
 			videoInput?.appendSampleBuffer(buffer)
 			lastVideoTime = start
-			NSLog("Video - \(CMTimeGetSeconds(start))")
+			NSLog("Video - \(CMTimeGetSeconds(videoDelta)) \(CMTimeGetSeconds(start))")
 		// handle audio writes
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData {
 			audioInput?.appendSampleBuffer(buffer)
@@ -217,7 +212,7 @@ class TurboCaptureWriter: TurboBase {
 			
 			// set last audio time
 			lastAudioTime = CMTimeAdd(start, duration)
-			NSLog("Audio - \(CMTimeGetSeconds(start))")
+			NSLog("Audio - \(CMTimeGetSeconds(audioDelta)) \(CMTimeGetSeconds(start))")
 		}
 	}
 	
