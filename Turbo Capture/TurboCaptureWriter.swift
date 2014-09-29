@@ -117,6 +117,8 @@ class TurboCaptureWriter: TurboBase {
 	}
 	
 	func write(type: TurboCaptureWriterMediaType, sampleBuffer: CMSampleBuffer) {
+		var buffer = sampleBuffer
+		
 		// can't write if not ready
 		if !ready {
 			return
@@ -166,7 +168,30 @@ class TurboCaptureWriter: TurboBase {
 		// adjust sample buffer times to account for pauses
 		if CMTimeGetSeconds(delta) > 0 {
 			// do adjustment
-//			NSLog("Need to adjust buffer by \(CMTimeGetSeconds(delta)) seconds")
+			var count: CMItemCount = 0
+			CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, 0, nil, &count)
+			
+			var timingInfo: [CMSampleTimingInfo] = []
+			
+			for var i: CMItemCount = 0; i < count; i++ {
+				timingInfo.append(CMSampleTimingInfo(duration: delta, presentationTimeStamp: delta, decodeTimeStamp: delta))
+			}
+			
+			CMSampleBufferGetSampleTimingInfoArray(sampleBuffer, count, &timingInfo, &count)
+			
+			NSLog("Total Count: \(count)")
+			
+			for var i: CMItemCount = 0; i < count; i++ {
+				timingInfo[i].decodeTimeStamp = CMTimeSubtract(timingInfo[i].decodeTimeStamp, delta)
+				timingInfo[i].presentationTimeStamp = CMTimeSubtract(timingInfo[i].presentationTimeStamp, delta)
+			}
+			
+			var out: Unmanaged<CMSampleBuffer>? = nil
+			CMSampleBufferCreateCopyWithNewTiming(nil, sampleBuffer, count, timingInfo, &out)
+			
+			if out != nil {
+				buffer = out!.takeRetainedValue() as CMSampleBuffer
+			}
 			
 			// update the start time of sample buffer
 			start = CMTimeSubtract(start, delta)
@@ -174,12 +199,12 @@ class TurboCaptureWriter: TurboBase {
 
 		// handle video write
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
-			videoInput?.appendSampleBuffer(sampleBuffer)
+			videoInput?.appendSampleBuffer(buffer)
 			lastVideoTime = start
-			
+			NSLog("Video - \(CMTimeGetSeconds(start))")
 		// handle audio writes
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData {
-			audioInput?.appendSampleBuffer(sampleBuffer)
+			audioInput?.appendSampleBuffer(buffer)
 			
 			// set startTime if not yet set
 			if startTime == nil {
@@ -192,6 +217,7 @@ class TurboCaptureWriter: TurboBase {
 			
 			// set last audio time
 			lastAudioTime = CMTimeAdd(start, duration)
+			NSLog("Audio - \(CMTimeGetSeconds(start))")
 		}
 	}
 	
