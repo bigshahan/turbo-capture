@@ -156,6 +156,12 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	
 	// writing output file finished!
 	func turboCaptureWriterFinished() {
+		// get length of recording
+		
+		
+		// get a thumbnail
+		
+		
 		// Call finished delegate
 		main({
 			self.delegate?.turboCaptureFinished(self.outputUrl!)

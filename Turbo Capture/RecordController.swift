@@ -71,13 +71,7 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 		// write to photos library
 		var library = ALAssetsLibrary()
 		library.writeVideoAtPathToSavedPhotosAlbum(url, completionBlock: nil)
-		
-		// figure out filesize
-		var err = NSErrorPointer()
-		var attributes = NSFileManager.defaultManager().attributesOfItemAtPath(url.path!, error: err)
-		var megabytes = (attributes![NSFileSize] as NSNumber)/(1024*1024)
-		NSLog("\(megabytes) megabytes :). on main thread? \(NSThread.currentThread().isMainThread)")
-		
+				
 		// load PlaybackController
 		var controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("playback") as PlaybackController
 		controller.url = url
