@@ -67,7 +67,7 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 		UIAlertView(title: "This app does not have access to your microphone.", message: "You can enable access in Privacy Settings.", delegate: nil, cancelButtonTitle: "Dismiss").show()
 	}
 	
-	func turboCaptureFinished(url :NSURL, thumbnail: UIImage, duration: Double) {
+	func turboCaptureFinished(url :NSURL, thumbnail: UIImage?, duration: Double) {
 		// write to photos library
 		var library = ALAssetsLibrary()
 		library.writeVideoAtPathToSavedPhotosAlbum(url, completionBlock: nil)

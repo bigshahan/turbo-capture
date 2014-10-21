@@ -80,7 +80,7 @@ class TurboPlayback: TurboBase {
 	
 	// MARK: - KVO Observer
 	// used for autoplay
-	override func observeValueForKeyPath(keyPath: String!, ofObject object: AnyObject!, change: [NSObject : AnyObject]!, context: UnsafeMutablePointer<Void>) {
+	override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
 		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
 			play()
 			player.removeObserver(self, forKeyPath: "status")

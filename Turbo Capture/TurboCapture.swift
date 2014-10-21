@@ -30,7 +30,9 @@ import AssetsLibrary
 import UIKit
 
 enum TurboCaptureQuality {
+	case Low
 	case Normal
+	case High // not implemented
 }
 
 enum TurboCaptureCamera {
@@ -43,7 +45,7 @@ protocol TurboCaptureDelegate {
 	func turboCaptureError(message: String)
 	func turboCaptureMicrophoneDenied()
 	func turboCaptureCameraDenied()
-	func turboCaptureFinished(url: NSURL, thumbnail: UIImage, duration: Double)
+	func turboCaptureFinished(url: NSURL, thumbnail: UIImage?, duration: Double)
 	func turboCaptureElapsed(seconds: Double)
 }
 
