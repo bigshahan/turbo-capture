@@ -13,6 +13,8 @@ protocol TurboPlaybackDelegate {
 	func turboPlaybackStopped()
 	func turboPlaybackPaused()
 	func turboPlaybackStarted()
+	func turboPlaybackBufferingStarted()
+	func turboPlaybackBufferingFinished()
 	func turboPlaybackPosition(seconds: Double)
 	func turboPlaybackError(message: String)
 }
@@ -32,6 +34,7 @@ class TurboPlayback: TurboBase {
 	}
 	
 	var loop = false
+	var buffering = false
 	
 	// in seconds
 	var duration: Double {
@@ -71,6 +74,9 @@ class TurboPlayback: TurboBase {
 		super.init()
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "stop", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
 		
+		player.currentItem.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .New, context: nil)
+		player.currentItem.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .New, context: nil)
+		
 		// handle autoplay
 		if autoplay {
 			player.addObserver(self, forKeyPath: "status", options: .New, context: nil)
@@ -81,10 +87,19 @@ class TurboPlayback: TurboBase {
 	// MARK: - KVO Observer
 	// used for autoplay
 	override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
-			play()
-			player.removeObserver(self, forKeyPath: "status")
-			player.currentItem.removeObserver(self, forKeyPath: "status")
+		switch keyPath {
+		case "playbackBufferEmpty":
+			buffering = true
+			delegate?.turboPlaybackBufferingStarted()
+		case "playbackLikelyToKeepUp":
+			buffering = false
+			delegate?.turboPlaybackBufferingFinished()
+		default:
+			if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
+				play()
+				player.removeObserver(self, forKeyPath: "status")
+				player.currentItem.removeObserver(self, forKeyPath: "status")
+			}
 		}
 	}
 	

@@ -72,6 +72,14 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 	func turboPlaybackStarted() {
 	}
 	
+	func turboPlaybackBufferingStarted() {
+		println("started buffering")
+	}
+	
+	func turboPlaybackBufferingFinished() {
+		println("finished buffering")
+	}
+	
 	func turboPlaybackPosition(seconds :Double) {
 		var progress = seconds/playback!.duration
 		progressView.setProgress(Float(progress), animated: true)
