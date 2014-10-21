@@ -75,7 +75,6 @@ class TurboPlayback: TurboBase {
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "stop", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
 		
 		player.currentItem.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .New, context: nil)
-		player.currentItem.addObserver(self, forKeyPath: "playbackBufferFull", options: .New, context: nil)
 		player.currentItem.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .New, context: nil)
 		
 		// handle autoplay
@@ -92,21 +91,27 @@ class TurboPlayback: TurboBase {
 		
 		switch keyPath {
 		case "playbackBufferEmpty":
-			delegate?.turboPlaybackBufferingStarted()
-		case "playbackBufferFull":
-			delegate?.turboPlaybackBufferingFinished()
-			
-			// resume playback
-			if playing && ready {
-				self.player.play()
-			}
+			checkBuffering = true
 		case "playbackLikelyToKeepUp":
-			delegate?.turboPlaybackBufferingFinished()
+			checkBuffering = true
 		default:
 			if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
 				play()
 				player.removeObserver(self, forKeyPath: "status")
 				player.currentItem.removeObserver(self, forKeyPath: "status")
+			}
+		}
+		
+		if checkBuffering {
+			if player.currentItem.playbackBufferFull || player.currentItem.playbackLikelyToKeepUp {
+				delegate?.turboPlaybackBufferingFinished()
+				
+				// resume playback
+				if playing && ready {
+					self.player.play()
+				}
+			} else {
+				delegate?.turboPlaybackBufferingStarted()
 			}
 		}
 	}
