@@ -107,6 +107,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="200" y="232"/>
         </scene>
         <!--Playback Controller-->
         <scene sceneID="lNj-vt-I0W">
@@ -147,6 +148,9 @@
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="xcM-XT-vqJ">
                                 <rect key="frame" x="0.0" y="340" width="320" height="3"/>
                             </progressView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="7rB-mq-Qig">
+                                <rect key="frame" x="150" y="170" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -165,6 +169,8 @@
                             <constraint firstAttribute="trailing" secondItem="eTe-5p-DXn" secondAttribute="trailing" id="h9C-b2-ZcW"/>
                             <constraint firstItem="bRL-Lz-MQQ" firstAttribute="centerX" secondItem="Pbo-dv-84L" secondAttribute="centerX" id="iit-Dk-Th0"/>
                             <constraint firstAttribute="trailing" secondItem="bRL-Lz-MQQ" secondAttribute="trailing" id="lkv-Q3-CKq"/>
+                            <constraint firstItem="7rB-mq-Qig" firstAttribute="centerY" secondItem="bRL-Lz-MQQ" secondAttribute="centerY" id="po8-wY-PAZ"/>
+                            <constraint firstAttribute="centerX" secondItem="7rB-mq-Qig" secondAttribute="centerX" id="uxU-QH-iOm"/>
                             <constraint firstItem="xcM-XT-vqJ" firstAttribute="leading" secondItem="Rum-pJ-x84" secondAttribute="leading" id="xwm-qK-eEC"/>
                             <constraint firstAttribute="trailing" secondItem="i3c-Dr-dha" secondAttribute="trailing" id="zOs-uC-rEJ"/>
                         </constraints>
@@ -177,13 +183,14 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="536"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="7rB-mq-Qig" id="orf-de-ydT"/>
                         <outlet property="playbackView" destination="bRL-Lz-MQQ" id="P6A-IC-prE"/>
                         <outlet property="progressView" destination="xcM-XT-vqJ" id="ejh-T6-070"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aKk-gJ-1sg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="749" y="302"/>
+            <point key="canvasLocation" x="666" y="232"/>
         </scene>
     </scenes>
 </document>

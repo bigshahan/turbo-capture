@@ -33,6 +33,7 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 	// MARK: IBOutlets
 	@IBOutlet weak var playbackView: UIView!
 	@IBOutlet weak var progressView: UIProgressView!
+	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
 	// MARK: - Handle Button Taps
 	@IBAction func playPauseTapped(sender: AnyObject) {
@@ -52,7 +53,7 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 		super.viewDidLoad()
 		
 		if url == nil {
-			return
+			url = NSURL(string: "http://www.quirksmode.org/html5/videos/big_buck_bunny.mp4")!
 		}
 		
 		// setup of playback
@@ -63,20 +64,25 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 	
 	// MARK: - Playback Delegate
 	func turboPlaybackStopped() {
+		println("stopped playback")
 		progressView.setProgress(0, animated: false)
 	}
 	
 	func turboPlaybackPaused() {
+		println("paused playback")
 	}
 	
 	func turboPlaybackStarted() {
+		println("started playback")
 	}
 	
 	func turboPlaybackBufferingStarted() {
+		activityIndicator.hidden = false
 		println("started buffering")
 	}
 	
 	func turboPlaybackBufferingFinished() {
+		activityIndicator.hidden = true
 		println("finished buffering")
 	}
 	
