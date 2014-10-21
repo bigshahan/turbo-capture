@@ -62,10 +62,6 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 		playback?.aspectFill()
 	}
 	
-	override func viewWillUnload() {
-		playback?.cleanup()
-	}
-	
 	// MARK: - Playback Delegate
 	func turboPlaybackStopped() {
 		println("stopped playback")

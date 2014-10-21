@@ -53,6 +53,11 @@ class TurboPlayback: TurboBase {
 	private var layer: AVPlayerLayer
 	private var timer: NSTimer?
 	
+	private var hasStatusObserver = false
+	private var hasStopObserver = false
+	private var hasPlaybackBufferEmptyObserver = false
+	private var hasPlaybackLikelyToKeepUpObserver = false
+	
 	// MARK: Init
 	init(url: NSURL, view: UIView, autoplay: Bool, delegate: TurboPlaybackDelegate?) {
 		self.url = url
@@ -72,7 +77,6 @@ class TurboPlayback: TurboBase {
 		
 		// setup notification listener
 		super.init()
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: "stop", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
 		
 		// handle autoplay
 		if autoplay {
@@ -86,6 +90,11 @@ class TurboPlayback: TurboBase {
 			return
 		}
 		
+		hasStopObserver = true
+		hasPlaybackBufferEmptyObserver = true
+		hasPlaybackLikelyToKeepUpObserver = true
+		
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "stop", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
 		player.currentItem.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .New, context: nil)
 		player.currentItem.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .New, context: nil)
 	}
@@ -95,9 +104,26 @@ class TurboPlayback: TurboBase {
 			return
 		}
 		
-		player.currentItem.removeObserver(self, forKeyPath: "status")
-		player.currentItem.removeObserver(self, forKeyPath: "playbackBufferEmpty")
-		player.currentItem.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+		if hasStopObserver {
+			hasStopObserver = false
+			NSNotificationCenter.defaultCenter().removeObserver(self, forKeyPath: "")
+		}
+		
+		if hasStatusObserver {
+			hasStatusObserver = false
+			player.currentItem.removeObserver(self, forKeyPath: "status")
+		}
+		
+		if hasPlaybackBufferEmptyObserver {
+			hasPlaybackBufferEmptyObserver = false
+			player.currentItem.removeObserver(self, forKeyPath: "playbackBufferEmpty")
+		}
+		
+		if hasPlaybackLikelyToKeepUpObserver {
+			hasPlaybackLikelyToKeepUpObserver = false
+			player.currentItem.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+
+		}
 	}
 	
 	func cleanup() {
