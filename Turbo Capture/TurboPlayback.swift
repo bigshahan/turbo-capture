@@ -106,7 +106,7 @@ class TurboPlayback: TurboBase {
 		
 		if hasStopObserver {
 			hasStopObserver = false
-			NSNotificationCenter.defaultCenter().removeObserver(self, forKeyPath: AVPlayerItemDidPlayToEndTimeNotification)
+			NSNotificationCenter.defaultCenter().removeObserver(self, name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
 		}
 		
 		if hasStatusObserver {
@@ -122,7 +122,7 @@ class TurboPlayback: TurboBase {
 		if hasPlaybackLikelyToKeepUpObserver {
 			hasPlaybackLikelyToKeepUpObserver = false
 			player.currentItem.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
-
+			
 		}
 	}
 	
@@ -180,7 +180,7 @@ class TurboPlayback: TurboBase {
 			self.isPlaying = true
 			self.delegate?.turboPlaybackStarted()
 			self.player.play()
-
+			
 			// start timer
 			timer = NSTimer.scheduledTimerWithTimeInterval(0.25, target: self, selector: "playedSplitSecond", userInfo: nil, repeats: true)
 		}
