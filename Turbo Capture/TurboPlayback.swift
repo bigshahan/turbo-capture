@@ -74,14 +74,34 @@ class TurboPlayback: TurboBase {
 		super.init()
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "stop", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
 		
-		player.currentItem.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .New, context: nil)
-		player.currentItem.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .New, context: nil)
-		
 		// handle autoplay
 		if autoplay {
 			player.addObserver(self, forKeyPath: "status", options: .New, context: nil)
 			player.currentItem.addObserver(self, forKeyPath: "status", options: .New, context: nil)
 		}
+	}
+	
+	private func startObserving() {
+		if player.currentItem == nil {
+			return
+		}
+		
+		player.currentItem.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .New, context: nil)
+		player.currentItem.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .New, context: nil)
+	}
+	
+	private func stopObserving() {
+		if player.currentItem == nil {
+			return
+		}
+		
+		player.currentItem.removeObserver(self, forKeyPath: "status")
+		player.currentItem.removeObserver(self, forKeyPath: "playbackBufferEmpty")
+		player.currentItem.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+	}
+	
+	func cleanup() {
+		stopObserving()
 	}
 	
 	// MARK: - KVO Observer
@@ -127,6 +147,8 @@ class TurboPlayback: TurboBase {
 			return
 		}
 		
+		startObserving()
+		
 		// nested due to swift compiler errors with type
 		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
 			self.isPlaying = true
@@ -143,6 +165,7 @@ class TurboPlayback: TurboBase {
 			return
 		}
 		
+		stopObserving()
 		player.pause()
 		
 		delegate?.turboPlaybackPaused()
