@@ -106,7 +106,7 @@ class TurboPlayback: TurboBase {
 		
 		if hasStopObserver {
 			hasStopObserver = false
-			NSNotificationCenter.defaultCenter().removeObserver(self, forKeyPath: "")
+			NSNotificationCenter.defaultCenter().removeObserver(self, forKeyPath: AVPlayerItemDidPlayToEndTimeNotification)
 		}
 		
 		if hasStatusObserver {
