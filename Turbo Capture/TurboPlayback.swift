@@ -97,52 +97,21 @@ class TurboPlayback: TurboBase {
 		if player.currentItem == nil {
 			return
 		}
-		
-		hasStopObserver = true
-		hasPlaybackBufferEmptyObserver = true
-		hasPlaybackLikelyToKeepUpObserver = true
-		
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: "stop", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
-		player.currentItem.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .New, context: nil)
-		player.currentItem.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .New, context: nil)
-	}
-	
-	private func stopObserving() {
-		if player.currentItem == nil {
-			return
-		}
-		
-		println("about to stop observers if needed")
-		
-		if hasStopObserver {
-			hasStopObserver = false
-			println("removing stop observer")
-			NSNotificationCenter.defaultCenter().removeObserver(self, name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
-		}
-		
-		if hasStatusObserver {
-			hasStatusObserver = false
-			println("removing status observer")
-			player.currentItem.removeObserver(self, forKeyPath: "status")
-		}
-		
-		if hasPlaybackBufferEmptyObserver {
-			hasPlaybackBufferEmptyObserver = false
-			println("removing playbackBufferEmpty observer")
-			player.currentItem.removeObserver(self, forKeyPath: "playbackBufferEmpty")
-		}
-		
-		if hasPlaybackLikelyToKeepUpObserver {
-			hasPlaybackLikelyToKeepUpObserver = false
-			println("removing playbackLikelyToKeepUp observer")
-			player.currentItem.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
 
+		if !hasStopObserver {
+			hasStopObserver = true
+			NSNotificationCenter.defaultCenter().addObserver(self, selector: "stop", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
 		}
-	}
-	
-	func cleanup() {
-		println("about to run pause function in TurboPlayback")
-		stopObserving()
+		
+		if !hasPlaybackBufferEmptyObserver {
+			hasPlaybackBufferEmptyObserver = true
+			player.currentItem.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .New, context: nil)
+		}
+		
+		if !hasPlaybackLikelyToKeepUpObserver {
+			hasPlaybackLikelyToKeepUpObserver = true
+			player.currentItem.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .New, context: nil)
+		}
 	}
 	
 	// MARK: - KVO Observer
@@ -203,14 +172,15 @@ class TurboPlayback: TurboBase {
 	
 	func pause() {
 		println("about to run pause functionin TurboPlayback")
-		stopObserving()
 
 		if !isPlaying || !ready {
 			return
 		}
 		
+		println("about to pause")
 		player.pause()
 		
+		println("about to call pause delegate")
 		delegate?.turboPlaybackPaused()
 		isPlaying = false
 		
@@ -230,8 +200,6 @@ class TurboPlayback: TurboBase {
 	}
 	
 	func stop() {
-		stopObserving()
-		
 		if !isPlaying || !ready {
 			return
 		}
@@ -263,5 +231,38 @@ class TurboPlayback: TurboBase {
 			self.delegate?.turboPlaybackPosition(CMTimeGetSeconds(self.player.currentTime()))
 			return
 		})
+	}
+	
+	deinit {
+		if player.currentItem == nil {
+			return
+		}
+		
+		println("about to stop observers if needed")
+		
+		if hasStopObserver {
+			hasStopObserver = false
+			println("removing stop observer")
+			NSNotificationCenter.defaultCenter().removeObserver(self, name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+		}
+		
+		if hasStatusObserver {
+			hasStatusObserver = false
+			println("removing status observer")
+			player.currentItem.removeObserver(self, forKeyPath: "status")
+		}
+		
+		if hasPlaybackBufferEmptyObserver {
+			hasPlaybackBufferEmptyObserver = false
+			println("removing playbackBufferEmpty observer")
+			player.currentItem.removeObserver(self, forKeyPath: "playbackBufferEmpty")
+		}
+		
+		if hasPlaybackLikelyToKeepUpObserver {
+			hasPlaybackLikelyToKeepUpObserver = false
+			println("removing playbackLikelyToKeepUp observer")
+			player.currentItem.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+			
+		}
 	}
 }
