@@ -49,7 +49,7 @@ class TurboPlayback: TurboBase {
 	private var view: UIView
 	private var isPlaying = false
 	private var videoDuration: Double = 0.0
-	private var player: AVPlayer
+	private var player: AVQueuePlayer
 	private var layer: AVPlayerLayer
 	private var timer: NSTimer?
 	
@@ -65,24 +65,32 @@ class TurboPlayback: TurboBase {
 		self.delegate = delegate
 		
 		// setup avplayer
-		player = AVPlayer(URL: url)
-		
-		// determine video duration
-		videoDuration = CMTimeGetSeconds(player.currentItem.asset.duration)
+		player = AVQueuePlayer()
 		
 		// setup view
 		layer = AVPlayerLayer(player: player)
 		layer.frame = view.bounds
 		view.layer.addSublayer(layer)
 		
-		// setup notification listener
+		// super init so can use self
 		super.init()
 		
-		// handle autoplay
-		if autoplay {
-			player.addObserver(self, forKeyPath: "status", options: .New, context: nil)
-			player.currentItem.addObserver(self, forKeyPath: "status", options: .New, context: nil)
-		}
+		// load on sep thread the requested video
+		var asset = AVURLAsset(URL: url, options: nil)
+		var keys = ["playable"]
+		asset.loadValuesAsynchronouslyForKeys(keys, completionHandler: {
+			self.main({
+				self.player.insertItem(AVPlayerItem(asset: asset), afterItem: nil)
+				self.videoDuration = CMTimeGetSeconds(self.player.currentItem.asset.duration)
+				
+				// handle autoplay
+				if autoplay {
+					self.hasStatusObserver = true
+					self.player.addObserver(self, forKeyPath: "status", options: .New, context: nil)
+					self.player.currentItem.addObserver(self, forKeyPath: "status", options: .New, context: nil)
+				}
+			})
+		})
 	}
 	
 	private func startObserving() {
@@ -104,29 +112,36 @@ class TurboPlayback: TurboBase {
 			return
 		}
 		
+		println("about to stop observers if needed")
+		
 		if hasStopObserver {
 			hasStopObserver = false
+			println("removing stop observer")
 			NSNotificationCenter.defaultCenter().removeObserver(self, name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
 		}
 		
 		if hasStatusObserver {
 			hasStatusObserver = false
+			println("removing status observer")
 			player.currentItem.removeObserver(self, forKeyPath: "status")
 		}
 		
 		if hasPlaybackBufferEmptyObserver {
 			hasPlaybackBufferEmptyObserver = false
+			println("removing playbackBufferEmpty observer")
 			player.currentItem.removeObserver(self, forKeyPath: "playbackBufferEmpty")
 		}
 		
 		if hasPlaybackLikelyToKeepUpObserver {
 			hasPlaybackLikelyToKeepUpObserver = false
+			println("removing playbackLikelyToKeepUp observer")
 			player.currentItem.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
-			
+
 		}
 	}
 	
 	func cleanup() {
+		println("about to run pause function in TurboPlayback")
 		stopObserving()
 	}
 	
@@ -178,20 +193,22 @@ class TurboPlayback: TurboBase {
 		// nested due to swift compiler errors with type
 		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
 			self.isPlaying = true
-			self.delegate?.turboPlaybackStarted()
 			self.player.play()
-			
+			self.delegate?.turboPlaybackStarted()
+
 			// start timer
 			timer = NSTimer.scheduledTimerWithTimeInterval(0.25, target: self, selector: "playedSplitSecond", userInfo: nil, repeats: true)
 		}
 	}
 	
 	func pause() {
+		println("about to run pause functionin TurboPlayback")
+		stopObserving()
+
 		if !isPlaying || !ready {
 			return
 		}
 		
-		stopObserving()
 		player.pause()
 		
 		delegate?.turboPlaybackPaused()
@@ -213,6 +230,8 @@ class TurboPlayback: TurboBase {
 	}
 	
 	func stop() {
+		stopObserving()
+		
 		if !isPlaying || !ready {
 			return
 		}
