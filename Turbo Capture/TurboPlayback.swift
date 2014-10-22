@@ -50,6 +50,7 @@ class TurboPlayback: TurboBase {
 	private var isPlaying = false
 	private var videoDuration: Double = 0.0
 	private var player: AVQueuePlayer
+	private var playerItem: AVPlayerItem
 	private var layer: AVPlayerLayer
 	private var timer: NSTimer?
 	
@@ -66,6 +67,7 @@ class TurboPlayback: TurboBase {
 		
 		// setup avplayer
 		player = AVQueuePlayer()
+		playerItem = AVPlayerItem()
 		
 		// setup view
 		layer = AVPlayerLayer(player: player)
@@ -80,14 +82,15 @@ class TurboPlayback: TurboBase {
 		var keys = ["playable"]
 		asset.loadValuesAsynchronouslyForKeys(keys, completionHandler: {
 			self.main({
-				self.player.insertItem(AVPlayerItem(asset: asset), afterItem: nil)
+				self.playerItem = AVPlayerItem(asset: asset)
+				self.player.insertItem(self.playerItem, afterItem: nil)
 				self.videoDuration = CMTimeGetSeconds(self.player.currentItem.asset.duration)
 				
 				// handle autoplay
 				if autoplay {
 					self.hasStatusObserver = true
 					self.player.addObserver(self, forKeyPath: "status", options: .New, context: nil)
-					self.player.currentItem.addObserver(self, forKeyPath: "status", options: .New, context: nil)
+					self.playerItem.addObserver(self, forKeyPath: "status", options: .New, context: nil)
 				}
 			})
 		})
@@ -100,7 +103,7 @@ class TurboPlayback: TurboBase {
 
 		if !hasStopObserver {
 			hasStopObserver = true
-			NSNotificationCenter.defaultCenter().addObserver(self, selector: "stop", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+			NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackReachedEnd", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
 		}
 		
 		if !hasPlaybackBufferEmptyObserver {
@@ -205,15 +208,26 @@ class TurboPlayback: TurboBase {
 		}
 		
 		pause()
-		seek(0)
 		
 		main({
 			self.delegate?.turboPlaybackStopped()
 			return
 		})
+	}
+	
+	func playbackReachedEnd() {
+		isPlaying = false
+		player.removeAllItems()
+		player.insertItem(playerItem, afterItem: nil)
+		seek(0)
 		
 		if loop {
 			play()
+		} else {
+			main({
+				self.delegate?.turboPlaybackStopped()
+				return
+			})
 		}
 	}
 	
@@ -243,7 +257,7 @@ class TurboPlayback: TurboBase {
 		if hasStopObserver {
 			hasStopObserver = false
 			println("removing stop observer")
-			NSNotificationCenter.defaultCenter().removeObserver(self, name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+			NSNotificationCenter.defaultCenter().removeObserver(self, name: AVPlayerItemDidPlayToEndTimeNotification, object: playerItem)
 		}
 		
 		if hasStatusObserver {

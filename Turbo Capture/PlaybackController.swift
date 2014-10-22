@@ -88,7 +88,7 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 	
 	func turboPlaybackPosition(seconds :Double) {
 		var progress = seconds/playback!.duration
-		progressView.setProgress(Float(progress), animated: true)
+		progressView.setProgress(Float(progress), animated: false)
 	}
 	
 	func turboPlaybackError(message :String) {
