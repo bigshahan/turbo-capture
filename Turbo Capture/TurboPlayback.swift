@@ -174,16 +174,12 @@ class TurboPlayback: TurboBase {
 	}
 	
 	func pause() {
-		println("about to run pause functionin TurboPlayback")
-
 		if !isPlaying || !ready {
 			return
 		}
 		
-		println("about to pause")
 		player.pause()
 		
-		println("about to call pause delegate")
 		delegate?.turboPlaybackPaused()
 		isPlaying = false
 		
@@ -220,6 +216,7 @@ class TurboPlayback: TurboBase {
 		player.removeAllItems()
 		player.insertItem(playerItem, afterItem: nil)
 		seek(0)
+		player.pause()
 		
 		if loop {
 			play()
@@ -252,29 +249,23 @@ class TurboPlayback: TurboBase {
 			return
 		}
 		
-		println("about to stop observers if needed")
-		
 		if hasStopObserver {
 			hasStopObserver = false
-			println("removing stop observer")
 			NSNotificationCenter.defaultCenter().removeObserver(self, name: AVPlayerItemDidPlayToEndTimeNotification, object: playerItem)
 		}
 		
 		if hasStatusObserver {
 			hasStatusObserver = false
-			println("removing status observer")
 			player.currentItem.removeObserver(self, forKeyPath: "status")
 		}
 		
 		if hasPlaybackBufferEmptyObserver {
 			hasPlaybackBufferEmptyObserver = false
-			println("removing playbackBufferEmpty observer")
 			player.currentItem.removeObserver(self, forKeyPath: "playbackBufferEmpty")
 		}
 		
 		if hasPlaybackLikelyToKeepUpObserver {
 			hasPlaybackLikelyToKeepUpObserver = false
-			println("removing playbackLikelyToKeepUp observer")
 			player.currentItem.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
 			
 		}
