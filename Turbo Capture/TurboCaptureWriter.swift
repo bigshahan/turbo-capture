@@ -57,6 +57,8 @@ class TurboCaptureWriter: TurboBase {
 	private var updateVideoTime = false
 	private var updateAudioTime = false
 	
+	private var quality: TurboCaptureQuality
+	
 	// time first sample came at
 	private var startTime: CMTime?
 	
@@ -66,7 +68,11 @@ class TurboCaptureWriter: TurboBase {
 		}
 	}
 	
-	init(url: NSURL, delegate: TurboCaptureWriterDelegate?) {
+	init(url: NSURL, quality qualityToSet: TurboCaptureQuality, delegate: TurboCaptureWriterDelegate?) {
+		// set the quality
+		quality = qualityToSet
+		
+		// initialize
 		super.init()
 		
 		// setup delegate
@@ -83,7 +89,7 @@ class TurboCaptureWriter: TurboBase {
 		
 		// setup audio input
 		var audioSettings = [
-			AVFormatIDKey:kAudioFormatMPEG4AAC,
+			AVFormatIDKey: kAudioFormatMPEG4AAC,
 			AVSampleRateKey: 44100.0,
 			AVNumberOfChannelsKey: 1,
 			AVEncoderBitRateKey: 64000
@@ -97,6 +103,16 @@ class TurboCaptureWriter: TurboBase {
 			AVVideoWidthKey: 480,
 			AVVideoHeightKey: 640
 		]
+		
+		// TODO: Adjust based on resolution
+		if quality == .Low {
+			videoSettings[AVVideoCompressionPropertiesKey] = [AVVideoAverageBitRateKey: 700000]
+		}
+		
+		if quality == .Medium {
+			videoSettings[AVVideoCompressionPropertiesKey] = [AVVideoAverageBitRateKey: 1200000]
+		}
+		
 		videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
 		videoInput?.expectsMediaDataInRealTime = true
 		

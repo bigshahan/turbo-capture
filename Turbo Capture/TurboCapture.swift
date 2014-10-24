@@ -31,8 +31,13 @@ import UIKit
 
 enum TurboCaptureQuality {
 	case Low
-	case Normal
-	case High // not implemented
+	case Medium
+	case High
+}
+
+enum TurboCaptureResolution {
+	case VGA
+	case HD // not implemented
 }
 
 enum TurboCaptureCamera {
@@ -53,7 +58,7 @@ protocol TurboCaptureDelegate {
 class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate, TurboCaptureWriterDelegate {
 	// MARK: Private Properties
 	private var delegate: TurboCaptureDelegate?
-	private var previewLayer: TurboCapturePreviewLayer?
+	private var previewLayer: TurboCapturePreviewLayer
 	
 	private var session: AVCaptureSession?
 	private var outputUrl: NSURL?
@@ -72,16 +77,15 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	private var errorOccurred = false
 	private var recording = false
 	
-	private var writer :TurboCaptureWriter?
+	private var writer: TurboCaptureWriter?
+	private var quality: TurboCaptureQuality
+	private var resolution: TurboCaptureResolution
 	
 	// MARK: - Computed / Public Properties
 	// number of seconds	
 	var ready: Bool {
 		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil && videoOutput != nil && audioOutput != nil && outputUrl != nil && writer != nil
 	}
-	
-	// quality is only set when start is called
-	var quality: TurboCaptureQuality = TurboCaptureQuality.Normal
 	
 	// the camera. defaults to front
 	var camera: TurboCaptureCamera {
@@ -122,9 +126,11 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	}
 	
 	// MARK: - Init Function
-	init(previewLayer: TurboCapturePreviewLayer?, delegate: TurboCaptureDelegate?) {
+	init(previewLayer: TurboCapturePreviewLayer, resolution: TurboCaptureResolution, quality: TurboCaptureQuality, delegate: TurboCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
+		self.quality = quality
+		self.resolution = resolution
 		super.init()
 		start()
 	}
@@ -253,16 +259,16 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 			return
 		}
 		
-		// setup video qualtity
-		switch quality {
+		// setup video resolution
+		switch resolution {
 		default:
-			if session? != nil && session!.canSetSessionPreset(AVCaptureSessionPreset640x480) {
+			if session != nil && session!.canSetSessionPreset(AVCaptureSessionPreset640x480) {
 				session?.sessionPreset = AVCaptureSessionPreset640x480
 			}
 		}
 		
 		// setup preview layer
-		previewLayer?.session = session
+		previewLayer.session = session
 		
 		// setup capture queue
 		captureQueue = dispatch_queue_create("com.shahan.turbocapture.capturequeue", DISPATCH_QUEUE_SERIAL)
@@ -300,7 +306,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		
 		// setup assetwrite
 		serialQueue = dispatch_queue_create("com.shahan.turbocapture.serialqueue", nil)
-		writer = TurboCaptureWriter(url: outputUrl!, delegate: self)
+		writer = TurboCaptureWriter(url: outputUrl!, quality: quality, delegate: self)
 		
 		// start running the session
 		session?.startRunning()

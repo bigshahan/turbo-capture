@@ -31,7 +31,7 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 	// MARK: Properties
 	var videoCapture :TurboCapture? = nil
 	var previewLayer :TurboCapturePreviewLayer? = nil
-	var duration :Double = 5
+	var duration :Double = 20
 	
 	// MARK: IBOutlets
 	@IBOutlet weak var previewView: UIView!
@@ -97,7 +97,7 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 		previewLayer?.aspectFill()
 	
 		// setup video capture + preview
-		videoCapture = TurboCapture(previewLayer: previewLayer, delegate: self)
+		videoCapture = TurboCapture(previewLayer: previewLayer!, resolution: .VGA, quality: .High, delegate: self)
 	}
 	
 	override func prefersStatusBarHidden() -> Bool {
