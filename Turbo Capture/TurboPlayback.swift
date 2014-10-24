@@ -130,6 +130,7 @@ class TurboPlayback: TurboBase {
 		default:
 			if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
 				play()
+				hasStatusObserver = false
 				player.removeObserver(self, forKeyPath: "status")
 				player.currentItem.removeObserver(self, forKeyPath: "status")
 			}
