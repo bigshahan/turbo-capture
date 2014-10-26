@@ -58,6 +58,7 @@ class TurboCaptureWriter: TurboBase {
 	private var updateAudioTime = false
 	
 	private var quality: TurboCaptureQuality
+	private var type: TurboCaptureType
 	
 	// time first sample came at
 	private var startTime: CMTime?
@@ -68,9 +69,10 @@ class TurboCaptureWriter: TurboBase {
 		}
 	}
 	
-	init(url: NSURL, quality qualityToSet: TurboCaptureQuality, delegate: TurboCaptureWriterDelegate?) {
+	init(url: NSURL, quality: TurboCaptureQuality, type:TurboCaptureType, delegate: TurboCaptureWriterDelegate?) {
 		// set the quality
-		quality = qualityToSet
+		self.quality = quality
+		self.type = type
 		
 		// initialize
 		super.init()
@@ -79,8 +81,14 @@ class TurboCaptureWriter: TurboBase {
 		self.delegate = delegate
 		
 		// setup writer
-		var err = NSErrorPointer()
-		writer = AVAssetWriter(URL: url, fileType: AVFileTypeQuickTimeMovie, error: err)
+		var err: NSError?
+		var type = AVFileTypeQuickTimeMovie
+		
+		if self.type == .MP4 {
+			type = AVFileTypeMPEG4
+		}
+		
+		writer = AVAssetWriter(URL: url, fileType: type, error: &err)
 		
 		if err != nil {
 			error("Could not initialize asset writer")
@@ -94,8 +102,16 @@ class TurboCaptureWriter: TurboBase {
 			AVNumberOfChannelsKey: 1,
 			AVEncoderBitRateKey: 64000
 		]
-		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: nil)
+		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: audioSettings)
 		audioInput?.expectsMediaDataInRealTime = true
+		
+		// add audio input to asset writer
+		if writer!.canAddInput(audioInput) {
+			writer?.addInput(audioInput)
+		} else {
+			error("Could not add audio input to asset writer")
+			return
+		}
 		
 		// setup video input
 		var videoSettings = [
@@ -104,7 +120,7 @@ class TurboCaptureWriter: TurboBase {
 			AVVideoHeightKey: 640
 		]
 		
-		// TODO: Adjust based on resolution
+		// setup quality
 		if quality == .Low {
 			videoSettings[AVVideoCompressionPropertiesKey] = [AVVideoAverageBitRateKey: 700000]
 		}
@@ -116,14 +132,7 @@ class TurboCaptureWriter: TurboBase {
 		videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
 		videoInput?.expectsMediaDataInRealTime = true
 		
-		// add inputs to AVAssetWriter
-		if writer!.canAddInput(audioInput) {
-			writer?.addInput(audioInput)
-		} else {
-			error("Could not add audio input to asset writer")
-			return
-		}
-		
+		// add video input to AVAssetWriter
 		if writer!.canAddInput(videoInput) {
 			writer?.addInput(videoInput)
 		} else {

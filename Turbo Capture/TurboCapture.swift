@@ -35,6 +35,11 @@ enum TurboCaptureQuality {
 	case High
 }
 
+enum TurboCaptureType {
+	case MOV
+	case MP4
+}
+
 enum TurboCaptureResolution {
 	case VGA
 	case HD // not implemented
@@ -80,6 +85,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	private var writer: TurboCaptureWriter?
 	private var quality: TurboCaptureQuality
 	private var resolution: TurboCaptureResolution
+	private var type: TurboCaptureType
 	
 	// MARK: - Computed / Public Properties
 	// number of seconds	
@@ -126,11 +132,12 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	}
 	
 	// MARK: - Init Function
-	init(previewLayer: TurboCapturePreviewLayer, resolution: TurboCaptureResolution, quality: TurboCaptureQuality, delegate: TurboCaptureDelegate?) {
+	init(previewLayer: TurboCapturePreviewLayer, resolution: TurboCaptureResolution, quality: TurboCaptureQuality, type: TurboCaptureType, delegate: TurboCaptureDelegate?) {
 		self.delegate = delegate
 		self.previewLayer = previewLayer
 		self.quality = quality
 		self.resolution = resolution
+		self.type = type
 		super.init()
 		start()
 	}
@@ -306,7 +313,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		
 		// setup assetwrite
 		serialQueue = dispatch_queue_create("com.shahan.turbocapture.serialqueue", nil)
-		writer = TurboCaptureWriter(url: outputUrl!, quality: quality, delegate: self)
+		writer = TurboCaptureWriter(url: outputUrl!, quality: quality, type: type, delegate: self)
 		
 		// start running the session
 		session?.startRunning()

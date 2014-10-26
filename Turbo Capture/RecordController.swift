@@ -89,15 +89,15 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 	}
 
 	// MARK: - View Controller Lifecycle
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		
+	override func viewDidAppear(animated: Bool) {
+		super.viewDidAppear(animated)
+
 		// setup the preview layer
 		previewLayer = TurboCapturePreviewLayer(view: previewView)
 		previewLayer?.aspectFill()
 	
 		// setup video capture + preview
-		videoCapture = TurboCapture(previewLayer: previewLayer!, resolution: .VGA, quality: .High, delegate: self)
+		videoCapture = TurboCapture(previewLayer: previewLayer!, resolution: .VGA, quality: .High, type: .MOV, delegate: self)
 	}
 	
 	override func prefersStatusBarHidden() -> Bool {
