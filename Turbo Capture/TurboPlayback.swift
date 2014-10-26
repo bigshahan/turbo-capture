@@ -128,7 +128,7 @@ class TurboPlayback: TurboBase {
 		case "playbackLikelyToKeepUp":
 			checkBuffering = true
 		default:
-			if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
+			if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem != nil && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
 				play()
 				hasStatusObserver = false
 				player.removeObserver(self, forKeyPath: "status")
