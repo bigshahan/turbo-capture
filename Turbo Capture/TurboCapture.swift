@@ -297,7 +297,13 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		session?.addOutput(audioOutput)
 		
 		// get a temporary file for output
-		var path = "\(NSTemporaryDirectory())output.mov"
+		var path = "\(NSTemporaryDirectory())"
+		
+		if type == .MP4 {
+			path += "output.mp4"
+		} else {
+			path += "output.mov"
+		}
 		
 		var fileManager = NSFileManager.defaultManager()
 		if fileManager.fileExistsAtPath(path) {
