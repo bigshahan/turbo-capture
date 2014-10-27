@@ -164,7 +164,7 @@ class TurboPlayback: TurboBase {
 		startObserving()
 		
 		// nested due to swift compiler errors with type
-		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
+		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem != nil && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
 			self.isPlaying = true
 			self.player.play()
 			self.delegate?.turboPlaybackStarted()
