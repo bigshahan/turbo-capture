@@ -84,7 +84,7 @@ class TurboPlayback: TurboBase {
 			self.main({
 				self.playerItem = AVPlayerItem(asset: asset)
 				self.player.insertItem(self.playerItem, afterItem: nil)
-				self.videoDuration = CMTimeGetSeconds(self.player.currentItem.asset.duration)
+				self.videoDuration = CMTimeGetSeconds(self.playerItem.asset.duration)
 				
 				// handle autoplay
 				if autoplay {
