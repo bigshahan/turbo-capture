@@ -74,11 +74,11 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	private var videoDevice: AVCaptureDevice?
 	private var videoInput: AVCaptureDeviceInput?
 	private var videoOutput: AVCaptureVideoDataOutput?
-
+	
 	private var audioInput: AVCaptureDeviceInput?
 	private var audioDevice: AVCaptureDevice?
 	private var audioOutput: AVCaptureAudioDataOutput?
-
+	
 	private var errorOccurred = false
 	private var recording = false
 	
@@ -88,7 +88,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	private var type: TurboCaptureType
 	
 	// MARK: - Computed / Public Properties
-	// number of seconds	
+	// number of seconds
 	var ready: Bool {
 		return !errorOccurred && session != nil && videoDevice != nil && audioDevice != nil && videoInput != nil && audioInput != nil && videoOutput != nil && audioOutput != nil && outputUrl != nil && writer != nil
 	}
@@ -183,8 +183,19 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 			self.delegate?.turboCaptureFinished(self.outputUrl!, thumbnail: UIImage(CGImage: image), duration: CMTimeGetSeconds(asset.duration))
 			return
 		})
+		
+		// Cleanup
+		session?.stopRunning()
+		session = nil
+		writer = nil
+		videoDevice = nil
+		videoInput = nil
+		videoOutput = nil
+		audioDevice = nil
+		audioInput = nil
+		audioOutput = nil
 	}
-
+	
 	// MARK: - Recording Lifecycle
 	// starts the preview
 	private func start() {
@@ -314,7 +325,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 				return
 			}
 		}
-
+		
 		outputUrl = NSURL(fileURLWithPath: path)
 		
 		// setup assetwrite
