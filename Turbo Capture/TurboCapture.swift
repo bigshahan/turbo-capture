@@ -81,6 +81,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	
 	private var errorOccurred = false
 	private var recording = false
+	private var startedRecording = false
 	
 	private var writer: TurboCaptureWriter?
 	private var quality: TurboCaptureQuality
@@ -185,15 +186,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		})
 		
 		// Cleanup
-		session?.stopRunning()
-		session = nil
-		writer = nil
-		videoDevice = nil
-		videoInput = nil
-		videoOutput = nil
-		audioDevice = nil
-		audioInput = nil
-		audioOutput = nil
+		cleanup()
 	}
 	
 	// MARK: - Recording Lifecycle
@@ -346,6 +339,8 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		// pause recording if needed
 		if recording {
 			pause()
+		} else if !startedRecording {
+			cleanup()
 		}
 		
 		// Create final output file
@@ -360,6 +355,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		}
 		
 		recording = true
+		startedRecording = true
 	}
 	
 	// pause video recording
@@ -421,6 +417,20 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 				camera = cameras[0]
 			}
 		}
+	}
+	
+	// MARK: - Private Function for Cleanup
+	private func cleanup() {
+		session?.stopRunning()
+		session = nil
+		writer = nil
+		videoDevice = nil
+		videoInput = nil
+		videoOutput = nil
+		audioDevice = nil
+		audioInput = nil
+		audioOutput = nil
+		startedRecording = false
 	}
 	
 	// MARK: - Error Handling
