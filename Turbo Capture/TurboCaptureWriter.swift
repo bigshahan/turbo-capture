@@ -122,10 +122,14 @@ class TurboCaptureWriter: TurboBase {
 		
 		// setup quality
 		if quality == .Low {
-			videoSettings[AVVideoCompressionPropertiesKey] = [AVVideoAverageBitRateKey: 700000]
+			videoSettings[AVVideoCompressionPropertiesKey] = [AVVideoAverageBitRateKey: 350000]
 		}
 		
 		if quality == .Medium {
+			videoSettings[AVVideoCompressionPropertiesKey] = [AVVideoAverageBitRateKey: 700000]
+		}
+		
+		if quality == .High {
 			videoSettings[AVVideoCompressionPropertiesKey] = [AVVideoAverageBitRateKey: 1200000]
 		}
 		
@@ -220,13 +224,13 @@ class TurboCaptureWriter: TurboBase {
 			// update the start time of sample buffer
 			start = CMTimeSubtract(start, delta)
 		}
-
+		
 		// handle video write
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
 			videoInput?.appendSampleBuffer(buffer)
 			lastVideoTime = CMTimeAdd(start, CMTimeMakeWithSeconds(0.04, 1000000000))
-
-		// handle audio writes
+			
+			// handle audio writes
 		} else if type == TurboCaptureWriterMediaType.Audio && audioInput!.readyForMoreMediaData {
 			audioInput?.appendSampleBuffer(buffer)
 			
