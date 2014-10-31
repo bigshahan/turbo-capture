@@ -53,6 +53,7 @@ class TurboPlayback: TurboBase {
 	private var playerItem: AVPlayerItem
 	private var layer: AVPlayerLayer
 	private var timer: NSTimer?
+	private var autoplay = false
 	
 	private var hasStatusObserver = false
 	private var hasStopObserver = false
@@ -64,6 +65,7 @@ class TurboPlayback: TurboBase {
 		self.url = url
 		self.view = view
 		self.delegate = delegate
+		self.autoplay = autoplay
 		
 		// setup avplayer
 		player = AVQueuePlayer()
@@ -87,7 +89,7 @@ class TurboPlayback: TurboBase {
 				self.videoDuration = CMTimeGetSeconds(self.playerItem.asset.duration)
 				
 				// handle autoplay
-				if autoplay {
+				if self.autoplay {
 					self.hasStatusObserver = true
 					self.player.addObserver(self, forKeyPath: "status", options: .New, context: nil)
 					self.playerItem.addObserver(self, forKeyPath: "status", options: .New, context: nil)
@@ -129,10 +131,14 @@ class TurboPlayback: TurboBase {
 			checkBuffering = true
 		default:
 			if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem != nil && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
-				play()
 				hasStatusObserver = false
 				player.removeObserver(self, forKeyPath: "status")
 				player.currentItem.removeObserver(self, forKeyPath: "status")
+				
+				if autoplay {
+					play()
+					autoplay = false
+				}
 			}
 		}
 		
@@ -175,6 +181,8 @@ class TurboPlayback: TurboBase {
 	}
 	
 	func pause() {
+		autoplay = false
+		
 		if !isPlaying || !ready {
 			return
 		}
@@ -200,6 +208,8 @@ class TurboPlayback: TurboBase {
 	}
 	
 	func stop() {
+		autoplay = false
+		
 		if !isPlaying || !ready {
 			return
 		}
