@@ -102,7 +102,7 @@ class TurboPlayback: TurboBase {
 		if player.currentItem == nil {
 			return
 		}
-
+		
 		if !hasStopObserver {
 			hasStopObserver = true
 			NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackReachedEnd", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
@@ -133,7 +133,7 @@ class TurboPlayback: TurboBase {
 			if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem != nil && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
 				hasStatusObserver = false
 				player.removeObserver(self, forKeyPath: "status")
-				player.currentItem.removeObserver(self, forKeyPath: "status")
+				playerItem.removeObserver(self, forKeyPath: "status")
 				
 				if autoplay {
 					play()
@@ -174,7 +174,7 @@ class TurboPlayback: TurboBase {
 			self.isPlaying = true
 			self.player.play()
 			self.delegate?.turboPlaybackStarted()
-
+			
 			// start timer
 			timer = NSTimer.scheduledTimerWithTimeInterval(0.25, target: self, selector: "playedSplitSecond", userInfo: nil, repeats: true)
 		}
@@ -256,10 +256,6 @@ class TurboPlayback: TurboBase {
 	}
 	
 	deinit {
-		if player.currentItem == nil {
-			return
-		}
-		
 		if hasStopObserver {
 			hasStopObserver = false
 			NSNotificationCenter.defaultCenter().removeObserver(self, name: AVPlayerItemDidPlayToEndTimeNotification, object: playerItem)
@@ -267,17 +263,18 @@ class TurboPlayback: TurboBase {
 		
 		if hasStatusObserver {
 			hasStatusObserver = false
-			player.currentItem.removeObserver(self, forKeyPath: "status")
+			player.removeObserver(self, forKeyPath: "status")
+			playerItem.removeObserver(self, forKeyPath: "status")
 		}
 		
 		if hasPlaybackBufferEmptyObserver {
 			hasPlaybackBufferEmptyObserver = false
-			player.currentItem.removeObserver(self, forKeyPath: "playbackBufferEmpty")
+			playerItem.removeObserver(self, forKeyPath: "playbackBufferEmpty")
 		}
 		
 		if hasPlaybackLikelyToKeepUpObserver {
 			hasPlaybackLikelyToKeepUpObserver = false
-			player.currentItem.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+			playerItem.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
 			
 		}
 	}
