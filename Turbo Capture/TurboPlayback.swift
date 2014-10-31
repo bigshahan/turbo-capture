@@ -105,17 +105,17 @@ class TurboPlayback: TurboBase {
 		
 		if !hasStopObserver {
 			hasStopObserver = true
-			NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackReachedEnd", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+			NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackReachedEnd", name: AVPlayerItemDidPlayToEndTimeNotification, object: playerItem)
 		}
 		
 		if !hasPlaybackBufferEmptyObserver {
 			hasPlaybackBufferEmptyObserver = true
-			player.currentItem.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .New, context: nil)
+			playerItem.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .New, context: nil)
 		}
 		
 		if !hasPlaybackLikelyToKeepUpObserver {
 			hasPlaybackLikelyToKeepUpObserver = true
-			player.currentItem.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .New, context: nil)
+			playerItem.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .New, context: nil)
 		}
 	}
 	
