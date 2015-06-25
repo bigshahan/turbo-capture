@@ -73,7 +73,7 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 		library.writeVideoAtPathToSavedPhotosAlbum(url, completionBlock: nil)
 				
 		// load PlaybackController
-		var controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("playback") as PlaybackController
+		var controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("playback") as! PlaybackController
 		controller.url = url
 		self.presentViewController(controller, animated: true, completion: nil)
 	}

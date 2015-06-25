@@ -144,12 +144,12 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	}
 	
 	// MARK: - Video / Audio Capture Data Output Delegate
-	func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
+	func captureOutput(captureOutput: AVCaptureOutput?, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
 		if ready && recording {
-			dispatch_sync(serialQueue, {
-				if captureOutput.connectionWithMediaType(AVMediaTypeAudio) == connection {
+			dispatch_sync(serialQueue!, {
+				if captureOutput?.connectionWithMediaType(AVMediaTypeAudio) == connection {
 					self.writer?.write(TurboCaptureWriterMediaType.Audio, sampleBuffer: sampleBuffer)
-				} else if captureOutput.connectionWithMediaType(AVMediaTypeVideo) == connection {
+				} else if captureOutput?.connectionWithMediaType(AVMediaTypeVideo) == connection {
 					self.writer?.write(TurboCaptureWriterMediaType.Video, sampleBuffer: sampleBuffer)
 				}
 			})
@@ -368,7 +368,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	func cameraDevice(type: TurboCaptureCamera) -> AVCaptureDevice? {
 		var devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
 		
-		for device in devices as [AVCaptureDevice] {
+		for device in devices as! [AVCaptureDevice] {
 			if type == TurboCaptureCamera.Back && device.position == AVCaptureDevicePosition.Back {
 				return device
 			}
@@ -391,7 +391,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		// get cameras
 		var devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
 		
-		for device in devices as [AVCaptureDevice] {
+		for device in devices as! [AVCaptureDevice] {
 			if device.position == AVCaptureDevicePosition.Back {
 				cameras.append(TurboCaptureCamera.Back)
 			} else {

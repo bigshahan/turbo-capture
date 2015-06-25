@@ -102,7 +102,7 @@ class TurboCaptureWriter: TurboBase {
 			AVNumberOfChannelsKey: 1,
 			AVEncoderBitRateKey: 64000
 		]
-		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: audioSettings)
+		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: audioSettings as [NSObject : AnyObject])
 		audioInput?.expectsMediaDataInRealTime = true
 		
 		// add audio input to asset writer
@@ -114,7 +114,7 @@ class TurboCaptureWriter: TurboBase {
 		}
 		
 		// setup video input
-		var videoSettings = [
+        var videoSettings: Dictionary<NSObject, AnyObject> = [
 			AVVideoCodecKey: AVVideoCodecH264,
 			AVVideoWidthKey: 480,
 			AVVideoHeightKey: 640
