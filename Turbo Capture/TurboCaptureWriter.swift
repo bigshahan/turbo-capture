@@ -133,7 +133,7 @@ class TurboCaptureWriter: TurboBase {
 			videoSettings[AVVideoCompressionPropertiesKey] = [AVVideoAverageBitRateKey: 1200000]
 		}
 		
-		videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
+        videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings as [NSObject: AnyObject])
 		videoInput?.expectsMediaDataInRealTime = true
 		
 		// add video input to AVAssetWriter
