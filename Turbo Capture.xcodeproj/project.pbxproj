@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6B48F2CA19BE69E5005C1C1E /* PlaybackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B48F2C919BE69E5005C1C1E /* PlaybackController.swift */; };
 		6B48F2CC19BE6BF0005C1C1E /* TurboPlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B48F2CB19BE6BF0005C1C1E /* TurboPlayback.swift */; };
+		6B587E721BBF4A7000E4C697 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B587E711BBF4A7000E4C697 /* LaunchScreen.storyboard */; settings = {ASSET_TAGS = (); }; };
 		6B77379519BD7E980051EC53 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B77379419BD7E980051EC53 /* AppDelegate.swift */; };
 		6B77379719BD7E980051EC53 /* RecordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B77379619BD7E980051EC53 /* RecordController.swift */; };
 		6B77379A19BD7E980051EC53 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B77379819BD7E980051EC53 /* Main.storyboard */; };
@@ -36,6 +37,7 @@
 /* Begin PBXFileReference section */
 		6B48F2C919BE69E5005C1C1E /* PlaybackController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackController.swift; sourceTree = "<group>"; };
 		6B48F2CB19BE6BF0005C1C1E /* TurboPlayback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurboPlayback.swift; sourceTree = "<group>"; };
+		6B587E711BBF4A7000E4C697 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6B77378F19BD7E980051EC53 /* Turbo Capture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Turbo Capture.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B77379319BD7E980051EC53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B77379419BD7E980051EC53 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				6B77379819BD7E980051EC53 /* Main.storyboard */,
 				6B77379B19BD7E980051EC53 /* Images.xcassets */,
 				6B77379219BD7E980051EC53 /* Supporting Files */,
+				6B587E711BBF4A7000E4C697 /* LaunchScreen.storyboard */,
 			);
 			path = "Turbo Capture";
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B587E721BBF4A7000E4C697 /* LaunchScreen.storyboard in Resources */,
 				6B77379A19BD7E980051EC53 /* Main.storyboard in Resources */,
 				6B77379C19BD7E980051EC53 /* Images.xcassets in Resources */,
 			);
@@ -364,7 +368,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Turbo Capture/Info.plist";
@@ -380,7 +383,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Turbo Capture/Info.plist";

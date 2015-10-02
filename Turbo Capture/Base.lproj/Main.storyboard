@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A388a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
@@ -19,7 +19,8 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x2l-lE-fqY">
-                                <rect key="frame" x="161" y="392" width="159" height="30"/>
+                                <rect key="frame" x="109" y="444" width="103" height="30"/>
+                                <animations/>
                                 <state key="normal" title="Hold to Record">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -31,33 +32,19 @@
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ggd-CO-2Ns">
                                 <rect key="frame" x="0.0" y="20" width="320" height="320"/>
+                                <animations/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ggd-CO-2Ns" secondAttribute="height" multiplier="1:1" id="evF-za-nrJ"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="faD-1b-eQM">
-                                <rect key="frame" x="0.0" y="392" width="160" height="30"/>
-                                <state key="normal" title="Switch Camera">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="switchCamera:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="kJf-Dd-6S2"/>
-                                </connections>
-                            </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rLn-4P-aYN">
-                                <rect key="frame" x="160" y="392" width="1" height="30"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="1" id="npa-oF-f16"/>
-                                    <constraint firstAttribute="height" constant="30" id="xKJ-My-mp7"/>
-                                </constraints>
-                            </view>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="7jb-TH-qTL">
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" verticalCompressionResistancePriority="751" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="7jb-TH-qTL">
                                 <rect key="frame" x="0.0" y="340" width="320" height="3"/>
+                                <animations/>
                             </progressView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SQn-zc-dYN">
-                                <rect key="frame" x="95" y="354" width="130" height="30"/>
+                                <rect key="frame" x="96" y="354" width="129" height="30"/>
+                                <animations/>
                                 <state key="normal" title="Play Remote Video">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -65,31 +52,49 @@
                                     <segue destination="OAS-Qj-Szz" kind="show" id="OId-ZG-ix1"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="faD-1b-eQM">
+                                <rect key="frame" x="108" y="399" width="104" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Switch Camera">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="switchCamera:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="kJf-Dd-6S2"/>
+                                </connections>
+                            </button>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="7jb-TH-qTL" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="02g-mC-H0T"/>
                             <constraint firstItem="x2l-lE-fqY" firstAttribute="centerY" secondItem="ggd-CO-2Ns" secondAttribute="centerY" id="0bi-nn-sdg"/>
                             <constraint firstAttribute="centerX" secondItem="SQn-zc-dYN" secondAttribute="centerX" id="1Hb-3D-fxo"/>
                             <constraint firstItem="faD-1b-eQM" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="1Yh-se-8UO"/>
-                            <constraint firstItem="faD-1b-eQM" firstAttribute="top" secondItem="SQn-zc-dYN" secondAttribute="bottom" constant="8" id="4HG-cf-gn1"/>
-                            <constraint firstItem="rLn-4P-aYN" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="392" id="5NF-HN-O1G"/>
+                            <constraint firstItem="x2l-lE-fqY" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="3Zf-b5-LMt"/>
+                            <constraint firstItem="faD-1b-eQM" firstAttribute="top" secondItem="SQn-zc-dYN" secondAttribute="bottom" constant="15" id="4HG-cf-gn1"/>
                             <constraint firstItem="ggd-CO-2Ns" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="943-MY-QGk"/>
-                            <constraint firstItem="rLn-4P-aYN" firstAttribute="leading" secondItem="faD-1b-eQM" secondAttribute="trailing" id="AYa-jE-PCf"/>
                             <constraint firstItem="x2l-lE-fqY" firstAttribute="width" secondItem="faD-1b-eQM" secondAttribute="width" id="Bkc-95-gVN"/>
                             <constraint firstItem="x2l-lE-fqY" firstAttribute="centerY" secondItem="faD-1b-eQM" secondAttribute="centerY" id="GIt-wf-bIR"/>
-                            <constraint firstItem="x2l-lE-fqY" firstAttribute="leading" secondItem="rLn-4P-aYN" secondAttribute="trailing" id="Hjb-Wn-aDV"/>
+                            <constraint firstItem="faD-1b-eQM" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="INo-0p-9tl"/>
                             <constraint firstAttribute="trailing" secondItem="ggd-CO-2Ns" secondAttribute="trailing" id="LU5-Sw-FQH"/>
                             <constraint firstAttribute="trailing" secondItem="7jb-TH-qTL" secondAttribute="trailing" id="LfL-9L-1zQ"/>
-                            <constraint firstItem="x2l-lE-fqY" firstAttribute="centerY" secondItem="rLn-4P-aYN" secondAttribute="centerY" id="a4f-PJ-Mg0"/>
+                            <constraint firstItem="faD-1b-eQM" firstAttribute="top" secondItem="SQn-zc-dYN" secondAttribute="bottom" constant="15" id="ZEk-dJ-Str"/>
                             <constraint firstItem="7jb-TH-qTL" firstAttribute="top" secondItem="ggd-CO-2Ns" secondAttribute="bottom" id="cKp-2V-7R7"/>
                             <constraint firstItem="x2l-lE-fqY" firstAttribute="centerY" secondItem="faD-1b-eQM" secondAttribute="centerY" id="kWM-mp-VMq"/>
                             <constraint firstItem="ggd-CO-2Ns" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="lIC-Hl-TaG"/>
                             <constraint firstAttribute="trailing" secondItem="x2l-lE-fqY" secondAttribute="trailing" id="mNH-eG-Een"/>
+                            <constraint firstItem="SQn-zc-dYN" firstAttribute="top" secondItem="7jb-TH-qTL" secondAttribute="bottom" constant="12" id="q77-RU-X1p"/>
+                            <constraint firstItem="x2l-lE-fqY" firstAttribute="top" secondItem="faD-1b-eQM" secondAttribute="bottom" constant="15" id="re2-x3-X5h"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="1Yh-se-8UO"/>
+                                <exclude reference="4HG-cf-gn1"/>
                                 <exclude reference="0bi-nn-sdg"/>
+                                <exclude reference="Bkc-95-gVN"/>
+                                <exclude reference="GIt-wf-bIR"/>
+                                <exclude reference="kWM-mp-VMq"/>
+                                <exclude reference="mNH-eG-Een"/>
                             </mask>
                         </variation>
                     </view>
@@ -117,13 +122,15 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bRL-Lz-MQQ">
                                 <rect key="frame" x="0.0" y="20" width="320" height="320"/>
+                                <animations/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="bRL-Lz-MQQ" secondAttribute="height" multiplier="1:1" id="bLl-Mq-1lH"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pbo-dv-84L">
-                                <rect key="frame" x="117" y="396" width="86" height="30"/>
+                                <rect key="frame" x="119" y="396" width="83" height="30"/>
+                                <animations/>
                                 <state key="normal" title="Play / Pause">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -133,19 +140,24 @@
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eTe-5p-DXn">
                                 <rect key="frame" x="0.0" y="342" width="320" height="54"/>
+                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i3c-Dr-dha">
                                 <rect key="frame" x="0.0" y="426" width="320" height="54"/>
+                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="xcM-XT-vqJ">
                                 <rect key="frame" x="0.0" y="340" width="320" height="3"/>
+                                <animations/>
                             </progressView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="7rB-mq-Qig">
                                 <rect key="frame" x="150" y="170" width="20" height="20"/>
+                                <animations/>
                             </activityIndicatorView>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="bRL-Lz-MQQ" firstAttribute="leading" secondItem="Rum-pJ-x84" secondAttribute="leading" id="1Ak-kW-z55"/>

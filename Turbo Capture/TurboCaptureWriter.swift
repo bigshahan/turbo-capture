@@ -234,7 +234,7 @@ class TurboCaptureWriter: TurboBase {
 				timingInfo[i].presentationTimeStamp = CMTimeSubtract(timingInfo[i].presentationTimeStamp, delta)
 			}
 			
-			let out: UnsafeMutablePointer<CMSampleBuffer?> = nil
+			let out = UnsafeMutablePointer<CMSampleBuffer?>.alloc(1)
 			CMSampleBufferCreateCopyWithNewTiming(nil, sampleBuffer, count, timingInfo, out)
 			
             if let buffa = out.memory {
@@ -247,6 +247,7 @@ class TurboCaptureWriter: TurboBase {
 		
 		// handle video write
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
+            NSLog("writing video buffer")
 			videoInput?.appendSampleBuffer(buffer)
 			lastVideoTime = CMTimeAdd(start, CMTimeMakeWithSeconds(0.04, 1000000000))
 			
@@ -287,7 +288,7 @@ class TurboCaptureWriter: TurboBase {
 		updateAudioTime = true
 	}
 	
-	private func error(message :String) {
+	private func error(message: String) {
 		errorOccurred = true
 		delegate?.turboCaptureWriterError(message)
 	}
