@@ -88,7 +88,12 @@ class TurboCaptureWriter: TurboBase {
 			type = AVFileTypeMPEG4
 		}
 		
-		writer = AVAssetWriter(URL: url, fileType: type, error: &err)
+		do {
+			writer = try AVAssetWriter(URL: url, fileType: type)
+		} catch let error as NSError {
+			err = error
+			writer = nil
+		}
 		
 		if err != nil {
 			error("Could not initialize asset writer")
@@ -96,25 +101,31 @@ class TurboCaptureWriter: TurboBase {
 		}
 		
 		// setup audio input
-		var audioSettings = [
-			AVFormatIDKey: kAudioFormatMPEG4AAC,
+        let audioSettings: [String: AnyObject] = [
+//            AVFormatIDKey: kAudioFormatMPEG4AAC,
 			AVSampleRateKey: 44100.0,
 			AVNumberOfChannelsKey: 1,
 			AVEncoderBitRateKey: 64000
 		]
-		audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: audioSettings as [NSObject : AnyObject])
+        
+        audioInput = AVAssetWriterInput(mediaType: AVMediaTypeAudio, outputSettings: audioSettings)
 		audioInput?.expectsMediaDataInRealTime = true
+        
+        if audioInput == nil {
+            error("Could not initiate audio input")
+            return
+        }
 		
 		// add audio input to asset writer
-		if writer!.canAddInput(audioInput) {
-			writer?.addInput(audioInput)
+		if writer!.canAddInput(audioInput!) {
+			writer?.addInput(audioInput!)
 		} else {
 			error("Could not add audio input to asset writer")
 			return
 		}
 		
 		// setup video input
-        var videoSettings: Dictionary<NSObject, AnyObject> = [
+        var videoSettings: [String: AnyObject] = [
 			AVVideoCodecKey: AVVideoCodecH264,
 			AVVideoWidthKey: 480,
 			AVVideoHeightKey: 640
@@ -133,12 +144,17 @@ class TurboCaptureWriter: TurboBase {
 			videoSettings[AVVideoCompressionPropertiesKey] = [AVVideoAverageBitRateKey: 1200000]
 		}
 		
-        videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings as [NSObject: AnyObject])
+        videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
 		videoInput?.expectsMediaDataInRealTime = true
+        
+        if videoInput == nil {
+            error("Could not initiate video input")
+            return
+        }
 		
 		// add video input to AVAssetWriter
-		if writer!.canAddInput(videoInput) {
-			writer?.addInput(videoInput)
+		if writer!.canAddInput(videoInput!) {
+			writer?.addInput(videoInput!)
 		} else {
 			error("Could not add video input to asset writer")
 			return
@@ -160,7 +176,11 @@ class TurboCaptureWriter: TurboBase {
 		}
 		
 		if writer?.status == AVAssetWriterStatus.Failed {
-			error("AVAssetWriter error \(writer!.error) \(writer?.error.code) \(writer?.error.localizedDescription)")
+            if let error = writer?.error {
+                self.error("AVAssetWriter error \(error) \(error.code) \(error.localizedDescription)")
+            } else {
+                error("AVAssetWriter error - failed")
+            }
 			return
 		}
 		
@@ -214,13 +234,13 @@ class TurboCaptureWriter: TurboBase {
 				timingInfo[i].presentationTimeStamp = CMTimeSubtract(timingInfo[i].presentationTimeStamp, delta)
 			}
 			
-			var out: Unmanaged<CMSampleBuffer>? = nil
-			CMSampleBufferCreateCopyWithNewTiming(nil, sampleBuffer, count, timingInfo, &out)
+			var out: UnsafeMutablePointer<CMSampleBuffer?> = nil
+			CMSampleBufferCreateCopyWithNewTiming(nil, sampleBuffer, count, timingInfo, out)
 			
-			if out != nil {
-				buffer = out!.takeRetainedValue() as CMSampleBuffer
-			}
-			
+            if let buffa = out.memory {
+                buffer = buffa
+            }
+            
 			// update the start time of sample buffer
 			start = CMTimeSubtract(start, delta)
 		}
@@ -240,7 +260,7 @@ class TurboCaptureWriter: TurboBase {
 			}
 			
 			// determine duration and trigger delegate
-			var elapsed = CMTimeSubtract(CMTimeAdd(start, duration), startTime!)
+			let elapsed = CMTimeSubtract(CMTimeAdd(start, duration), startTime!)
 			delegate?.turboCaptureWriterElapsed(CMTimeGetSeconds(elapsed))
 			
 			// set last audio time

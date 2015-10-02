@@ -64,35 +64,35 @@ class PlaybackController: UIViewController, TurboPlaybackDelegate {
 	
 	// MARK: - Playback Delegate
 	func turboPlaybackStopped() {
-		println("stopped playback")
+		print("stopped playback")
 		progressView.setProgress(0, animated: false)
 	}
 	
 	func turboPlaybackPaused() {
-		println("paused playback")
+		print("paused playback")
 	}
 	
 	func turboPlaybackStarted() {
-		println("started playback")
+		print("started playback")
 	}
 	
 	func turboPlaybackBufferingStarted() {
 		activityIndicator.hidden = false
-		println("started buffering")
+		print("started buffering")
 	}
 	
 	func turboPlaybackBufferingFinished() {
 		activityIndicator.hidden = true
-		println("finished buffering")
+		print("finished buffering")
 	}
 	
 	func turboPlaybackPosition(seconds :Double) {
-		var progress = seconds/playback!.duration
+		let progress = seconds/playback!.duration
 		progressView.setProgress(Float(progress), animated: false)
 	}
 	
 	func turboPlaybackError(message :String) {
 		NSLog("Playback error \(message)")
-		UIAlertView(title: "Error", message: "Could not playback video", delegate: nil, cancelButtonTitle: "Dismiss")
+		UIAlertView(title: "Error", message: "Could not playback video", delegate: nil, cancelButtonTitle: "Dismiss").show()
 	}
 }

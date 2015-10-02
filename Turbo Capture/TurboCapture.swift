@@ -104,9 +104,15 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 			if ready {
 				session?.beginConfiguration()
 				
-				var newVideoDevice = cameraDevice(currentCamera)!
-				var error = NSErrorPointer()
-				var newVideoInput = AVCaptureDeviceInput(device: newVideoDevice, error: error)
+				let newVideoDevice = cameraDevice(currentCamera)!
+				let error = NSErrorPointer()
+				var newVideoInput: AVCaptureDeviceInput!
+				do {
+					newVideoInput = try AVCaptureDeviceInput(device: newVideoDevice)
+				} catch let error1 as NSError {
+					error.memory = error1
+					newVideoInput = nil
+				}
 				
 				if error == nil {
 					session?.removeInput(videoInput)
@@ -121,7 +127,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 				session?.commitConfiguration()
 				
 				// portrait orientation - this is done in two places
-				var connection = videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
+				let connection = videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
 				if connection != nil && connection!.supportsVideoOrientation {
 					connection!.videoOrientation = AVCaptureVideoOrientation.Portrait
 				}
@@ -173,11 +179,17 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	// writing output file finished!
 	func turboCaptureWriterFinished() {
 		// setup AVAsset to get a thumbnail and recording length
-		var asset = AVURLAsset(URL: self.outputUrl!, options: nil)
-		var generator = AVAssetImageGenerator(asset: asset)
-		var error = NSErrorPointer()
-		var time = CMTimeMake(1,60)
-		var image = generator.copyCGImageAtTime(time, actualTime: nil, error: error)
+		let asset = AVURLAsset(URL: self.outputUrl!, options: nil)
+		let generator = AVAssetImageGenerator(asset: asset)
+		let error = NSErrorPointer()
+		let time = CMTimeMake(1,60)
+		var image: CGImage!
+		do {
+			image = try generator.copyCGImageAtTime(time, actualTime: nil)
+		} catch let error1 as NSError {
+			error.memory = error1
+			image = nil
+		}
 		
 		// Call finished delegate
 		main({
@@ -198,7 +210,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		}
 		
 		// Check for Camera Permissions
-		var videoStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+		let videoStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
 		
 		if videoStatus == AVAuthorizationStatus.Denied {
 			main({
@@ -209,7 +221,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		}
 		
 		// Check for Microphone Permissions
-		var audioStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeAudio)
+		let audioStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeAudio)
 		
 		if audioStatus == AVAuthorizationStatus.Denied {
 			main({
@@ -220,8 +232,8 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		}
 		
 		// setup video capturing session
-		session = AVCaptureSession()
-		
+        session = AVCaptureSession()
+            
 		// setup video device
 		videoDevice = cameraDevice(currentCamera)
 		
@@ -231,20 +243,19 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		}
 		
 		// setup video input
-		var err = NSErrorPointer()
-		videoInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: err) as? AVCaptureDeviceInput
-		
-		if err == nil {
-			if (session?.canAddInput(videoInput) != nil) {
-				session?.addInput(videoInput)
-			} else {
-				error("Could not add video device input to session")
-				return
-			}
-		} else {
-			error("Could not create a video device input")
-			return
-		}
+        do {
+            videoInput = try AVCaptureDeviceInput(device: videoDevice)
+        } catch {
+            self.error("Could not create a video device input")
+            return
+        }
+        
+        if (session?.canAddInput(videoInput) != nil) {
+            session?.addInput(videoInput)
+        } else {
+            error("Could not add video device input to session")
+            return
+        }
 		
 		// setup audio input
 		audioDevice	= AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
@@ -255,20 +266,19 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		}
 		
 		// setup audio device
-		err = NSErrorPointer()
-		audioInput = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: err) as? AVCaptureDeviceInput
-		
-		if err == nil {
-			if (session?.canAddInput(audioInput) != nil) {
-				session?.addInput(audioInput)
-			} else {
-				error("Could not add audio device input to session")
-				return
-			}
-		} else {
-			error("Could not create an audio device input")
-			return
-		}
+        do {
+            audioInput = try AVCaptureDeviceInput(device: audioDevice)
+        } catch {
+            self.error("Could not create an audio device input")
+            return
+        }
+        
+        if (session?.canAddInput(audioInput) != nil) {
+            session?.addInput(audioInput)
+        } else {
+            error("Could not add audio device input to session")
+            return
+        }
 		
 		// setup video resolution
 		switch resolution {
@@ -290,7 +300,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		session?.addOutput(videoOutput)
 		
 		// portrait orientation - this is done in two places
-		var connection = videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
+		let connection = videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
 		if connection != nil && connection!.supportsVideoOrientation {
 			connection!.videoOrientation = AVCaptureVideoOrientation.Portrait
 		}
@@ -309,11 +319,14 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 			path += "output.mov"
 		}
 		
-		var fileManager = NSFileManager.defaultManager()
+		let fileManager = NSFileManager.defaultManager()
 		if fileManager.fileExistsAtPath(path) {
-			var error = NSErrorPointer()
+			let error = NSErrorPointer()
 			
-			if !fileManager.removeItemAtPath(path, error: error) {
+			do {
+				try fileManager.removeItemAtPath(path)
+			} catch let error1 as NSError {
+				error.memory = error1
 				self.error("A duplicate output file could not be removed from the output directory")
 				return
 			}
@@ -350,7 +363,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	// start video recording
 	func record() {
 		if !ready {
-			throw("Need to check if ready before trying to record")
+			`throw`("Need to check if ready before trying to record")
 			return
 		}
 		
@@ -389,7 +402,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 		var cameras: [TurboCaptureCamera] = []
 		
 		// get cameras
-		var devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+		let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
 		
 		for device in devices as! [AVCaptureDevice] {
 			if device.position == AVCaptureDevicePosition.Back {
@@ -434,7 +447,7 @@ class TurboCapture: TurboBase, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
 	}
 	
 	// MARK: - Error Handling
-	private func throw(message :String) {
+	private func `throw`(message :String) {
 		errorOccurred = true
 		NSException(name: "VideoCaptureException", reason: message, userInfo: nil).raise()
 	}

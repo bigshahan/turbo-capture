@@ -69,17 +69,17 @@ class RecordController: UIViewController, TurboCaptureDelegate {
 	
 	func turboCaptureFinished(url :NSURL, thumbnail: UIImage?, duration: Double) {
 		// write to photos library
-		var library = ALAssetsLibrary()
+		let library = ALAssetsLibrary()
 		library.writeVideoAtPathToSavedPhotosAlbum(url, completionBlock: nil)
 				
 		// load PlaybackController
-		var controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("playback") as! PlaybackController
+		let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("playback") as! PlaybackController
 		controller.url = url
 		self.presentViewController(controller, animated: true, completion: nil)
 	}
 	
 	func turboCaptureElapsed(seconds: Double) {
-		var value = seconds/duration
+		let value = seconds/duration
 		progressView.setProgress(Float(value), animated: false)
 
 		if value >= 1 {

@@ -50,7 +50,7 @@ class TurboPlayback: TurboBase {
 	private var isPlaying = false
 	private var videoDuration: Double = 0.0
 	private var player: AVQueuePlayer
-	private var playerItem: AVPlayerItem
+	private var playerItem: AVPlayerItem!
 	private var layer: AVPlayerLayer
 	private var timer: NSTimer?
 	private var autoplay = false
@@ -69,7 +69,6 @@ class TurboPlayback: TurboBase {
 		
 		// setup avplayer
 		player = AVQueuePlayer()
-		playerItem = AVPlayerItem()
 		
 		// setup view
 		layer = AVPlayerLayer(player: player)
@@ -80,8 +79,8 @@ class TurboPlayback: TurboBase {
 		super.init()
 		
 		// load on sep thread the requested video
-		var asset = AVURLAsset(URL: url, options: nil)
-		var keys = ["playable"]
+		let asset = AVURLAsset(URL: url, options: nil)
+		let keys = ["playable"]
 		asset.loadValuesAsynchronouslyForKeys(keys, completionHandler: {
 			self.main({
 				self.playerItem = AVPlayerItem(asset: asset)
@@ -121,16 +120,24 @@ class TurboPlayback: TurboBase {
 	
 	// MARK: - KVO Observer
 	// used for autoplay
-	override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+	override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
 		var checkBuffering = false
+        
+        if keyPath == nil {
+            return
+        }
 		
-		switch keyPath {
+		switch keyPath! {
 		case "playbackBufferEmpty":
 			checkBuffering = true
 		case "playbackLikelyToKeepUp":
 			checkBuffering = true
 		default:
-			if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem != nil && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
+            if player.currentItem == nil {
+                return
+            }
+            
+			if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem!.status == AVPlayerItemStatus.ReadyToPlay {
 				hasStatusObserver = false
 				player.removeObserver(self, forKeyPath: "status")
 				playerItem.removeObserver(self, forKeyPath: "status")
@@ -143,7 +150,7 @@ class TurboPlayback: TurboBase {
 		}
 		
 		if checkBuffering {
-			if player.currentItem.playbackBufferFull || player.currentItem.playbackLikelyToKeepUp {
+			if player.currentItem != nil && player.currentItem!.playbackBufferFull || player.currentItem!.playbackLikelyToKeepUp {
 				delegate?.turboPlaybackBufferingFinished()
 				
 				// resume playback
@@ -170,7 +177,7 @@ class TurboPlayback: TurboBase {
 		startObserving()
 		
 		// nested due to swift compiler errors with type
-		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem != nil && player.currentItem.status == AVPlayerItemStatus.ReadyToPlay {
+		if player.status == AVPlayerStatus.ReadyToPlay && player.currentItem != nil && player.currentItem!.status == AVPlayerItemStatus.ReadyToPlay {
 			self.isPlaying = true
 			self.player.play()
 			self.delegate?.turboPlaybackStarted()
