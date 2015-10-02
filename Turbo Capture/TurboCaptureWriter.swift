@@ -100,11 +100,9 @@ class TurboCaptureWriter: TurboBase {
 			return
 		}
         
-        let test = kAudioFormatMPEG4AAC
-		
 		// setup audio input
         let audioSettings: [String: AnyObject] = [
-            AVFormatIDKey: 1633772320, // kAudioFormatMPEG4AAC
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
 			AVSampleRateKey: 44100.0,
 			AVNumberOfChannelsKey: 1,
 			AVEncoderBitRateKey: 64000
@@ -236,7 +234,7 @@ class TurboCaptureWriter: TurboBase {
 				timingInfo[i].presentationTimeStamp = CMTimeSubtract(timingInfo[i].presentationTimeStamp, delta)
 			}
 			
-			var out: UnsafeMutablePointer<CMSampleBuffer?> = nil
+			let out: UnsafeMutablePointer<CMSampleBuffer?> = nil
 			CMSampleBufferCreateCopyWithNewTiming(nil, sampleBuffer, count, timingInfo, out)
 			
             if let buffa = out.memory {
