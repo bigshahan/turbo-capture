@@ -99,10 +99,12 @@ class TurboCaptureWriter: TurboBase {
 			error("Could not initialize asset writer")
 			return
 		}
+        
+        let test = kAudioFormatMPEG4AAC
 		
 		// setup audio input
         let audioSettings: [String: AnyObject] = [
-//            AVFormatIDKey: kAudioFormatMPEG4AAC,
+            AVFormatIDKey: 1633772320, // kAudioFormatMPEG4AAC
 			AVSampleRateKey: 44100.0,
 			AVNumberOfChannelsKey: 1,
 			AVEncoderBitRateKey: 64000
