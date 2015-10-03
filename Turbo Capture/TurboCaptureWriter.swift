@@ -163,7 +163,7 @@ class TurboCaptureWriter: TurboBase {
 	
 	func write(type: TurboCaptureWriterMediaType, sampleBuffer: CMSampleBuffer) {
 		var buffer = sampleBuffer
-		
+
 		// can't write if not ready
 		if !ready {
 			return
@@ -247,7 +247,6 @@ class TurboCaptureWriter: TurboBase {
 		
 		// handle video write
 		if type == TurboCaptureWriterMediaType.Video && videoInput!.readyForMoreMediaData {
-            NSLog("writing video buffer")
 			videoInput?.appendSampleBuffer(buffer)
 			lastVideoTime = CMTimeAdd(start, CMTimeMakeWithSeconds(0.04, 1000000000))
 			
