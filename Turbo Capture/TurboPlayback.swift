@@ -205,13 +205,7 @@ class TurboPlayback: TurboBase {
 	}
 	
 	func seek(seconds: Double) {
-		var seconds2 = seconds
-		
-		if seconds > videoDuration {
-			seconds2 = videoDuration
-		}
-		
-		player.seekToTime(CMTimeMakeWithSeconds(seconds, player.currentTime().timescale))
+        player.seekToTime(CMTimeMakeWithSeconds((seconds > videoDuration ? videoDuration : seconds), player.currentTime().timescale))
 	}
 	
 	func stop() {
